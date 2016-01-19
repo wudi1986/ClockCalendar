@@ -15,7 +15,6 @@ public class NotificationUtil {
         Notification notification = new Notification(R.drawable.bottom,msg, when);
         notification.flags=Notification.FLAG_AUTO_CANCEL;
 //        PendingIntent pi = PendingIntent.getActivity(context, 0, new Intent(context,NewMainActivity.class), 0);
-        notification.setLatestEventInfo(context, "Pat发送中", msg, null);
         nm.notify(1, notification);
         
         new  Thread(new Runnable() {

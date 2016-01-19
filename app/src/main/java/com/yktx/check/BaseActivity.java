@@ -6,7 +6,6 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Window;
 
 import com.baidu.location.BDLocation;
@@ -18,8 +17,6 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.yktx.check.util.Tools;
 import com.yktx.sqlite.DBHelper;
-
-import java.util.Collection;
 
 public abstract class BaseActivity extends Activity{
 	public Activity mContext;
@@ -41,7 +38,7 @@ public abstract class BaseActivity extends Activity{
 	public String userID;
 	public static boolean isLogin;
 	public DisplayImageOptions headOptions = new DisplayImageOptions.Builder()
-	.showImageOnLoading(R.mipmap.zw_touxiang)
+	.showImageOnLoading(R.drawable.zw_touxiang)
 	.showImageForEmptyUri(null).showImageOnFail(null)
 	.bitmapConfig(Bitmap.Config.RGB_565).cacheOnDisk(true)
 	.cacheInMemory(false).displayer(new RoundedBitmapDisplayer(200))

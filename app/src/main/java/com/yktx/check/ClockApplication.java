@@ -1,20 +1,15 @@
 package com.yktx.check;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.LocationManager;
 import android.os.Handler;
+import android.support.multidex.MultiDex;
 import android.telephony.TelephonyManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import cn.jpush.android.api.JPushInterface;
 
 import com.easemob.easeui.controller.EaseUI;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -31,8 +26,14 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.yktx.check.bean.AlarmBean;
-import com.yktx.check.util.CrashHandler;
 import com.yktx.check.util.FileURl;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import cn.jpush.android.api.JPushInterface;
 
 public class ClockApplication extends Application {
 	private static ClockApplication clockApplication;
@@ -55,8 +56,8 @@ public class ClockApplication extends Application {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		// 获取异常信息
-		 CrashHandler crashHandler = CrashHandler.getInstance();
-		 crashHandler.init(getApplicationContext());
+//		 CrashHandler crashHandler = CrashHandler.getInstance();
+//		 crashHandler.init(getApplicationContext());
 
 		clockApplication = this;
 		aboutimageloder();// 初始化ImageLoders
@@ -65,6 +66,12 @@ public class ClockApplication extends Application {
 		//环信
 		EaseUI.getInstance().init(clockApplication);
 //		 DemoHelper.getInstance().init(clockApplication);
+	}
+
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		MultiDex.install(this);
 	}
 
 	public String getUUID() {

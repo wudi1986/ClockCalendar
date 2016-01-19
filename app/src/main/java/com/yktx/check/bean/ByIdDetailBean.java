@@ -34,7 +34,7 @@ public class ByIdDetailBean implements Serializable{
 	/** 累计打卡次数 */
 	private String totalCheckCount;
 	/** 累计打卡天数*/
-	private String totalDateCount;
+	private int totalDateCount;
 	/** 气球数 */
 	private String point;
 	/** //勋章图片地址, 若无勋章则为null  */
@@ -78,7 +78,7 @@ public class ByIdDetailBean implements Serializable{
 			String title, String description, String privateFlag,
 			String timeLimitFlag, String beginTime, String endTime,
 			String stickFlag, String stickTime, String color, String alertTime,
-			String status, String totalCheckCount, String totalDateCount,
+			String status, String totalCheckCount, int totalDateCount,
 			String point, String badgePath, int badgeSource,
 			int autoShareFlag, String userName, long cTime) {
 		super();
@@ -166,10 +166,10 @@ public class ByIdDetailBean implements Serializable{
 	public void setTotalCheckCount(String totalCheckCount) {
 		this.totalCheckCount = totalCheckCount;
 	}
-	public String getTotalDateCount() {
+	public int getTotalDateCount() {
 		return totalDateCount;
 	}
-	public void setTotalDateCount(String totalDateCount) {
+	public void setTotalDateCount(int totalDateCount) {
 		this.totalDateCount = totalDateCount;
 	}
 	public String getId() {

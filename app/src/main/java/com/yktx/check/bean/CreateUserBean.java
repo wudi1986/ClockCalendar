@@ -21,9 +21,20 @@ public class CreateUserBean implements Serializable {
 	private int imageSource;
 	/** 此用户共打卡次数 */
 	private int totalJobCount;
+	/** 正坚持的卡数 */
+	private int taskCount;
 	
 
 	
+	
+	public int getTaskCount() {
+		return taskCount;
+	}
+
+	public void setTaskCount(int taskCount) {
+		this.taskCount = taskCount;
+	}
+
 	public int getTotalJobCount() {
 		return totalJobCount;
 	}
