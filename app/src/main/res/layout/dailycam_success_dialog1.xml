@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android_custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/dailycam_success_dialog_blank"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/dailycam_success_dialog_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/dk_close" />
+
+    <LinearLayout
+        android:id="@+id/dailycam_success_dialog_numLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="累计"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font4" />
+
+        <TextView
+            android:id="@+id/dailycam_success_dialog_totalDateCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24"
+            android:textColor="@color/meibao_color_1"
+            android:textSize="@dimen/font24s" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="天"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font4" />
+
+<!--         <TextView -->
+<!--             android:id="@+id/dailycam_success_dialog_photoNum" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_marginLeft="22dp" -->
+<!--             android:text="124" -->
+<!--             android:textColor="@color/meibao_color_18" -->
+<!--             android:textSize="@dimen/font24s" /> -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="张照片"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font4" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/dailycam_success_dialog_ImageLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
+        android:background="@drawable/dk_bg" >
+
+        <ImageView
+            android:layout_width="208dp"
+            android:layout_height="276dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/dk_kuang"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/dailycam_success_dialog_imageMainLayout"
+            android:layout_width="256dp"
+            android:layout_height="306dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="41dp" >
+
+            <ImageView
+                android:id="@+id/dailycam_success_dialog_imageMain2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/dailycam_success_dialog_imageMain1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon" />
+
+            <ImageView
+                android:id="@+id/dailycam_success_dialog_play"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/dk_bofang" />
+
+            <com.yktx.check.view.RoundProgressBar
+                android:id="@+id/roundProgressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android_custom:roundColor="@color/meibao_color_14"
+                android_custom:roundProgressColor="@color/meibao_color_4"
+                android_custom:roundWidth="2dip"
+                android_custom:textIsDisplayable="false" />
+
+        </RelativeLayout>
+		
+        <TextView
+            android:id="@+id/dailycam_success_dialog_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dailycam_success_dialog_imageMainLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="day12"
+            android:textColor="@color/meibao_color_20"
+            android:textSize="@dimen/font2" />
+
+        <TextView
+            android:id="@+id/dailycam_success_dialog_taskName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dailycam_success_dialog_day"
+             android:layout_centerHorizontal="true"
+             android:layout_marginTop="5dp"
+            android:text="爱自拍"
+            android:textColor="@color/meibao_color_10"
+            android:textSize="@dimen/font3" />
+        
+        <TextView
+            android:id="@+id/dailycam_success_dialog_photoNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dailycam_success_dialog_taskName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="5dp"
+            android:text="124"
+            android:textColor="@color/meibao_color_14"
+            android:textSize="@dimen/font5" />
+        
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/dailycam_success_dialog_topImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/dailycam_success_dialog_ImageLayout"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/dk_daka" />
+
+    <ImageView
+        android:id="@+id/dailycam_success_dialog_shareWeiXin"
+        android:layout_width="164dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/dailycam_success_dialog_ImageLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/dk_share" />
+
+</RelativeLayout>
