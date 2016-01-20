@@ -32,20 +32,20 @@
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-xhdpi\\toumingimg.png"
     },
     {
-        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\liaotian_ren.png",
-        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-xhdpi\\liaotian_ren.png"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\ease_dot_emojicon_selected.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-xhdpi\\ease_dot_emojicon_selected.png"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\ease_groups_icon.png",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-xhdpi\\ease_groups_icon.png"
+        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\liaotian_ren.png",
+        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-xhdpi\\liaotian_ren.png"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\toumingimg.png",
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-xhdpi\\toumingimg.png"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\ease_groups_icon.png",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-xhdpi\\ease_groups_icon.png"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\ease_blue_add.png",
