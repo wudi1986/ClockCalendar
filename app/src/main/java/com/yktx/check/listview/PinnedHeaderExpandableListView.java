@@ -679,6 +679,6 @@ public class PinnedHeaderExpandableListView extends ExpandableListView
 	public interface setClickHeadViewlistener {
 		public void clickHead(int position);
 	}
-	
+
 
 }

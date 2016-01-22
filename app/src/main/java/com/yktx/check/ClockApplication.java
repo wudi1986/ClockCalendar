@@ -11,6 +11,7 @@ import android.telephony.TelephonyManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.easemob.chatuidemo.ui.DemoHelper;
 import com.easemob.easeui.controller.EaseUI;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
@@ -65,7 +66,7 @@ public class ClockApplication extends Application {
 		aboutjpush();// 激光推送初始化
 		//环信
 		EaseUI.getInstance().init(clockApplication);
-//		 DemoHelper.getInstance().init(clockApplication);
+		 DemoHelper.getInstance().init(clockApplication);
 	}
 
 	@Override

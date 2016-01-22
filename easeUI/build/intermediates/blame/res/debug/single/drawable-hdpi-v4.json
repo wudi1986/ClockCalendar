@@ -16,20 +16,20 @@
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_24.png"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_04.png",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_record_animate_04.png"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chatting_setmode_voice_btn_normal.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_chatting_setmode_voice_btn_normal.png"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_dx_checkbox_off.png",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_dx_checkbox_off.png"
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_04.png",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_record_animate_04.png"
     },
     {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_13.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_record_animate_13.png"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_dx_checkbox_off.png",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_dx_checkbox_off.png"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chat_face_pressed.png",
@@ -80,12 +80,12 @@
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_record_animate_08.png"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_33.png",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_33.png"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chatting_biaoqing_btn_enable.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_chatting_biaoqing_btn_enable.png"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_33.png",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_33.png"
     },
     {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chatfrom_voice_playing_f1.png",
@@ -136,12 +136,12 @@
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_chatfrom_voice_playing.png"
     },
     {
-        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_28.png",
-        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_28.png"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_2.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_2.png"
+    },
+    {
+        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_28.png",
+        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_28.png"
     },
     {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_settings_normal.png",
@@ -172,12 +172,12 @@
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_video_play_btn_small_nor.png"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_to_group_details_normal.png",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_to_group_details_normal.png"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_icon_marka.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_icon_marka.png"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_to_group_details_normal.png",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_to_group_details_normal.png"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chatfrom_voice_playing_f1.png",
@@ -240,28 +240,28 @@
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_seabar_input.9.png"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chatting_biaoqing_btn_enable.png",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_chatting_biaoqing_btn_enable.png"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_17.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_17.png"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chatting_biaoqing_btn_enable.png",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_chatting_biaoqing_btn_enable.png"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_contact_list_normal.png",
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_contact_list_normal.png"
     },
     {
-        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_contact_list_normal.png",
-        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_contact_list_normal.png"
+        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_5.png",
+        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_5.png"
     },
     {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_default_image.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_default_image.png"
     },
     {
-        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_5.png",
-        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_5.png"
+        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_contact_list_normal.png",
+        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_contact_list_normal.png"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_3.png",
@@ -300,16 +300,16 @@
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_input_bar_bg_active.9.png"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_msg_state_fail_resend_pressed.png",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_msg_state_fail_resend_pressed.png"
+        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_7.png",
+        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_7.png"
     },
     {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_groups_icon.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_groups_icon.png"
     },
     {
-        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_7.png",
-        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable-hdpi\\ee_7.png"
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_msg_state_fail_resend_pressed.png",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-hdpi\\ease_msg_state_fail_resend_pressed.png"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_14.png",

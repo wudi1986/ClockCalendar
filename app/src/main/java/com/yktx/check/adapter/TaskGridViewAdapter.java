@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +28,7 @@ import com.yktx.check.util.DateUtil;
 import com.yktx.check.util.TimeUtil;
 import com.yktx.check.util.Tools;
 
-public class TaskGridViewAdapter extends BaseAdapter {
+public class TaskGridViewAdapter extends RecyclerView.Adapter<TaskGridViewAdapter.ViewHolder> {
 	private LinkedHashMap<String, GetByTaskIdCameraBean> curMap = new LinkedHashMap<String, GetByTaskIdCameraBean>();
 	protected LayoutInflater mInflater;
 
@@ -50,23 +51,31 @@ public class TaskGridViewAdapter extends BaseAdapter {
 		infoTakePhoto = takePhoto;
 	}
 
-	@Override
-	public int getCount() {
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public Object getItem(int position) {
-		return position;
-	}
-
 	public void setCreateDate(CustomDate createDate) {
 		this.createDate = createDate;
 	}
 
 	@Override
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		ViewHolder holder = new ViewHolder(LayoutInflater.from(
+				mContext).inflate(R.layout.task_gridview_item, parent,
+				false));
+		return holder;
+	}
+
+	@Override
+	public void onBindViewHolder(ViewHolder holder, int position) {
+		showView(holder, position);
+	}
+
+	@Override
 	public long getItemId(int position) {
 		return position;
+	}
+
+	@Override
+	public int getItemCount() {
+		return Integer.MAX_VALUE;
 	}
 
 	String getUserID, taskID, userID;
@@ -103,24 +112,24 @@ public class TaskGridViewAdapter extends BaseAdapter {
 		}
 	}
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		final ViewHolder viewHolder;
-		// GetByTaskIdCameraBean bean = list.get(position);
-		// String path = mNewCameraBean.getTopImagePath();
-
-		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.task_gridview_item, null);
-			viewHolder = new ViewHolder(convertView);
-			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
-			// viewHolder.mImageView.setImageResource(R.drawable.bg_home_item_none);
-		}
-
-		showView(viewHolder, position);
-		return convertView;
-	}
+//	@Override
+//	public View getView(int position, View convertView, ViewGroup parent) {
+//		final ViewHolder viewHolder;
+//		// GetByTaskIdCameraBean bean = list.get(position);
+//		// String path = mNewCameraBean.getTopImagePath();
+//
+//		if (convertView == null) {
+//			convertView = mInflater.inflate(R.layout.task_gridview_item, null);
+//			viewHolder = new ViewHolder(convertView);
+//			convertView.setTag(viewHolder);
+//		} else {
+//			viewHolder = (ViewHolder) convertView.getTag();
+//			// viewHolder.mImageView.setImageResource(R.drawable.bg_home_item_none);
+//		}
+//
+//		showView(viewHolder, position);
+//		return convertView;
+//	}
 
 	@SuppressLint("ResourceAsColor")
 	private void showView(ViewHolder viewHolder, final int position) {
@@ -272,12 +281,12 @@ public class TaskGridViewAdapter extends BaseAdapter {
 
 	}
 
-	public static class ViewHolder {
+	public static class ViewHolder extends RecyclerView.ViewHolder{
 		private ImageView taskLastPhoto, taskMorePhoto, taskImageKuang;//
 		private TextView taskBg;
 
 		public ViewHolder(View convertView) {
-			// TODO Auto-generated constructor stub
+			super(convertView);
 			taskLastPhoto = (ImageView) convertView
 					.findViewById(R.id.taskLastPhoto);
 			taskBg = (TextView) convertView.findViewById(R.id.taskBg);

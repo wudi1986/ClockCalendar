@@ -12,12 +12,12 @@
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ease_groups_icon.png"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\ease_groups_icon.png",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ease_groups_icon.png"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\ease_back.png",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ease_back.png"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\ease_groups_icon.png",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ease_groups_icon.png"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\liaotian_ren.png",

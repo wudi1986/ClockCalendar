@@ -36,12 +36,12 @@
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_received_voice_call.xml"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_fragment_conversation_list.xml",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_fragment_conversation_list.xml"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_big_expression.xml",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_big_expression.xml"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_fragment_conversation_list.xml",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_fragment_conversation_list.xml"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_fragment_chat.xml",
@@ -60,36 +60,36 @@
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_received_video.xml"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_sent_voice_call.xml",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_sent_voice_call.xml"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_search_bar_with_padding.xml",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_search_bar_with_padding.xml"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_contact.xml",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_contact.xml"
-    },
-    {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_sent_voice.xml",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_sent_voice.xml"
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_sent_voice_call.xml",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_sent_voice_call.xml"
     },
     {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_scroll_tab_item.xml",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_scroll_tab_item.xml"
     },
     {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_sent_voice.xml",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_sent_voice.xml"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_contact.xml",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_contact.xml"
+    },
+    {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_search_bar.xml",
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_search_bar.xml"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_big_expression.xml",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_big_expression.xml"
-    },
-    {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_chat_menu_item.xml",
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_chat_menu_item.xml"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_big_expression.xml",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_big_expression.xml"
     },
     {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_showvideo_activity.xml",

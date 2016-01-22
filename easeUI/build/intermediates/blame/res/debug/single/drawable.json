@@ -28,24 +28,24 @@
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable\\ease_chat_location_selector.xml"
     },
     {
-        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_mm_listitem_grey.xml",
-        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable\\ease_mm_listitem_grey.xml"
-    },
-    {
         "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_btn_blue_selector.xml",
         "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable\\ease_btn_blue_selector.xml"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_btn_cancel_bj.xml",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable\\ease_btn_cancel_bj.xml"
+        "merged": "C:\\ASProjects\\ClockCalendar\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_mm_listitem_grey.xml",
+        "source": "C:\\ASProjects\\ClockCalendar\\easeUI\\src\\main\\res\\drawable\\ease_mm_listitem_grey.xml"
+    },
+    {
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_chat_press_speak_btn.xml",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable\\ease_chat_press_speak_btn.xml"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_chat_send_btn_selector.xml",
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable\\ease_chat_send_btn_selector.xml"
     },
     {
-        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_chat_press_speak_btn.xml",
-        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable\\ease_chat_press_speak_btn.xml"
+        "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_btn_cancel_bj.xml",
+        "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable\\ease_btn_cancel_bj.xml"
     },
     {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_chatting_setmode_voice_btn.xml",

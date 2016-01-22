@@ -138,9 +138,9 @@
             android:scrollbarAlwaysDrawHorizontalTrack="false" >
         </com.yktx.check.listview.PinnedHeaderExpandableListView>
 
-        <include
-            android:id="@+id/loadingView"
-            layout="@layout/loading_view_anim" />
+        <!--<include-->
+            <!--android:id="@+id/loadingView"-->
+            <!--layout="@layout/loading_view_anim" />-->
     </RelativeLayout>
 
     <View
