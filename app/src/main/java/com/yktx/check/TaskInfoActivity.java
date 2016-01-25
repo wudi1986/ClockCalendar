@@ -101,9 +101,6 @@ public class TaskInfoActivity extends FragmentActivity implements
 	public static String mDescription;
 	private String mTitleContent;
 	private LastTwoUsersBean lastTwoJobBean = new LastTwoUsersBean();
-	// private XListView infoListView;
-	// private MyexpandableListAdapter myExpandableListAdapter;
-	// private TaskInfoAdapter adapter;
 	private ImageView title_item_leftImage, title_item_createJob;
 	public static ByIdDetailBean byIdDetailBean;
 

@@ -37,8 +37,9 @@
                     android:id="@+id/title_item_chat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:src="@drawable/xq_liaotian"
-                    android:layout_alignParentRight="true"/>
+                    android:visibility="gone" />
 
                 <View
                     android:layout_width="match_parent"

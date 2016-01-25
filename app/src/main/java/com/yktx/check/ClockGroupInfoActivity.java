@@ -1,5 +1,15 @@
 package com.yktx.check;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -48,17 +58,8 @@ import com.yktx.check.service.Service;
 import com.yktx.check.util.Contanst;
 import com.yktx.check.util.FileURl;
 import com.yktx.check.util.ImageTool;
+import com.yktx.check.util.MyUMSDK;
 import com.yktx.check.util.Tools;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClockGroupInfoActivity extends BaseActivity implements
 ServiceListener {
@@ -599,9 +600,6 @@ ServiceListener {
 		adapter.setBuildingOnClick(buildingInfoOnClick);
 		adapter.setOnClickAdd(onClickAdd);
 
-//		SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
-//		swingBottomInAnimationAdapter.setAbsListView(xListView);
-
 		xListView.setAdapter(adapter);
 
 		xListView.setXListViewListener(listener);
@@ -905,7 +903,7 @@ ServiceListener {
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (OutOfMemoryError e) {
+				}  catch (OutOfMemoryError e) {
 					ImageLoader.getInstance().clearMemoryCache();
 				}
 

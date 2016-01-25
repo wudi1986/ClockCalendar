@@ -446,7 +446,7 @@ public class TakeClockDialog extends Dialog implements ServiceListener {
 						R.style.CustomDiaLog_by_SongHang));
 
 		builder.setItems(unitArray,
-				new OnClickListener() {
+				new AlertDialog.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				//						if(which == 0){

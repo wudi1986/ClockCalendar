@@ -65,4 +65,6 @@
     <color name="meibao_color_18">#ffffcc00</color>
     <color name="meibao_color_20">#ffff9500</color>
 
+    <color name="umeng_fb_color_btn_pressed">#1495F7</color>
+    <color name="umeng_fb_color_btn_normal">#333333</color>
 </resources>

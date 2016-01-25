@@ -1,30 +1,48 @@
 package com.yktx.check.dialog;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.gallety.PhotoActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.umeng.analytics.MobclickAgent;
+import com.yktx.check.ClockApplication;
 import com.yktx.check.ClockMainActivity.OnSetDialogImage;
 import com.yktx.check.R;
+import com.yktx.check.adapter.TakeClockAdapter;
 import com.yktx.check.bean.ImageListBean;
+import com.yktx.check.dialog.TakeClockDialog.TaskClockDialogOnCLickClockSuccess;
+import com.yktx.check.listview.HorizontalListView;
+import com.yktx.check.util.FileURl;
 import com.yktx.check.util.Tools;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class TaskInfoDialog extends Dialog {
 	private Context mContext;

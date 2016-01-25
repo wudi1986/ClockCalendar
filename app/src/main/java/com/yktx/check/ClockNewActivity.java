@@ -37,8 +37,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
@@ -157,6 +159,7 @@ ServiceListener {
 	private View new_line;
 
 	boolean isSuccess;//判断完成不可重复点击
+	boolean isChaoChu;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -348,565 +351,519 @@ ServiceListener {
 
 	public void setListeners() {
 		// TODO Auto-generated method stub
-		mNewInput.addTextChangedListener(new TextWatcher() {
-
-			private int selectionStart;
-			private int selectionEnd;
-			private CharSequence temp;
+		mNewState.setOnTouchListener(new OnTouchListener() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				temp = s;
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				isInput = true;
-				if (isSelectSearch) {
-					isSelectSearch = false;
-					return;
-				} else {
-					int infoNum = temp.length();
-					if (infoNum == 0) {
-						SuccessType(false);//取消变色
-					} else {
-						SuccessType(true);//完成变色
-					}
-					searchStr = mNewInput.getText().toString();
-					selectionStart = mNewInput.getSelectionStart();
-					selectionEnd = mNewInput.getSelectionEnd();
-					final int textLength = mNewInput.getText().length();
-					if (Tools.getLineSize(searchStr) > 30) {
-						Toast.makeText(ClockNewActivity.this, "字数超限",
-								Toast.LENGTH_SHORT).show();
-						s.delete(selectionStart - 1, selectionEnd);
-						int tempSelection = selectionStart;
-						mNewInput.setText(s);
-						mNewInput.setSelection(tempSelection);
-					}
-
-					timer.cancel();
-					timer = new Timer();
-					/**
-					 * 延时一秒执行
-					 */
-					timer.schedule(new TimerTask() {
-						public void run() {
-							Message msg = new Message();
-							msg.what = TIMER_SEARCH;
-							msg.arg1 = textLength;
-							mHandler.sendMessage(msg);
-						}
-					}, SearchTime);
-				}
+			public boolean onTouch(View v, MotionEvent event) {
+				//这句话说的意思告诉父View我自己的事件我自己处理
+				v.getParent().requestDisallowInterceptTouchEvent(true);
+				return false;
 			}
 		});
+	mNewInput.addTextChangedListener(new TextWatcher() {
 
-		mNewState.addTextChangedListener(new TextWatcher() {
-			private CharSequence temp;
-			int editStart;
-			int editEnd;
+		private int selectionStart;
+		private int selectionEnd;
+		private CharSequence temp;
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// TODO Auto-generated method stub
-				temp = s;
-			}
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			temp = s;
+		}
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,  
-					int after) {
-				// TODO Auto-generated method stub
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
 
-			}
+		}
 
-			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				editStart = mNewState.getSelectionStart();
-				editEnd = mNewState.getSelectionEnd();
+		@Override
+		public void afterTextChanged(Editable s) {
+			isInput = true;
+			if (isSelectSearch) {
+				isSelectSearch = false;
+				return;
+			} else {
 				int infoNum = temp.length();
-				if (infoNum > 200) {
+				if (infoNum == 0) {
+					SuccessType(false);//取消变色
+				} else {
+					SuccessType(true);//完成变色
+				}
+				searchStr = mNewInput.getText().toString();
+				selectionStart = mNewInput.getSelectionStart();
+				selectionEnd = mNewInput.getSelectionEnd();
+				final int textLength = mNewInput.getText().length();
+				if (Tools.getLineSize(searchStr) > 30) {
+					Toast.makeText(ClockNewActivity.this, "字数超限",
+							Toast.LENGTH_SHORT).show();
+					s.delete(selectionStart - 1, selectionEnd);
+					int tempSelection = selectionStart;
+					mNewInput.setText(s);
+					mNewInput.setSelection(tempSelection);
+				}
+
+				timer.cancel();
+				timer = new Timer();
+				/**
+				 * 延时一秒执行
+				 */
+				timer.schedule(new TimerTask() {
+					public void run() {
+						Message msg = new Message();
+						msg.what = TIMER_SEARCH;
+						msg.arg1 = textLength;
+						mHandler.sendMessage(msg);
+					}
+				}, SearchTime);
+			}
+		}
+	});
+
+	mNewState.addTextChangedListener(new TextWatcher() {
+		private CharSequence temp;
+		int editStart;
+		int editEnd;
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			// TODO Auto-generated method stub
+			temp = s;
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,  
+				int after) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			// TODO Auto-generated method stub
+			Tools.getLog(Tools.d, "aaa", "输入的文字=");
+			editStart = mNewState.getSelectionStart();
+			editEnd = mNewState.getSelectionEnd();
+			int infoNum = temp.length();
+			if (infoNum > 200) {
+				if(!isChaoChu){
 					Toast.makeText(mContext,
 							"你输入的字数已经超过了限制！", Toast.LENGTH_SHORT)
 							.show();
-					s.delete(editStart-1, editEnd);
-
-					temp = s;
-					infoNum = temp.length();
-					mNewState.setText(temp);
-					mNewState.setSelection(infoNum);
+					isChaoChu = true;
 				}
-				new_inputStateText.setText(temp.length()+"/200");
+				
+				s.delete(editStart-1, editEnd);
+
+				temp = s;
+				infoNum = temp.length();
+				mNewState.setText(temp);
+				mNewState.setSelection(infoNum);
+				
+			}else{
+				isChaoChu = false;
 			}
-		});
-		new_limitTimeLayout.setOnClickListener(new OnClickListener() {
+			new_inputStateText.setText(temp.length()+"/200");
+		}
+	});
+	new_limitTimeLayout.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				MobclickAgent.onEvent(mContext, "clicklimit");
-				Intent  in = new Intent(mContext, ClockLimitActivity.class);
-				String time = new_limitTimeText.getText().toString();
-				if(time !=null){
-					in.putExtra("limittime", time);
-				}
-				startActivityForResult(in, LIMITCODE);
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			MobclickAgent.onEvent(mContext, "clicklimit");
+			Intent  in = new Intent(mContext, ClockLimitActivity.class);
+			String time = new_limitTimeText.getText().toString();
+			if(time !=null){
+				in.putExtra("limittime", time);
 			}
-		});
-		new_alertTimeLayout.setOnClickListener(new OnClickListener() {
+			startActivityForResult(in, LIMITCODE);
+		}
+	});
+	new_alertTimeLayout.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				MobclickAgent.onEvent(mContext, "clickalarm");
-				Intent  in = new Intent(mContext, ClockMoreAlertActivity.class);
-				//				String time = new_alertTimeText.getText().toString();
-				//				if(time !=null){
-				//					in.putExtra("ischeck", time);
-				//				}
-				in.putExtra("taskid", TaskID);
-				in.putExtra("onlist", alertTimeBeans);
-				startActivityForResult(in, TIMECODE);
-				//				Intent  in = new Intent(mContext, ClockMoreAlertActivity.class);
-				//				startActivity(in);
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			MobclickAgent.onEvent(mContext, "clickalarm");
+			Intent  in = new Intent(mContext, ClockMoreAlertActivity.class);
+			//				String time = new_alertTimeText.getText().toString();
+			//				if(time !=null){
+			//					in.putExtra("ischeck", time);
+			//				}
+			in.putExtra("taskid", TaskID);
+			in.putExtra("onlist", alertTimeBeans);
+			startActivityForResult(in, TIMECODE);
+			//				Intent  in = new Intent(mContext, ClockMoreAlertActivity.class);
+			//				startActivity(in);
+		}
+	});
+	new_isVisibleImage.setOnClickListener(new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			MobclickAgent.onEvent(mContext, "clickvisity");
+			if(isVisity){
+				isVisity = false;
+				new_isVisibleImage.setImageResource(R.drawable.clock_new_unvisible);
+				new_isVisibleText.setText("");
+			}else{
+				showVisibleDialog();
 			}
-		});
-		new_isVisibleImage.setOnClickListener(new OnClickListener() {
+		}
+	});
+	mNewBack.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				MobclickAgent.onEvent(mContext, "clickvisity");
-				if(isVisity){
-					isVisity = false;
-					new_isVisibleImage.setImageResource(R.drawable.clock_new_unvisible);
-					new_isVisibleText.setText("");
-				}else{
-					showVisibleDialog();
-				}
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			finish();
+
+		}
+	});
+	mNewSuccess.setOnClickListener(new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			if(isSuccess){
+				return;
 			}
-		});
-		mNewBack.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				finish();
-
+			ClockTitle = mNewInput.getText().toString();
+			String ClockState = mNewState.getText().toString();
+			Toast toast = Toast.makeText(mContext, "", Toast.LENGTH_SHORT);
+			if(ClockTitle == null||ClockTitle.length()==0){
+				toast.setText("打卡标题不可为空！");
+				toast.show();
+				isSuccess = false;
+				return ;
 			}
-		});
-		mNewSuccess.setOnClickListener(new OnClickListener() {
+			if(isInput){
+				MobclickAgent.onEvent(mContext, "newtitleinput");
+			}else{
+				MobclickAgent.onEvent(mContext, "newtitleadd");
+			}
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				if(isSuccess){
+			Tools.getLog(Tools.d, "aaa", "ClockTitle=" + ClockTitle);
+			Tools.getLog(Tools.d, "aaa", "ClockState=" + ClockState);
+			Tools.getLog(Tools.d, "aaa", "CoverUrl=" + CoverUrl);
+
+
+
+			//					long dayTime = 1000L * 60 * 60 * 24;
+			//					String arrayTime[] = tixingTime.split(":");
+			//					int hour = Integer.parseInt(arrayTime[0]);
+			//					int minute = Integer.parseInt(arrayTime[1]);
+			//
+			//					canlendar.setTimeInMillis(System.currentTimeMillis());
+			//					canlendar.set(Calendar.HOUR_OF_DAY, hour);
+			//					canlendar.set(Calendar.MINUTE, minute);
+			//					canlendar.set(Calendar.SECOND, 0);
+			//					canlendar.set(Calendar.MILLISECOND, 0);
+			//
+			//					Intent intent = new Intent(ClockNewActivity.this,
+			//							CallAlarm.class);
+			//					PendingIntent sender = PendingIntent.getBroadcast(
+			//							ClockNewActivity.this, 1, intent, 0);
+			//					/*
+			//					 * setRepeating() 可让闹钟重复执行
+			//					 */
+			//					AlarmManager am;
+			//					am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			//					am.setRepeating(AlarmManager.RTC_WAKEUP,
+			//							canlendar.getTimeInMillis(), dayTime, sender);
+			//					/* 更新显示的设定闹钟时间 */
+			Conn(TaskID,ClockTitle, ClockState ,isVisity?"1":"0",isCheckTime+"",beginTime,endTime);
+		}
+
+	});
+
+	searchListView.setOnItemClickListener(new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			// TODO Auto-generated method stub
+			isInput = false;
+			isSelectSearch = true;
+			SearchBean searchBean = searchBeanList.get(arg2);
+			mNewInput.setText(searchBean.getTitle());
+			if(isVisity){
+				isVisity = false;
+				new_isVisibleImage.setImageResource(R.drawable.clock_new_unvisible);
+			}
+
+			//				GetAlarmList(searchBean.getTaskId());//不把提醒同步过来
+			mNewState.setText(searchBean.getDescription());
+			if (searchBean.getTime_limit_flag().equals("1")) {
+				isCheckTime = 1;
+				new_limitTimeText.setText(searchBean.getBegin_time() + "-"
+						+ searchBean.getEnd_time());
+				new_limitTimeImage.setImageResource(R.drawable.clock_new_limit);
+				new_limitTimeText.setVisibility(View.VISIBLE);
+			} else {
+				isCheckTime = 0;
+				new_limitTimeText.setText("");
+				new_limitTimeImage
+				.setImageResource(R.drawable.clock_new_unlimit);
+				new_limitTimeText.setVisibility(View.GONE);
+			}
+			SuccessType(true);//完成变色
+			searchListView.setVisibility(View.GONE);
+			ClockApplication.closeKeybord(mNewInput, mContext);
+		}
+	});
+}
+
+
+/**
+ * 对PagerSlidingTabStrip的各项属性进行赋值。
+ */
+private void setTabsValue() {
+	// 设置Tab是自动填充满屏幕的
+	new_tabs.setShouldExpand(true);
+	// 设置Tab的分割线是透明的
+	new_tabs.setDividerColor(Color.TRANSPARENT);
+	// 设置Tab底部线的高度
+	new_tabs.setUnderlineHeight((int) TypedValue.applyDimension(
+			TypedValue.COMPLEX_UNIT_DIP, 1, mDisplayMetrics));
+	// 设置Tab Indicator的高度
+	new_tabs.setIndicatorHeight((int) TypedValue.applyDimension(
+			TypedValue.COMPLEX_UNIT_DIP, 2, mDisplayMetrics));
+	//设置Tab标题文字的大小（默认的） 
+	new_tabs.setTextSize((int) TypedValue.applyDimension(
+			TypedValue.COMPLEX_UNIT_SP, 14, mDisplayMetrics));
+	//设置选中的文字的大小
+	new_tabs.setSelectTextSice((int) TypedValue.applyDimension(
+			TypedValue.COMPLEX_UNIT_SP, 16, mDisplayMetrics));
+	// 设置Tab Indicator的颜色
+	new_tabs.setIndicatorColor(getResources().getColor(R.color.meibao_color_1));
+	// 设置选中Tab文字的颜色 (这是我自定义的一个方法)
+	new_tabs.setSelectedTextColor(getResources().getColor(R.color.meibao_color_10));
+	//设置没有选中的文字颜色
+	new_tabs.setTextColorResource(R.color.meibao_color_10);
+	// 取消点击Tab时的背景色
+	new_tabs.setTabBackground(0);
+}
+
+public void GetAlarmList(String taskid){
+	String str = "?userId="+userID+"&taskId="+taskid;
+	Service.getService(Contanst.HTTP_ALARM_GETBYRASKID, null, str,
+			ClockNewActivity.this).addList(null).request(UrlParams.GET);
+}
+public void ConnGetCategory(){
+	String str = "?userId="+userID;
+	Service.getService(Contanst.HTTP_GET_CATEGORY, null, str,
+			ClockNewActivity.this).addList(null).request(UrlParams.GET);
+}
+
+public void ConnSearch(String keyWord) {
+	List<NameValuePair> params = new ArrayList<NameValuePair>();
+	try {
+		params.add(new BasicNameValuePair("keyWord", keyWord));
+		params.add(new BasicNameValuePair("userId", userID));
+	} catch (Exception e) {
+
+	}
+	Service.getService(Contanst.HTTP_SEARCH, null, null,
+			ClockNewActivity.this).addList(params).request(UrlParams.POST);
+}
+
+public String TaskID,addTaskid,addTitle;
+
+public void Conn(String taskid,String title, String state,String privateFlag,String timeLimitFlag,String beginTimes,String endTimes) {
+	isSuccess = true;
+	List<NameValuePair> params = new ArrayList<NameValuePair>();
+	try {
+		params.add(new BasicNameValuePair("taskId", taskid));// UUID.randomUUID().toString())
+		params.add(new BasicNameValuePair("userId", userID));// UUID.randomUUID().toString())
+		params.add(new BasicNameValuePair("title", title));
+		params.add(new BasicNameValuePair("description", state));
+		//			if(isVisity){
+		//				params.add(new BasicNameValuePair("privateFlag", "1"));
+		//			}else{
+		//				params.add(new BasicNameValuePair("privateFlag", "0"));
+		//			}
+		params.add(new BasicNameValuePair("privateFlag", privateFlag));
+		params.add(new BasicNameValuePair("autoShareFlag", 0+""));
+		//			if(settings.getBoolean("isWeiboOpen", false)){
+		//				params.add(new BasicNameValuePair("autoShareFlag", 1+""));
+		//			} else {
+		//				params.add(new BasicNameValuePair("autoShareFlag", 0+""));
+		//			}
+		params.add(new BasicNameValuePair("timeLimitFlag", timeLimitFlag));
+		if(timeLimitFlag.equals("1")){
+			params.add(new BasicNameValuePair("beginTime", beginTimes));
+			params.add(new BasicNameValuePair("endTime", endTimes));
+		}
+		params.add(new BasicNameValuePair("alertTime", new_alertTimeText.getText().toString()));
+		params.add(new BasicNameValuePair("cover", CoverUrl));
+		params.add(new BasicNameValuePair("onlineFlag", 1+""));
+		//			params.add(new BasicNameValuePair("offLineCTime", ""));
+	} catch (Exception e) {
+
+	}
+	Service.getService(Contanst.HTTP_CREATETASK, null, null,
+			ClockNewActivity.this).addList(params).request(UrlParams.POST);
+}
+
+public void AddAlertConn(String taskid, ArrayList<MoreAlertTimeBean> list){
+	Gson gson = new Gson();
+	String str = gson.toJson(list);
+	List<NameValuePair> params = new ArrayList<NameValuePair>();
+	try {
+		params.add(new BasicNameValuePair("taskId", taskid));// UUID.randomUUID().toString())
+		params.add(new BasicNameValuePair("userId", userID));
+		params.add(new BasicNameValuePair("alarmListJson", str));
+	} catch (Exception e) {
+
+	}
+	Service.getService(Contanst.HTTP_ALERT_CREATE, null, null,
+			ClockNewActivity.this).addList(params).request(UrlParams.POST);
+}
+
+@Override
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+	// TODO Auto-generated method stub
+	Tools.getLog(Tools.i, "aaa", "keyCode ---------- " + keyCode);
+	if (keyCode == KeyEvent.KEYCODE_BACK) {
+		Tools.getLog(Tools.i, "aaa", "KEYCODE_BACKKEYCODE_BACKKEYCODE_BACK");
+		if (searchListView.getVisibility() == View.VISIBLE) {
+			searchListView.setVisibility(View.GONE);
+			return true;
+		}
+
+
+	}
+	return super.onKeyDown(keyCode, event);
+}
+private static String getTime(int hour,int minute){
+	String hours = hour+"";
+	String minutes = minute+"";
+	if(hours.length() == 1){
+		hours = 0+hours;
+	}
+	if(minutes.length() == 1){
+		minutes = 0+minutes;
+	}
+	return hours+":"+minutes;
+}
+
+@Override
+public void getJOSNdataSuccess(Object bean, String sccmsg, int connType) {
+	// TODO Auto-generated method stub
+	Tools.getLog(Tools.i, "aaa", "===========getJOSNdataSuccess=============");
+	Message msg = new Message();
+	msg.what = Contanst.BEST_INFO_OK;
+	msg.obj = bean;
+	msg.arg1 = connType;
+	mHandler.sendMessage(msg);
+}
+
+@Override
+public void getJOSNdataFail(String errcode, String errmsg, int connType) {
+	// TODO Auto-generated method stub
+	Tools.getLog(Tools.i, "aaa", "==========getJOSNdataFail===========");
+	Message msg = new Message();
+	msg.what = Contanst.BEST_INFO_FAIL;
+	msg.obj = errmsg;
+	msg.arg1 = connType;
+	mHandler.sendMessage(msg);
+}
+@SuppressLint("HandlerLeak")
+private Handler mHandler = new Handler(){
+	@SuppressWarnings("unchecked")
+	@Override
+	public void handleMessage(Message msg) {
+		// TODO Auto-generated method stub
+		super.handleMessage(msg);
+		switch (msg.what) {
+		case Contanst.BEST_INFO_OK:
+			switch (msg.arg1) {
+			case Contanst.GETRECOMMEND:
+				recommendBeans = (List<RecommendBean>) msg.obj;
+				lists.add(recommendBeans);
+				type++;
+				if (type > 3) {
 					return;
 				}
-				ClockTitle = mNewInput.getText().toString();
-				String ClockState = mNewState.getText().toString();
-				Toast toast = Toast.makeText(mContext, "", Toast.LENGTH_SHORT);
-				if(ClockTitle == null||ClockTitle.length()==0){
-					toast.setText("打卡标题不可为空！");
-					toast.show();
-					isSuccess = false;
-					return ;
-				}
-				if(isInput){
-					MobclickAgent.onEvent(mContext, "newtitleinput");
-				}else{
-					MobclickAgent.onEvent(mContext, "newtitleadd");
-				}
-
-				Tools.getLog(Tools.d, "aaa", "ClockTitle=" + ClockTitle);
-				Tools.getLog(Tools.d, "aaa", "ClockState=" + ClockState);
-				Tools.getLog(Tools.d, "aaa", "CoverUrl=" + CoverUrl);
-
-
-
-				//					long dayTime = 1000L * 60 * 60 * 24;
-				//					String arrayTime[] = tixingTime.split(":");
-				//					int hour = Integer.parseInt(arrayTime[0]);
-				//					int minute = Integer.parseInt(arrayTime[1]);
-				//
-				//					canlendar.setTimeInMillis(System.currentTimeMillis());
-				//					canlendar.set(Calendar.HOUR_OF_DAY, hour);
-				//					canlendar.set(Calendar.MINUTE, minute);
-				//					canlendar.set(Calendar.SECOND, 0);
-				//					canlendar.set(Calendar.MILLISECOND, 0);
-				//
-				//					Intent intent = new Intent(ClockNewActivity.this,
-				//							CallAlarm.class);
-				//					PendingIntent sender = PendingIntent.getBroadcast(
-				//							ClockNewActivity.this, 1, intent, 0);
-				//					/*
-				//					 * setRepeating() 可让闹钟重复执行
-				//					 */
-				//					AlarmManager am;
-				//					am = (AlarmManager) getSystemService(ALARM_SERVICE);
-				//					am.setRepeating(AlarmManager.RTC_WAKEUP,
-				//							canlendar.getTimeInMillis(), dayTime, sender);
-				//					/* 更新显示的设定闹钟时间 */
-				Conn(TaskID,ClockTitle, ClockState ,isVisity?"1":"0",isCheckTime+"",beginTime,endTime);
-			}
-
-		});
-
-		searchListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-				isInput = false;
-				isSelectSearch = true;
-				SearchBean searchBean = searchBeanList.get(arg2);
-				mNewInput.setText(searchBean.getTitle());
-				if(isVisity){
-					isVisity = false;
-					new_isVisibleImage.setImageResource(R.drawable.clock_new_unvisible);
-				}
-
-				//				GetAlarmList(searchBean.getTaskId());//不把提醒同步过来
-				mNewState.setText(searchBean.getDescription());
-				if (searchBean.getTime_limit_flag().equals("1")) {
-					isCheckTime = 1;
-					new_limitTimeText.setText(searchBean.getBegin_time() + "-"
-							+ searchBean.getEnd_time());
-					new_limitTimeImage.setImageResource(R.drawable.clock_new_limit);
-					new_limitTimeText.setVisibility(View.VISIBLE);
-				} else {
-					isCheckTime = 0;
-					new_limitTimeText.setText("");
-					new_limitTimeImage
-					.setImageResource(R.drawable.clock_new_unlimit);
-					new_limitTimeText.setVisibility(View.GONE);
-				}
-				SuccessType(true);//完成变色
-				searchListView.setVisibility(View.GONE);
-				ClockApplication.closeKeybord(mNewInput, mContext);
-			}
-		});
-	}
-
-
-	/**
-	 * 对PagerSlidingTabStrip的各项属性进行赋值。
-	 */
-	private void setTabsValue() {
-		// 设置Tab是自动填充满屏幕的
-		new_tabs.setShouldExpand(true);
-		// 设置Tab的分割线是透明的
-		new_tabs.setDividerColor(Color.TRANSPARENT);
-		// 设置Tab底部线的高度
-		new_tabs.setUnderlineHeight((int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, 1, mDisplayMetrics));
-		// 设置Tab Indicator的高度
-		new_tabs.setIndicatorHeight((int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, 2, mDisplayMetrics));
-		//设置Tab标题文字的大小（默认的） 
-		new_tabs.setTextSize((int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_SP, 14, mDisplayMetrics));
-		//设置选中的文字的大小
-		new_tabs.setSelectTextSice((int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_SP, 16, mDisplayMetrics));
-		// 设置Tab Indicator的颜色
-		new_tabs.setIndicatorColor(getResources().getColor(R.color.meibao_color_1));
-		// 设置选中Tab文字的颜色 (这是我自定义的一个方法)
-		new_tabs.setSelectedTextColor(getResources().getColor(R.color.meibao_color_10));
-		//设置没有选中的文字颜色
-		new_tabs.setTextColorResource(R.color.meibao_color_10);
-		// 取消点击Tab时的背景色
-		new_tabs.setTabBackground(0);
-	}
-
-	public void GetAlarmList(String taskid){
-		String str = "?userId="+userID+"&taskId="+taskid;
-		Service.getService(Contanst.HTTP_ALARM_GETBYRASKID, null, str,
-				ClockNewActivity.this).addList(null).request(UrlParams.GET);
-	}
-	public void ConnGetCategory(){
-		String str = "?userId="+userID;
-		Service.getService(Contanst.HTTP_GET_CATEGORY, null, str,
-				ClockNewActivity.this).addList(null).request(UrlParams.GET);
-	}
-
-	public void ConnSearch(String keyWord) {
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		try {
-			params.add(new BasicNameValuePair("keyWord", keyWord));
-			params.add(new BasicNameValuePair("userId", userID));
-		} catch (Exception e) {
-
-		}
-		Service.getService(Contanst.HTTP_SEARCH, null, null,
-				ClockNewActivity.this).addList(params).request(UrlParams.POST);
-	}
-
-	public String TaskID,addTaskid,addTitle;
-
-	public void Conn(String taskid,String title, String state,String privateFlag,String timeLimitFlag,String beginTimes,String endTimes) {
-		isSuccess = true;
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		try {
-			params.add(new BasicNameValuePair("taskId", taskid));// UUID.randomUUID().toString())
-			params.add(new BasicNameValuePair("userId", userID));// UUID.randomUUID().toString())
-			params.add(new BasicNameValuePair("title", title));
-			params.add(new BasicNameValuePair("description", state));
-			//			if(isVisity){
-			//				params.add(new BasicNameValuePair("privateFlag", "1"));
-			//			}else{
-			//				params.add(new BasicNameValuePair("privateFlag", "0"));
-			//			}
-			params.add(new BasicNameValuePair("privateFlag", privateFlag));
-			params.add(new BasicNameValuePair("autoShareFlag", 0+""));
-			//			if(settings.getBoolean("isWeiboOpen", false)){
-			//				params.add(new BasicNameValuePair("autoShareFlag", 1+""));
-			//			} else {
-			//				params.add(new BasicNameValuePair("autoShareFlag", 0+""));
-			//			}
-			params.add(new BasicNameValuePair("timeLimitFlag", timeLimitFlag));
-			if(timeLimitFlag.equals("1")){
-				params.add(new BasicNameValuePair("beginTime", beginTimes));
-				params.add(new BasicNameValuePair("endTime", endTimes));
-			}
-			params.add(new BasicNameValuePair("alertTime", new_alertTimeText.getText().toString()));
-			params.add(new BasicNameValuePair("cover", CoverUrl));
-			params.add(new BasicNameValuePair("onlineFlag", 1+""));
-			//			params.add(new BasicNameValuePair("offLineCTime", ""));
-		} catch (Exception e) {
-
-		}
-		Service.getService(Contanst.HTTP_CREATETASK, null, null,
-				ClockNewActivity.this).addList(params).request(UrlParams.POST);
-	}
-
-	public void AddAlertConn(String taskid, ArrayList<MoreAlertTimeBean> list){
-		Gson gson = new Gson();
-		String str = gson.toJson(list);
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		try {
-			params.add(new BasicNameValuePair("taskId", taskid));// UUID.randomUUID().toString())
-			params.add(new BasicNameValuePair("userId", userID));
-			params.add(new BasicNameValuePair("alarmListJson", str));
-		} catch (Exception e) {
-
-		}
-		Service.getService(Contanst.HTTP_ALERT_CREATE, null, null,
-				ClockNewActivity.this).addList(params).request(UrlParams.POST);
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		Tools.getLog(Tools.i, "aaa", "keyCode ---------- " + keyCode);
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Tools.getLog(Tools.i, "aaa", "KEYCODE_BACKKEYCODE_BACKKEYCODE_BACK");
-			if (searchListView.getVisibility() == View.VISIBLE) {
-				searchListView.setVisibility(View.GONE);
-				return true;
-			}
-
-
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	private static String getTime(int hour,int minute){
-		String hours = hour+"";
-		String minutes = minute+"";
-		if(hours.length() == 1){
-			hours = 0+hours;
-		}
-		if(minutes.length() == 1){
-			minutes = 0+minutes;
-		}
-		return hours+":"+minutes;
-	}
-
-	@Override
-	public void getJOSNdataSuccess(Object bean, String sccmsg, int connType) {
-		// TODO Auto-generated method stub
-		Tools.getLog(Tools.i, "aaa", "===========getJOSNdataSuccess=============");
-		Message msg = new Message();
-		msg.what = Contanst.BEST_INFO_OK;
-		msg.obj = bean;
-		msg.arg1 = connType;
-		mHandler.sendMessage(msg);
-	}
-
-	@Override
-	public void getJOSNdataFail(String errcode, String errmsg, int connType) {
-		// TODO Auto-generated method stub
-		Tools.getLog(Tools.i, "aaa", "==========getJOSNdataFail===========");
-		Message msg = new Message();
-		msg.what = Contanst.BEST_INFO_FAIL;
-		msg.obj = errmsg;
-		msg.arg1 = connType;
-		mHandler.sendMessage(msg);
-	}
-	@SuppressLint("HandlerLeak")
-	private Handler mHandler = new Handler(){
-		@SuppressWarnings("unchecked")
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case Contanst.BEST_INFO_OK:
-				switch (msg.arg1) {
-				case Contanst.GETRECOMMEND:
-					recommendBeans = (List<RecommendBean>) msg.obj;
-					lists.add(recommendBeans);
-					type++;
-					if (type > 3) {
-						return;
-					}
-					// getBuildingConn(type);
-					break;
-				case Contanst.CREATETASK:
-					CreateTaskBean bean = (CreateTaskBean) msg.obj;
-					//					ArrayList<AlarmBean> alarmList = ClockApplication.getInstance().getAlarmList();
-					for(int i = 0;i<alertTimeBeans.size();i++){
-						alertTimeBeans.get(i).setTitle(ClockTitle);
-						if(alertTimeBeans.get(i).getStatus().equals("1")){
-							AlarmBean alarmBean = new AlarmBean();
-							alarmBean.setAlarmIndex(i);
-							alarmBean.setAlarmTime(alertTimeBeans.get(i).getTime());
-							alarmBean.setTastID(TaskID);
-							alarmBean.setTastTitle(ClockTitle);
-							//							alarmList.add(alarmBean);
-							CallAlarmUtil.setAlarm(ClockNewActivity.this, alarmBean);
-						}
-					}
-
-					//					dbHelper.addAlarmList(alertTimeBeans);
-					if(isAdd){
-						AddAlertConn(addTaskid,addAlertTimeBeans);
-					}else{
-						AddAlertConn(TaskID,alertTimeBeans);
-					}
-
-					//					alertTimeBeans = dbHelper.getAlarmList(TaskID);
-					Tools.getLog(Tools.d, "aaa", "存入的数据:"+alertTimeBeans.toString());
-					//					ClockApplication.getInstance().setAlarmList(alarmList);
-					Tools.getLog(Tools.d, "aaa", "CreateTaskBean:" + bean);
-					setResult(FINISHCODE);
-					ClockMainActivity.isBackToday = true;
-
-					break;
-				case Contanst.GET_CATEGORY:
-
-					getCategoryBeanList = (ArrayList<GetCategoryBean>) msg.obj;
-					String[] titles = new String[getCategoryBeanList.size()];
-					for(int i = 0; i < getCategoryBeanList.size(); i++){
-						titles[i] = getCategoryBeanList.get(i).getTitle();
-						Tools.getLog(Tools.i, "bbb", "titles ============== "+titles[i]);
-					}
-					initTab(titles);
-					break;
-
-				case Contanst.SEARCH:
-					searchBeanList = (ArrayList<SearchBean>) msg.obj;
-					if (searchBeanList.size() > 0) {
-						searchListView.setVisibility(View.VISIBLE);
-						searchBuildingAdapter.setList(searchBeanList);
-						searchBuildingAdapter.setSearchStr(searchStr);
-						searchBuildingAdapter.notifyDataSetChanged();
-					} else {
-						searchListView.setVisibility(View.GONE);
-					}
-
-					break;
-				case Contanst.ALERT_CREATE:
-					Tools.getLog(Tools.d, "aaa", "=======添加数据成功!=====");
-					if(isAdd){
-						snakbarTitle.setText("已将#"+addTitle+"#添加到主页的打卡列表中");
-						animAlertStart();
-
-					}else{
-						finish();
-					}
-
-					break;
-				case Contanst.ALARM_GETBYRASKID:
-					ArrayList<MoreAlertTimeBean> beans = (ArrayList<MoreAlertTimeBean>) msg.obj;
-					Tools.getLog(Tools.d, "aaa", "获得的alarm："+beans.toString());
-					int alarmNum = 0;
-					for(int i = 0; i<beans.size(); i++){
-						if(beans.get(i).getStatus().equals("1")){
-							alarmNum ++;
-						}
-					}
-
-					new_alertTimeText.setText(alarmNum+"");
-					if(alarmNum == 0){
-						new_alertTimeImage
-						.setImageResource(R.drawable.clock_new_unalert);
-						new_alertTimeText.setVisibility(View.GONE);
-					}else{
-						new_alertTimeImage
-						.setImageResource(R.drawable.clock_new_alert);
-						new_alertTimeText.setVisibility(View.VISIBLE);
-					}
-					break;
-				}
-
+				// getBuildingConn(type);
 				break;
-			case Contanst.BEST_INFO_FAIL:
-				String message = (String) msg.obj;
-				Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-				switch (msg.arg1) {
-				case Contanst.GETRECOMMEND:
-					Tools.getLog(Tools.d, "aaa", "GETRECOMMEND:"+message);
-					break;
-				case Contanst.CREATETASK:
-					break;
-				}
-
-				break;
-			case TIMER_SEARCH:
-
-				if (msg.arg1 > 0) {
-					ConnSearch(searchStr);
-				}
-				break;
-			}
-		}
-	};
-
-	String tixingTime;
-	ArrayList<MoreAlertTimeBean> alertTimeBeans = new ArrayList<MoreAlertTimeBean>();
-	ArrayList<MoreAlertTimeBean> addAlertTimeBeans = new ArrayList<MoreAlertTimeBean>();
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		Tools.getLog(Tools.i, "aaa", "Activity.RESULT_OK === "
-				+ Activity.RESULT_OK);
-		Tools.getLog(Tools.i, "aaa", "requestCode === " + resultCode);
-		Bitmap bitmap = null;
-
-		if (requestCode == TIMECODE) {
-			if (resultCode == RESULT_OK) {
-				//				alertTimeBeans = dbHelper.getAlarmList(TaskID);
-				alertTimeBeans = (ArrayList<MoreAlertTimeBean>) data.getSerializableExtra("list");
-				int fristposition = 0;
-				int alarmNum = 0;
-				for(int i = 0; i<alertTimeBeans.size(); i++){
+			case Contanst.CREATETASK:
+				CreateTaskBean bean = (CreateTaskBean) msg.obj;
+				//					ArrayList<AlarmBean> alarmList = ClockApplication.getInstance().getAlarmList();
+				for(int i = 0;i<alertTimeBeans.size();i++){
+					alertTimeBeans.get(i).setTitle(ClockTitle);
 					if(alertTimeBeans.get(i).getStatus().equals("1")){
+						AlarmBean alarmBean = new AlarmBean();
+						alarmBean.setAlarmIndex(i);
+						alarmBean.setAlarmTime(alertTimeBeans.get(i).getTime());
+						alarmBean.setTastID(TaskID);
+						alarmBean.setTastTitle(ClockTitle);
+						//							alarmList.add(alarmBean);
+						CallAlarmUtil.setAlarm(ClockNewActivity.this, alarmBean);
+					}
+				}
+
+				//					dbHelper.addAlarmList(alertTimeBeans);
+				if(isAdd){
+					AddAlertConn(addTaskid,addAlertTimeBeans);
+				}else{
+					AddAlertConn(TaskID,alertTimeBeans);
+				}
+
+				//					alertTimeBeans = dbHelper.getAlarmList(TaskID);
+				Tools.getLog(Tools.d, "aaa", "存入的数据:"+alertTimeBeans.toString());
+				//					ClockApplication.getInstance().setAlarmList(alarmList);
+				Tools.getLog(Tools.d, "aaa", "CreateTaskBean:" + bean);
+				setResult(FINISHCODE);
+				ClockMainActivity.isBackToday = true;
+
+				break;
+			case Contanst.GET_CATEGORY:
+
+				getCategoryBeanList = (ArrayList<GetCategoryBean>) msg.obj;
+				String[] titles = new String[getCategoryBeanList.size()];
+				for(int i = 0; i < getCategoryBeanList.size(); i++){
+					titles[i] = getCategoryBeanList.get(i).getTitle();
+					Tools.getLog(Tools.i, "bbb", "titles ============== "+titles[i]);
+				}
+				initTab(titles);
+				break;
+
+			case Contanst.SEARCH:
+				searchBeanList = (ArrayList<SearchBean>) msg.obj;
+				if (searchBeanList.size() > 0) {
+					searchListView.setVisibility(View.VISIBLE);
+					searchBuildingAdapter.setList(searchBeanList);
+					searchBuildingAdapter.setSearchStr(searchStr);
+					searchBuildingAdapter.notifyDataSetChanged();
+				} else {
+					searchListView.setVisibility(View.GONE);
+				}
+
+				break;
+			case Contanst.ALERT_CREATE:
+				Tools.getLog(Tools.d, "aaa", "=======添加数据成功!=====");
+				if(isAdd){
+					snakbarTitle.setText("已将#"+addTitle+"#添加到主页的打卡列表中");
+					animAlertStart();
+
+				}else{
+					finish();
+				}
+
+				break;
+			case Contanst.ALARM_GETBYRASKID:
+				ArrayList<MoreAlertTimeBean> beans = (ArrayList<MoreAlertTimeBean>) msg.obj;
+				Tools.getLog(Tools.d, "aaa", "获得的alarm："+beans.toString());
+				int alarmNum = 0;
+				for(int i = 0; i<beans.size(); i++){
+					if(beans.get(i).getStatus().equals("1")){
 						alarmNum ++;
-						if(alarmNum == 1){
-							fristposition = i;
-						}
 					}
 				}
 
@@ -915,301 +872,364 @@ ServiceListener {
 					new_alertTimeImage
 					.setImageResource(R.drawable.clock_new_unalert);
 					new_alertTimeText.setVisibility(View.GONE);
-				}else if(alarmNum == 1){
-					new_alertTimeImage
-					.setImageResource(R.drawable.clock_new_alert);
-					new_alertTimeText.setVisibility(View.VISIBLE);
-					new_alertTimeText.setText(alertTimeBeans.get(fristposition).getTime());
 				}else{
 					new_alertTimeImage
 					.setImageResource(R.drawable.clock_new_alert);
 					new_alertTimeText.setVisibility(View.VISIBLE);
 				}
+				break;
+			}
 
-				//						tixingTime = data.getStringExtra("time");
-				//				new_alertTimeText.setText(tixingTime);
-				//				if (tixingTime != null && tixingTime.length() != 0) {
-				//					new_alertTimeImage
-				//					.setImageResource(R.drawable.clock_new_alert);
-				//					new_alertTimeText.setVisibility(View.VISIBLE);
-				//				}else {
-				//					Tools.getLog(Tools.i, "aaa", "dasdasdasdasd=================");
-				//					tixingTime = null;
-				//					new_alertTimeImage
-				//					.setImageResource(R.drawable.clock_new_unalert);
-				//					new_alertTimeText.setVisibility(View.GONE);
-				//				}
+			break;
+		case Contanst.BEST_INFO_FAIL:
+			String message = (String) msg.obj;
+			Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+			switch (msg.arg1) {
+			case Contanst.GETRECOMMEND:
+				Tools.getLog(Tools.d, "aaa", "GETRECOMMEND:"+message);
+				break;
+			case Contanst.CREATETASK:
+				break;
+			}
 
+			break;
+		case TIMER_SEARCH:
 
-			} 
-		} else if (requestCode == LIMITCODE) {
-			if (resultCode == RESULT_OK) {
-				String time = data.getStringExtra("limittime");
-				if (time != null) {
-					isCheckTime = 1;
-					new_limitTimeText.setText(time);
-					String[] arrayTime = time.split("-");
-					beginTime = arrayTime[0];
-					endTime = arrayTime[1];
-					new_limitTimeImage
-					.setImageResource(R.drawable.clock_new_limit);
-					new_limitTimeText.setVisibility(View.VISIBLE);
-				}else {
-					isCheckTime = 0;
-					new_limitTimeText.setText("");
-					new_limitTimeImage
-					.setImageResource(R.drawable.clock_new_unlimit);
-					new_limitTimeText.setVisibility(View.GONE);
-				}
-			} 
+			if (msg.arg1 > 0) {
+				ConnSearch(searchStr);
+			}
+			break;
 		}
 	}
+};
 
-	ClockNewBuildingFragment fragment[];
+String tixingTime;
+ArrayList<MoreAlertTimeBean> alertTimeBeans = new ArrayList<MoreAlertTimeBean>();
+ArrayList<MoreAlertTimeBean> addAlertTimeBeans = new ArrayList<MoreAlertTimeBean>();
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	// TODO Auto-generated method stub
+	super.onActivityResult(requestCode, resultCode, data);
+	Tools.getLog(Tools.i, "aaa", "Activity.RESULT_OK === "
+			+ Activity.RESULT_OK);
+	Tools.getLog(Tools.i, "aaa", "requestCode === " + resultCode);
+	Bitmap bitmap = null;
 
-	public class MyPagerAdapter extends FragmentPagerAdapter {
-		private String[] titles;
-
-		public MyPagerAdapter(FragmentManager fm, String[] titles) {
-			super(fm);
-			this.titles = titles;
-			fragment = new ClockNewBuildingFragment[titles.length];
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return titles[position];
-		}
-		@Override
-		public int getCount() {
-			return titles.length;
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			if (fragment[position] == null) {
-				fragment[position] = new ClockNewBuildingFragment(
-						getCategoryBeanList.get(position).getId(),
-						parentScrollView, goTopButton,userID);
-
-			}
-			fragment[position].setClickAdd(clickAdd);
-			return fragment[position];
-
-		}
-
-	}
-
-	GOTopButton goTopButton = new GOTopButton() {
-
-		@Override
-		public void getTopBottom(String title) {
-			isSelectSearch = true;
-			mNewInput.setText(title);
-			Tools.getLog(Tools.i, "aaa", "aaaaaaaaaaaaaaaaaa");
-			// TODO Auto-generated method stub
-			for (int i = 0; i < fragment.length; i++) {
-				if (fragment[i] != null)
-					fragment[i].listView.setSelection(0);
-			}
-			parentScrollView.scrollTo(0, 0);
-		}
-
-	};
-	/** 下面切换的添加。。*/
-	onClickAdd clickAdd = new onClickAdd() {
-
-		@Override
-		public void clickAdd(RecommendBean recommendBean) {
-			// TODO Auto-generated method stub
-			//			isSelectSearch = true;
-			isInput = false;
-			isAdd = true;
-			addTaskid = Tools.getUuid();
-			addTitle = recommendBean.getTitle();
-			addAlertTimeBeans = new ArrayList<MoreAlertTimeBean>();
-			MoreAlertTimeBean alertTimeBean = new MoreAlertTimeBean();
-			alertTimeBean.setId(Tools.getUuid());
-			alertTimeBean.setTaskId(addTaskid);
-			long currentTime = System.currentTimeMillis();
-			SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-			Date date = new Date(currentTime);
-			alertTimeBean.setTime(formatter.format(date));
-			alertTimeBean.setStatus("1");
-			alertTimeBean.setPickervisity("2");
-			addAlertTimeBeans.add(alertTimeBean);
-			MobclickAgent.onEvent(mContext, "clicksetalarm");//默认设置提醒一次
-			Conn(addTaskid, addTitle, recommendBean.getDescription(),"0" ,recommendBean.getTime_limit_flag(),
-					recommendBean.getBegin_time(),recommendBean.getEnd_time());
-
-			//			GetAlarmList(recommendBean.getId());
-			//			if(isVisity){
-			//				isVisity = false;
-			//				new_isVisibleImage.setImageResource(R.drawable.clock_new_unvisible);
-			//				new_isVisibleText.setText("");
-			//			}
-			//			mNewInput.setText(recommendBean.getTitle());
-			//			mNewState.setText(recommendBean.getDescription());
-			//			if (recommendBean.getTime_limit_flag().equals("1")) {
-			//				isCheckTime = 1;
-			//				new_limitTimeText.setText(recommendBean.getBegin_time() + "-"
-			//						+ recommendBean.getEnd_time());
-			//				new_limitTimeImage.setImageResource(R.drawable.clock_new_limit);
-			//				new_limitTimeText.setVisibility(View.VISIBLE);
-			//			} else {
-			//				isCheckTime = 0;
-			//				new_limitTimeText.setText("");
-			//				new_limitTimeImage
-			//				.setImageResource(R.drawable.clock_new_unlimit);
-			//				new_limitTimeText.setVisibility(View.GONE);
-			//			}
-			//			mNewSuccess.setTextColor(getResources().getColor(
-			//					R.color.meibao_color_1));
-			//			parentScrollView.scrollTo(0, 0);
-		}
-	};
-
-	listenerSetHeght setHeght = new listenerSetHeght() {
-
-		@Override
-		public void setHeight(int height) {
-			// TODO Auto-generated method stub
-		}
-	};
-	public void showVisibleDialog(){
-		new AlertDialog.Builder(mContext)
-		.setTitle("隐私设置")
-		.setMessage("设置为隐私后，所有打卡信息\n仅能被自己看到")
-		.setPositiveButton("设为隐私", new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				// TODO Auto-generated method stub
-				MobclickAgent.onEvent(mContext, "clicksetvisity");
-				isVisity = true;
-				new_isVisibleImage.setImageResource(R.drawable.clock_new_visible);
-				new_isVisibleText.setText("已隐私");
-			}
-		})
-		.setNegativeButton("返回", new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				// TODO Auto-generated method stub
-
-			}
-		}).show();
-		//		final TaskVisityDialog taskVisityDialog = new TaskVisityDialog(ClockNewActivity.this);
-		//		taskVisityDialog.show();
-		//		taskVisityDialog.mCancel.setOnClickListener(new OnClickListener() {
-		//
-		//			@Override
-		//			public void onClick(View arg0) {
-		//				// TODO Auto-generated method stub
-		//				taskVisityDialog.dismiss();
-		//			}
-		//		});
-		//		taskVisityDialog.mResult.setOnClickListener(new OnClickListener() {
-		//
-		//			@Override
-		//			public void onClick(View arg0) {
-		//				// TODO Auto-generated method stub
-		//				isVisity = true;
-		//				new_isVisibleImage.setImageResource(R.drawable.clock_new_visible);
-		//				taskVisityDialog.dismiss();
-		//			}
-		//		});
-
-
-	}
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		MobclickAgent.onPause(this);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onResume()
-	 */
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		MobclickAgent.onResume(this);
-	}
-	public void animAlertStart() {
-		Tools.getLog(Tools.i, "aaa", "开始动画：");
-		int height = snakbarLayout.getHeight();
-		Tools.getLog(Tools.i, "aaa", "animAlertStart height ============= "
-				+ height);
-		TranslateAnimation animationStart = new TranslateAnimation(0, 0,
-				height, 0);
-
-		animationStart.setDuration(500L);// 设置动画持续时间
-		snakbarLayout.startAnimation(animationStart);
-		animationStart.setAnimationListener(new AnimationListener() {
-
-			@Override
-			public void onAnimationStart(Animation arg0) {
-				// TODO Auto-generated method stub
-				snakbarLayout.setVisibility(View.VISIBLE);
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onAnimationEnd(Animation arg0) {
-				// TODO Auto-generated method stub
-				snakbarLayout.setVisibility(View.VISIBLE);
-				new Handler().postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						int height = snakbarLayout.getHeight();
-						Animation mAnimation = new TranslateAnimation(0, 0, 0,
-								height);
-						mAnimation.setDuration(250L);
-						// building_dialog_Layout.setAnimation(mAnimation);
-						snakbarLayout.startAnimation(mAnimation);
-
-						mAnimation.setAnimationListener(new AnimationListener() {
-
-							@Override
-							public void onAnimationStart(Animation arg0) {
-								// TODO Auto-generated method stub
-								snakbarLayout
-								.setVisibility(View.VISIBLE);
-							}
-
-							@Override
-							public void onAnimationRepeat(Animation arg0) {
-								// TODO Auto-generated method stub
-
-							}
-
-							@Override
-							public void onAnimationEnd(Animation arg0) {
-								// TODO Auto-generated method stub
-								snakbarLayout
-								.setVisibility(View.GONE);
-
-							}
-						});
+	if (requestCode == TIMECODE) {
+		if (resultCode == RESULT_OK) {
+			//				alertTimeBeans = dbHelper.getAlarmList(TaskID);
+			alertTimeBeans = (ArrayList<MoreAlertTimeBean>) data.getSerializableExtra("list");
+			int fristposition = 0;
+			int alarmNum = 0;
+			for(int i = 0; i<alertTimeBeans.size(); i++){
+				if(alertTimeBeans.get(i).getStatus().equals("1")){
+					alarmNum ++;
+					if(alarmNum == 1){
+						fristposition = i;
 					}
-				}, 3000L);
-
+				}
 			}
-		});
+
+			new_alertTimeText.setText(alarmNum+"");
+			if(alarmNum == 0){
+				new_alertTimeImage
+				.setImageResource(R.drawable.clock_new_unalert);
+				new_alertTimeText.setVisibility(View.GONE);
+			}else if(alarmNum == 1){
+				new_alertTimeImage
+				.setImageResource(R.drawable.clock_new_alert);
+				new_alertTimeText.setVisibility(View.VISIBLE);
+				new_alertTimeText.setText(alertTimeBeans.get(fristposition).getTime());
+			}else{
+				new_alertTimeImage
+				.setImageResource(R.drawable.clock_new_alert);
+				new_alertTimeText.setVisibility(View.VISIBLE);
+			}
+
+			//						tixingTime = data.getStringExtra("time");
+			//				new_alertTimeText.setText(tixingTime);
+			//				if (tixingTime != null && tixingTime.length() != 0) {
+			//					new_alertTimeImage
+			//					.setImageResource(R.drawable.clock_new_alert);
+			//					new_alertTimeText.setVisibility(View.VISIBLE);
+			//				}else {
+			//					Tools.getLog(Tools.i, "aaa", "dasdasdasdasd=================");
+			//					tixingTime = null;
+			//					new_alertTimeImage
+			//					.setImageResource(R.drawable.clock_new_unalert);
+			//					new_alertTimeText.setVisibility(View.GONE);
+			//				}
+
+
+		} 
+	} else if (requestCode == LIMITCODE) {
+		if (resultCode == RESULT_OK) {
+			String time = data.getStringExtra("limittime");
+			if (time != null) {
+				isCheckTime = 1;
+				new_limitTimeText.setText(time);
+				String[] arrayTime = time.split("-");
+				beginTime = arrayTime[0];
+				endTime = arrayTime[1];
+				new_limitTimeImage
+				.setImageResource(R.drawable.clock_new_limit);
+				new_limitTimeText.setVisibility(View.VISIBLE);
+			}else {
+				isCheckTime = 0;
+				new_limitTimeText.setText("");
+				new_limitTimeImage
+				.setImageResource(R.drawable.clock_new_unlimit);
+				new_limitTimeText.setVisibility(View.GONE);
+			}
+		} 
+	}
+}
+
+ClockNewBuildingFragment fragment[];
+
+public class MyPagerAdapter extends FragmentPagerAdapter {
+	private String[] titles;
+
+	public MyPagerAdapter(FragmentManager fm, String[] titles) {
+		super(fm);
+		this.titles = titles;
+		fragment = new ClockNewBuildingFragment[titles.length];
+	}
+
+	@Override
+	public CharSequence getPageTitle(int position) {
+		return titles[position];
+	}
+	@Override
+	public int getCount() {
+		return titles.length;
+	}
+
+	@Override
+	public Fragment getItem(int position) {
+		if (fragment[position] == null) {
+			fragment[position] = new ClockNewBuildingFragment(
+					getCategoryBeanList.get(position).getId(),
+					parentScrollView, goTopButton,userID);
+
+		}
+		fragment[position].setClickAdd(clickAdd);
+		return fragment[position];
 
 	}
+
+}
+
+GOTopButton goTopButton = new GOTopButton() {
+
+	@Override
+	public void getTopBottom(String title) {
+		isSelectSearch = true;
+		mNewInput.setText(title);
+		Tools.getLog(Tools.i, "aaa", "aaaaaaaaaaaaaaaaaa");
+		// TODO Auto-generated method stub
+		for (int i = 0; i < fragment.length; i++) {
+			if (fragment[i] != null)
+				fragment[i].listView.setSelection(0);
+		}
+		parentScrollView.scrollTo(0, 0);
+	}
+
+};
+/** 下面切换的添加。。*/
+onClickAdd clickAdd = new onClickAdd() {
+
+	@Override
+	public void clickAdd(RecommendBean recommendBean) {
+		// TODO Auto-generated method stub
+		//			isSelectSearch = true;
+		isInput = false;
+		isAdd = true;
+		addTaskid = Tools.getUuid();
+		addTitle = recommendBean.getTitle();
+		addAlertTimeBeans = new ArrayList<MoreAlertTimeBean>();
+		MoreAlertTimeBean alertTimeBean = new MoreAlertTimeBean();
+		alertTimeBean.setId(Tools.getUuid());
+		alertTimeBean.setTaskId(addTaskid);
+		long currentTime = System.currentTimeMillis();
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+		Date date = new Date(currentTime);
+		alertTimeBean.setTime(formatter.format(date));
+		alertTimeBean.setStatus("1");
+		alertTimeBean.setPickervisity("2");
+		addAlertTimeBeans.add(alertTimeBean);
+		MobclickAgent.onEvent(mContext, "clicksetalarm");//默认设置提醒一次
+		Conn(addTaskid, addTitle, recommendBean.getDescription(),"0" ,recommendBean.getTime_limit_flag(),
+				recommendBean.getBegin_time(),recommendBean.getEnd_time());
+
+		//			GetAlarmList(recommendBean.getId());
+		//			if(isVisity){
+		//				isVisity = false;
+		//				new_isVisibleImage.setImageResource(R.drawable.clock_new_unvisible);
+		//				new_isVisibleText.setText("");
+		//			}
+		//			mNewInput.setText(recommendBean.getTitle());
+		//			mNewState.setText(recommendBean.getDescription());
+		//			if (recommendBean.getTime_limit_flag().equals("1")) {
+		//				isCheckTime = 1;
+		//				new_limitTimeText.setText(recommendBean.getBegin_time() + "-"
+		//						+ recommendBean.getEnd_time());
+		//				new_limitTimeImage.setImageResource(R.drawable.clock_new_limit);
+		//				new_limitTimeText.setVisibility(View.VISIBLE);
+		//			} else {
+		//				isCheckTime = 0;
+		//				new_limitTimeText.setText("");
+		//				new_limitTimeImage
+		//				.setImageResource(R.drawable.clock_new_unlimit);
+		//				new_limitTimeText.setVisibility(View.GONE);
+		//			}
+		//			mNewSuccess.setTextColor(getResources().getColor(
+		//					R.color.meibao_color_1));
+		//			parentScrollView.scrollTo(0, 0);
+	}
+};
+
+listenerSetHeght setHeght = new listenerSetHeght() {
+
+	@Override
+	public void setHeight(int height) {
+		// TODO Auto-generated method stub
+	}
+};
+public void showVisibleDialog(){
+	new AlertDialog.Builder(mContext)
+	.setTitle("隐私设置")
+	.setMessage("设置为隐私后，所有打卡信息\n仅能被自己看到")
+	.setPositiveButton("设为隐私", new DialogInterface.OnClickListener() {
+
+		@Override
+		public void onClick(DialogInterface arg0, int arg1) {
+			// TODO Auto-generated method stub
+			MobclickAgent.onEvent(mContext, "clicksetvisity");
+			isVisity = true;
+			new_isVisibleImage.setImageResource(R.drawable.clock_new_visible);
+			new_isVisibleText.setText("已隐私");
+		}
+	})
+	.setNegativeButton("返回", new DialogInterface.OnClickListener() {
+
+		@Override
+		public void onClick(DialogInterface arg0, int arg1) {
+			// TODO Auto-generated method stub
+
+		}
+	}).show();
+	//		final TaskVisityDialog taskVisityDialog = new TaskVisityDialog(ClockNewActivity.this);
+	//		taskVisityDialog.show();
+	//		taskVisityDialog.mCancel.setOnClickListener(new OnClickListener() {
+	//
+	//			@Override
+	//			public void onClick(View arg0) {
+	//				// TODO Auto-generated method stub
+	//				taskVisityDialog.dismiss();
+	//			}
+	//		});
+	//		taskVisityDialog.mResult.setOnClickListener(new OnClickListener() {
+	//
+	//			@Override
+	//			public void onClick(View arg0) {
+	//				// TODO Auto-generated method stub
+	//				isVisity = true;
+	//				new_isVisibleImage.setImageResource(R.drawable.clock_new_visible);
+	//				taskVisityDialog.dismiss();
+	//			}
+	//		});
+
+
+}
+@Override
+protected void onPause() {
+	// TODO Auto-generated method stub
+	super.onPause();
+	MobclickAgent.onPause(this);
+}
+
+/*
+ * (non-Javadoc)
+ * 
+ * @see android.app.Activity#onResume()
+ */
+@Override
+protected void onResume() {
+	// TODO Auto-generated method stub
+	super.onResume();
+	MobclickAgent.onResume(this);
+}
+public void animAlertStart() {
+	Tools.getLog(Tools.i, "aaa", "开始动画：");
+	int height = snakbarLayout.getHeight();
+	Tools.getLog(Tools.i, "aaa", "animAlertStart height ============= "
+			+ height);
+	TranslateAnimation animationStart = new TranslateAnimation(0, 0,
+			height, 0);
+
+	animationStart.setDuration(500L);// 设置动画持续时间
+	snakbarLayout.startAnimation(animationStart);
+	animationStart.setAnimationListener(new AnimationListener() {
+
+		@Override
+		public void onAnimationStart(Animation arg0) {
+			// TODO Auto-generated method stub
+			snakbarLayout.setVisibility(View.VISIBLE);
+		}
+
+		@Override
+		public void onAnimationRepeat(Animation arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onAnimationEnd(Animation arg0) {
+			// TODO Auto-generated method stub
+			snakbarLayout.setVisibility(View.VISIBLE);
+			new Handler().postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					int height = snakbarLayout.getHeight();
+					Animation mAnimation = new TranslateAnimation(0, 0, 0,
+							height);
+					mAnimation.setDuration(250L);
+					// building_dialog_Layout.setAnimation(mAnimation);
+					snakbarLayout.startAnimation(mAnimation);
+
+					mAnimation.setAnimationListener(new AnimationListener() {
+
+						@Override
+						public void onAnimationStart(Animation arg0) {
+							// TODO Auto-generated method stub
+							snakbarLayout
+							.setVisibility(View.VISIBLE);
+						}
+
+						@Override
+						public void onAnimationRepeat(Animation arg0) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void onAnimationEnd(Animation arg0) {
+							// TODO Auto-generated method stub
+							snakbarLayout
+							.setVisibility(View.GONE);
+
+						}
+					});
+				}
+			}, 3000L);
+
+		}
+	});
+
+}
 
 
 }

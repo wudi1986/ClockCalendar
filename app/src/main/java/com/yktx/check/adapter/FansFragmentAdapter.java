@@ -1,10 +1,11 @@
 package com.yktx.check.adapter;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -16,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,6 +28,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.yktx.check.BaseActivity;
+import com.yktx.check.ClockGroupInfoActivity;
 import com.yktx.check.ClockGroupInfoFragmentActivity;
 import com.yktx.check.PointExplainActivity;
 import com.yktx.check.R;
@@ -36,9 +39,7 @@ import com.yktx.check.util.Contanst;
 import com.yktx.check.util.TimeUtil;
 import com.yktx.check.util.Tools;
 
-import java.util.ArrayList;
-
-public class FansFragmentAdapter extends RecyclerView.Adapter<FansFragmentAdapter.HolderView>{
+public class FansFragmentAdapter extends BaseAdapter{
 	private Context mContext;
 	private ArrayList<FansItemBean> fansItemBeans = new ArrayList<FansItemBean>(10);
 	private LayoutInflater inflater;
@@ -84,25 +85,17 @@ public class FansFragmentAdapter extends RecyclerView.Adapter<FansFragmentAdapte
 		this.fansItemBeans = fansItemBeans;
 	}
 
-
-
 	@Override
-	public HolderView onCreateViewHolder(ViewGroup parent, int viewType) {
-		{
-			// TODO Auto-generated method stub
-			HolderView holder = new HolderView(LayoutInflater.from(
-					mContext).inflate(R.layout.fansfragment_listview_item, parent,
-					false));
-			return holder;
-		}
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return fansItemBeans.size();
 	}
 
 	@Override
-	public void onBindViewHolder(HolderView holder, int position) {
-		FansItemBean bean = fansItemBeans.get(position);
-		showView(position,bean,holder);
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return position;
 	}
-
 
 	@Override
 	public long getItemId(int position) {
@@ -111,26 +104,21 @@ public class FansFragmentAdapter extends RecyclerView.Adapter<FansFragmentAdapte
 	}
 
 	@Override
-	public int getItemCount() {
-		return fansItemBeans.size();
-	}
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		HolderView holder;
+		if(convertView == null){
+			convertView = inflater.inflate(R.layout.fansfragment_listview_item, null);
+			holder = new HolderView(convertView);
+			convertView.setTag(holder);
 
-//	@Override
-//	public View getView(int position, View convertView, ViewGroup parent) {
-//		// TODO Auto-generated method stub
-//		HolderView holder;
-//		if(convertView == null){
-//			convertView = inflater.inflate(R.layout.fansfragment_listview_item, null);
-//			holder = new HolderView(convertView);
-//			convertView.setTag(holder);
-//
-//		}else{
-//			holder = (HolderView) convertView.getTag();
-//		}
-//		FansItemBean bean = fansItemBeans.get(position);
-//		showView(position, bean, holder);
-//		return convertView;
-//	}
+		}else{
+			holder = (HolderView) convertView.getTag();
+		}
+		FansItemBean bean = fansItemBeans.get(position);
+		showView(position, bean, holder);
+		return convertView;
+	}
 	public void showView(final int position,final FansItemBean itemBean,final HolderView holder){
 		ImageLoader.getInstance().displayImage(Tools.getImagePath(itemBean.getImageSource())+ itemBean.getAvartarPath()
 				+(itemBean.getImageSource() == 2?"?imageMogr2/thumbnail/55x55":""),
@@ -289,18 +277,17 @@ public class FansFragmentAdapter extends RecyclerView.Adapter<FansFragmentAdapte
 
 		}
 	}
-	class HolderView extends RecyclerView.ViewHolder{
-
+	class HolderView{
 		private ImageView fansfragment_listview_item_headImage,fansfragment_listview_item_fanstypeImage;
 		private TextView fansfragment_listview_item_name,fansfragment_listview_item_point,
 		fansfragment_listview_item_timeOrtaskname,fansfragment_listview_item_fanstypeText;
 		private LinearLayout fansfragment_listview_item_fanstypeLayout,fansfragment_listview_item_medalLayout;
 		private RelativeLayout fansfragment_listview_item_Layout;
 		public HolderView(View convertView){
-			super(convertView);
 			fansfragment_listview_item_medalLayout = (LinearLayout) convertView.findViewById(R.id.fansfragment_listview_item_medalLayout);
 			fansfragment_listview_item_headImage = (ImageView) convertView.findViewById(R.id.fansfragment_listview_item_headImage);
 			fansfragment_listview_item_fanstypeImage = (ImageView) convertView.findViewById(R.id.fansfragment_listview_item_fanstypeImage);
+
 			fansfragment_listview_item_name = (TextView) convertView.findViewById(R.id.fansfragment_listview_item_name);
 			fansfragment_listview_item_point = (TextView) convertView.findViewById(R.id.fansfragment_listview_item_point);
 			fansfragment_listview_item_timeOrtaskname = (TextView) convertView.findViewById(R.id.fansfragment_listview_item_timeOrtaskname);

@@ -1,18 +1,24 @@
 package com.yktx.check.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -26,17 +32,12 @@ import com.yktx.check.bean.FansBean;
 import com.yktx.check.bean.FansItemBean;
 import com.yktx.check.conn.ServiceListener;
 import com.yktx.check.conn.UrlParams;
+import com.yktx.check.listview.XListView;
 import com.yktx.check.listview.XListView.IXListViewListener;
 import com.yktx.check.service.Service;
 import com.yktx.check.square.fragment.BaseFragment;
 import com.yktx.check.util.Contanst;
 import com.yktx.check.util.Tools;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressLint({ "NewApi", "ValidFragment" })
 public class ClockFollowFragment extends BaseFragment implements ServiceListener{
@@ -77,7 +78,7 @@ public class ClockFollowFragment extends BaseFragment implements ServiceListener
 //		this.offView = offView;
 	}
 	private RelativeLayout layout;
-	private RecyclerView listView;
+	private XListView listView;
 	private ImageView imageListNull;
 
 	@Override
@@ -94,18 +95,17 @@ public class ClockFollowFragment extends BaseFragment implements ServiceListener
 			conn(1);
 		}
 		
-		listView = (RecyclerView) layout
+		listView = (XListView) layout
 		.findViewById(R.id.clock_my_fragment_listview);
 		adapter = new FansFragmentAdapter(mContext,false);
 //		SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
 //		swingBottomInAnimationAdapter.setAbsListView(listView);
-		listView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		listView.setAdapter(adapter);
-//		listView.setIsShow(true);
-//		listView.setPullGoHome(false);
-//		listView.setPullLoadEnable(false);
-//		listView.setPullRefreshEnable(false);
-//		listView.setXListViewListener(listener);
+		listView.setIsShow(true);
+		listView.setPullGoHome(false);
+		listView.setPullLoadEnable(false);
+		listView.setPullRefreshEnable(false);
+		listView.setXListViewListener(listener);
 //		listView.setParentScrollView(parentScrollView);
 //		listView.setViewGetLocationOnScreen(offView);
 		
@@ -298,11 +298,9 @@ public class ClockFollowFragment extends BaseFragment implements ServiceListener
 						adapter.setList(fansItemBeans);
 						adapter.notifyDataSetChanged();
 						//						adapter.setDistance(latitude, longitude);
-//						listView.setPullLoadEnable(true);
+						listView.setPullLoadEnable(true);
 
-//						SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
-//						swingBottomInAnimationAdapter.setAbsListView(listView);
-//						listView.setAdapter(adapter);
+						listView.setAdapter(adapter);
 
 					} else {
 						currentPage++;
@@ -320,11 +318,11 @@ public class ClockFollowFragment extends BaseFragment implements ServiceListener
 					}
 
 					onLoad();
-//					if (totalCount <= 10 || currentPage * 10 >= totalCount) {
-//						listView.setIsShow(false);
-//					} else {
-//						listView.setIsShow(true);
-//					}
+					if (totalCount <= 10 || currentPage * 10 >= totalCount) {
+						listView.setIsShow(false);
+					} else {
+						listView.setIsShow(true);
+					}
 					//判断是否为本页点入building 页
 					//					Tools.getLog(Tools.d, "aaa","type："+GroupMainFragmentActivity.ReflushItem+"，页数："+newItem);
 					//					if(GroupMainFragmentActivity.ReflushItem == 1){
@@ -373,8 +371,8 @@ public class ClockFollowFragment extends BaseFragment implements ServiceListener
 		//		if(loadingView.getVisibility() != View.GONE){
 		//			loadingView.setVisibility(View.GONE);
 		//		}
-//		listView.stopRefresh();
-//		listView.stopLoadMore();
+		listView.stopRefresh();
+		listView.stopLoadMore();
 		isConn = false;
 		isReflush = false;
 	}

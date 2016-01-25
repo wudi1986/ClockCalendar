@@ -62,13 +62,13 @@ public class XListViewFooter extends LinearLayout {
 	
 	public void setBottomMargin(int height) {
 		if (height < 0) return ;
-		LayoutParams lp = (LayoutParams)mContentView.getLayoutParams();
+		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)mContentView.getLayoutParams();
 		lp.bottomMargin = height;
 		mContentView.setLayoutParams(lp);
 	}
 	
 	public int getBottomMargin() {
-		LayoutParams lp = (LayoutParams)mContentView.getLayoutParams();
+		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)mContentView.getLayoutParams();
 		return lp.bottomMargin;
 	}
 	
@@ -93,7 +93,7 @@ public class XListViewFooter extends LinearLayout {
 	 * hide footer when disable pull load more
 	 */
 	public void hide() {
-		LayoutParams lp = (LayoutParams)mContentView.getLayoutParams();
+		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)mContentView.getLayoutParams();
 		lp.height = 0;
 		mContentView.setLayoutParams(lp);
 	}
@@ -102,7 +102,7 @@ public class XListViewFooter extends LinearLayout {
 	 * show footer
 	 */
 	public void show() {
-		LayoutParams lp = (LayoutParams)mContentView.getLayoutParams();
+		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)mContentView.getLayoutParams();
 		lp.height = LayoutParams.WRAP_CONTENT;
 		mContentView.setLayoutParams(lp);
 	}
@@ -127,7 +127,7 @@ public class XListViewFooter extends LinearLayout {
 		mContext = context;
 		 moreView = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.xlistview_footer, null);
 		addView(moreView);
-		moreView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		moreView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		
 		mContentView = moreView.findViewById(R.id.xlistview_footer_content);
 		background = (LinearLayout) moreView.findViewById(R.id.background);

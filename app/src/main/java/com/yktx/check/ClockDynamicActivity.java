@@ -1,5 +1,7 @@
 package com.yktx.check;
 
+import java.lang.reflect.Field;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,8 +27,6 @@ import com.yktx.check.square.fragment.AttentionFragment2;
 import com.yktx.check.square.fragment.ConversationListFragment;
 import com.yktx.check.square.fragment.DynamicFragment;
 import com.yktx.check.widget.OldPagerSlidingTabStrip;
-
-import java.lang.reflect.Field;
 
 public class ClockDynamicActivity extends FragmentActivity {
 	//	private ImageView mLeftTitleImage,mRightTitleImage;
@@ -62,7 +62,6 @@ public class ClockDynamicActivity extends FragmentActivity {
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		setContentView(R.layout.activity_clock_dynamic);
 		mContext = this;
-
 		initView();
 		//		setDefaultFragment();
 	}
@@ -201,7 +200,7 @@ public class ClockDynamicActivity extends FragmentActivity {
 
 		}
 
-		private final String[] titles = { "消息", "关注", "群聊" };
+		private final String[] titles = { "消息", "关注" };
 
 		@Override
 		public CharSequence getPageTitle(int position) {
@@ -230,11 +229,11 @@ public class ClockDynamicActivity extends FragmentActivity {
 				}
 				return attentionFragment2;
 
-			case 2:
-				if (conversationListFragment == null) {
-					conversationListFragment = new ConversationListFragment();
-				}
-				return conversationListFragment;
+//			case 2:
+//				if (conversationListFragment == null) {
+//					conversationListFragment = new ConversationListFragment();
+//				}
+//				return conversationListFragment;
 			default:
 				return null;
 			}

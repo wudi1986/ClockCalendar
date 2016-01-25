@@ -1,7 +1,14 @@
 package com.yktx.check;
 
-import android.graphics.Color;
+import java.lang.reflect.Field;
+
+import com.umeng.analytics.MobclickAgent;
+import com.yktx.check.square.fragment.CommentFragment;
+import com.yktx.check.square.fragment.VoteFragment;
+import com.yktx.check.widget.OldPagerSlidingTabStrip;
+
 import android.os.Bundle;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -10,17 +17,10 @@ import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
-
-import com.umeng.analytics.MobclickAgent;
-import com.yktx.check.square.fragment.CommentFragment;
-import com.yktx.check.square.fragment.VoteFragment;
-import com.yktx.check.widget.OldPagerSlidingTabStrip;
-
-import java.lang.reflect.Field;
 
 public class ClockTaskDynamicActivity extends FragmentActivity {
 	ImageView ClockTaskDynamic_title_back;

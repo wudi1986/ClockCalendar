@@ -110,7 +110,7 @@ public class DynamicFragment  extends BaseFragment implements ServiceListener{
 		xListView.setIsShow(true);
 		xListView.setPullGoHome(false);
 		xListView.setPullLoadEnable(true);
-		xListView.setPullRefreshEnable(true);
+		xListView.setPullRefreshEnable(false);
 		xListView.setFooterBackground(getActivity().getResources().getColor(R.color.meibao_color_15));
 		xListView.setOnItemClickListener(null);
 		MyReceiver.setDynamic(thisdynamic);
@@ -255,6 +255,8 @@ public class DynamicFragment  extends BaseFragment implements ServiceListener{
 
 					if (msgToUserListBeans.size() == 0) {
 						//						imageListNull.setVisibility(View.VISIBLE);
+						main_upLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+						xListView.setFooterBackground(getActivity().getResources().getColor(R.color.white));
 
 						hot_or_near_ProgressBar.setVisibility(View.GONE);
 						onLoad();
@@ -263,6 +265,9 @@ public class DynamicFragment  extends BaseFragment implements ServiceListener{
 					}
 					//					imageListNull.setVisibility(View.GONE);
 					//					send_time = msgToUserListBeans.get(msgToUserListBeans.size()-1).getCheck_time();
+					xListView.setFooterBackground(getActivity().getResources().getColor(R.color.meibao_color_15));
+					main_upLayout.setBackgroundColor(mContext.getResources().getColor(R.color.meibao_color_15));
+
 					adapter.setList(msgToUserListBeans);
 					//					adapter.setDistance(latitude, longitude);
 					xListView.setPullLoadEnable(true);

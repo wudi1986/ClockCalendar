@@ -40,6 +40,8 @@ public class MainActivity extends BaseActivity {
 		
 		userName = settings.getString("username", null);
 		main_Layout = (RelativeLayout) findViewById(R.id.main_Layout);
+		/** 渠道号 */
+		AnalyticsConfig.setChannel("yyb");
 		/** 友盟自动更新 */
 //		MobclickAgent.updateOnlineConfig(mContext);
 		/** 百度自动更新 */

@@ -1,47 +1,64 @@
 package com.yktx.check;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.graphics.Color;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import com.clock.service.AddShowPhotoService;
+import com.easemob.chat.EMGroupManager;
+import com.easemob.chatuidemo.ui.ChatActivity;
+import com.easemob.chatuidemo.ui.EasemobConstant;
+import com.easemob.exceptions.EaseMobException;
+import com.umeng.analytics.MobclickAgent;
+import com.yktx.check.ClockDynamicActivity.MyPagerAdapter;
+import com.yktx.check.bean.ByIdDetailBean;
+import com.yktx.check.bean.ChatGroupInfoBean;
+import com.yktx.check.bean.CreateJobBean;
+import com.yktx.check.bean.LastTwoUsersBean;
+import com.yktx.check.bean.MsgToUserBean;
+import com.yktx.check.conn.ServiceListener;
+import com.yktx.check.conn.UrlParams;
+import com.yktx.check.dialog.TakeClockSuccessDialog;
+import com.yktx.check.service.Service;
+import com.yktx.check.square.fragment.AttentionFragment2;
+import com.yktx.check.square.fragment.BuildingRankingListFragment;
+import com.yktx.check.square.fragment.ClockGroupInfoFragment;
+import com.yktx.check.square.fragment.DynamicFragment;
+import com.yktx.check.square.fragment.GroupMainFragmentActivity;
+import com.yktx.check.util.Contanst;
+import com.yktx.check.util.Tools;
+import com.yktx.check.widget.OldPagerSlidingTabStrip;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.DialogInterface.OnDismissListener;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.view.Window;
 import android.widget.ImageView;
-
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chatuidemo.ui.ChatActivity;
-import com.easemob.chatuidemo.ui.EasemobConstant;
-import com.easemob.exceptions.EaseMobException;
-import com.umeng.analytics.MobclickAgent;
-import com.yktx.check.bean.ChatGroupInfoBean;
-import com.yktx.check.conn.ServiceListener;
-import com.yktx.check.conn.UrlParams;
-import com.yktx.check.service.Service;
-import com.yktx.check.square.fragment.BuildingRankingListFragment;
-import com.yktx.check.square.fragment.ClockGroupInfoFragment;
-import com.yktx.check.util.Contanst;
-import com.yktx.check.widget.OldPagerSlidingTabStrip;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Toast;
 
 public class ClockGroupInfoFragmentActivity extends FragmentActivity implements ServiceListener{
 	public SharedPreferences settings;
@@ -301,7 +318,7 @@ public class ClockGroupInfoFragmentActivity extends FragmentActivity implements 
 			e.printStackTrace();
 		}
 
-		Service
+		com.yktx.check.service.Service
 				.getService(Contanst.HTTP_CHAT_ADDUSERTOCHATGROUP, null, null,
 						ClockGroupInfoFragmentActivity.this).addList(params)
 				.request(UrlParams.POST);

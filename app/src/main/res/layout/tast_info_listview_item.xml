@@ -4,8 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/meibao_color_15"
     android:paddingTop="8dp" >
-
+    <include layout="@layout/group"
+        android:id="@+id/groupTitleLayout">
+    </include>
     <RelativeLayout
+        android:layout_below="@id/groupTitleLayout"
         android:id="@+id/taskItem_TopLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

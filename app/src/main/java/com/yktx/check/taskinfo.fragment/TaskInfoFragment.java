@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView.LayoutParams;
-import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,10 +36,7 @@ import com.yktx.check.ClockMainActivity;
 import com.yktx.check.ClockSetActivity;
 import com.yktx.check.R;
 import com.yktx.check.TaskInfoActivity;
-import com.yktx.check.adapter.MyexpandableListAdapter;
-import com.yktx.check.adapter.MyexpandableListAdapter.SharedThisJob;
-import com.yktx.check.adapter.MyexpandableListAdapter.TaskInfoOnClick;
-import com.yktx.check.adapter.MyexpandableListAdapter.giveUpFlagClick;
+import com.yktx.check.adapter.TaskInfoListAdapter;
 import com.yktx.check.bean.ByDateBean;
 import com.yktx.check.bean.ByIdDetailBean;
 import com.yktx.check.bean.ByTaskIdBean;
@@ -53,10 +51,7 @@ import com.yktx.check.dialog.AddCommentDialog.onCLickCommentSuccess;
 import com.yktx.check.dialog.GiveUpJobDialog;
 import com.yktx.check.dialog.TaskInfoDialog;
 import com.yktx.check.dialog.TaskInfoDialog.onCLickClockSuccess;
-import com.yktx.check.listview.PinnedHeaderExpandableListView;
-import com.yktx.check.listview.PinnedHeaderExpandableListView.IXListViewListener;
-import com.yktx.check.listview.PinnedHeaderExpandableListView.OnHeaderUpdateListener;
-import com.yktx.check.listview.PinnedHeaderExpandableListView.setClickHeadViewlistener;
+import com.yktx.check.listview.LoadMoreRecyclerView;
 import com.yktx.check.service.Service;
 import com.yktx.check.square.fragment.BaseFragment;
 import com.yktx.check.util.Contanst;
@@ -71,8 +66,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
-public class TaskInfoFragment extends BaseFragment implements ServiceListener,ExpandableListView.OnChildClickListener,
-ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
+public class TaskInfoFragment extends BaseFragment implements ServiceListener{
 	TaskInfoActivity taskInfoActivity;
 	View view;
 	boolean isConn, isReflush = true;
@@ -83,10 +77,10 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 	private  ByIdDetailBean byIdDetailBean;
 	
 
-	private PinnedHeaderExpandableListView expandablelist;
-	private MyexpandableListAdapter myExpandableListAdapter;
+	private LoadMoreRecyclerView taskInfoRcview;
+	private TaskInfoListAdapter adapter;
 
-	private RelativeLayout loadingView,clock_main_alertLayout,expandablelist_Layout;
+	private RelativeLayout loadingView,clock_main_alertLayout,taskInfoRcview_Layout;
 	private TextView clock_main_alertText,shareTitle;
 	private ImageView leftImage;
 	
@@ -119,7 +113,7 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 			ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		view = taskInfoActivity.getLayoutInflater().inflate(R.layout.taskinfo_fragment, null);
-		expandablelist = (PinnedHeaderExpandableListView) view.findViewById(R.id.expandablelist);
+		taskInfoRcview = (LoadMoreRecyclerView) view.findViewById(R.id.taskInfoRcview);
 
 		loadingView = (RelativeLayout) view.findViewById(R.id.loadingView);
 		
@@ -128,9 +122,9 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 		shareTitle = (TextView) view.findViewById(R.id.shareTitle);
 		leftImage = (ImageView) view.findViewById(R.id.leftImage);
 		
-		expandablelist_Layout  = (RelativeLayout) view.findViewById(R.id.expandablelist_Layout);
+		taskInfoRcview_Layout  = (RelativeLayout) view.findViewById(R.id.expandablelist_Layout);
 		donghua = new FrameLayout(taskInfoActivity);
-		expandablelist_Layout.addView(donghua);
+		taskInfoRcview_Layout.addView(donghua);
 		qiQiuUtils = new QiQiuUtils(donghua, taskInfoActivity);
 		
 		myShare = new MyUMSDK(taskInfoActivity);
@@ -138,68 +132,67 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 		settings = taskInfoActivity.getSharedPreferences("clock", taskInfoActivity.MODE_PRIVATE);
 		userID = settings.getString("userid", null);
 
-		expandablelist.setXListViewListener(listener);
-		expandablelist.setIsShow(true);
-		expandablelist.setPullLoadEnable(true);
-		expandablelist.setPullRefreshEnable(false);
-		
-		
-		myExpandableListAdapter = new MyexpandableListAdapter(taskInfoActivity,thisJobUserid);
-		myExpandableListAdapter.setTaskInfoOnClick(taskInfoOnClick);
-		myExpandableListAdapter.setGiveUpFlagClick(upFlagClick);
-		myExpandableListAdapter.setSharedThisJob(sharedThisJob);
-		myExpandableListAdapter.isOtherTaksInfo(isOther);
-		expandablelist.setAdapter(myExpandableListAdapter);
-		expandablelist.setIsShow(true);
-		expandablelist.setOnHeaderUpdateListener(this);
-		expandablelist.setOnChildClickListener(this);
-		expandablelist.setOnGroupClickListener(this);
-		expandablelist.setClickHeadView(clickHeadViewlistener);
 
-		expandablelist
-		.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
+		
+		adapter = new TaskInfoListAdapter(taskInfoActivity,thisJobUserid);
+		adapter.setTaskInfoOnClick(taskInfoOnClick);
+		adapter.setGiveUpFlagClick(upFlagClick);
+		adapter.setSharedThisJob(sharedThisJob);
+		adapter.isOtherTaksInfo(isOther);
+		taskInfoRcview.setLayoutManager(new LinearLayoutManager(getActivity()));
+		taskInfoRcview.setAdapter(adapter);
+		taskInfoRcview.setAutoLoadMoreEnable(true);
+		taskInfoRcview.setLoadMoreListener(new LoadMoreRecyclerView.LoadMoreListener() {
 			@Override
-			public boolean onGroupClick(ExpandableListView arg0,
-					View arg1, int arg2, long arg3) {
-				// TODO Auto-generated method stub
-				return true;
+			public void onLoadMore() {
+				if (isConn) {
+					return;
+				}
+				isReflush = false;
+
+				if (currentPage * 10 >= totalCount) {
+					onLoad();
+					return;
+				}
+				getByTaskIdConn(currentPage + 1);
+				isConn = true;
 			}
 		});
+
 		getByTaskIdConn(1);
 		return view;
 	}
-	IXListViewListener listener = new IXListViewListener() {
-
-		@Override
-		public void onRefresh() {
-			// TODO Auto-generated method stub
-			if (isConn) {
-				return;
-			}
-			getByTaskIdConn(1);
-			isReflush = true;
-			isConn = true;
-
-		}
-
-		@Override
-		public void onLoadMore() {
-			// TODO Auto-generated method stub
-			Tools.getLog(Tools.i, "aaa", "加载更多数据");
-			if (isConn) {
-				return;
-			}
-			isReflush = false;
-
-			if (currentPage * 10 >= totalCount) {
-				onLoad();
-				return;
-			}
-			getByTaskIdConn(currentPage + 1);
-			isConn = true;
-		}
-	};
+//	IXListViewListener listener = new IXListViewListener() {
+//
+//		@Override
+//		public void onRefresh() {
+//			// TODO Auto-generated method stub
+//			if (isConn) {
+//				return;
+//			}
+//			getByTaskIdConn(1);
+//			isReflush = true;
+//			isConn = true;
+//
+//		}
+//
+//		@Override
+//		public void onLoadMore() {
+//			// TODO Auto-generated method stub
+//			Tools.getLog(Tools.i, "aaa", "加载更多数据");
+//			if (isConn) {
+//				return;
+//			}
+//			isReflush = false;
+//
+//			if (currentPage * 10 >= totalCount) {
+//				onLoad();
+//				return;
+//			}
+//			getByTaskIdConn(currentPage + 1);
+//			isConn = true;
+//		}
+//	};
 
 	private void getByTaskIdConn(int currentPage) {
 		StringBuffer sb = new StringBuffer();
@@ -332,14 +325,13 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 						// infoListView.setPullLoadEnable(true);
 						// adapter.notifyDataSetChanged();
 
-						setExpandableList();
-						// myExpandableListAdapter.setList(newList);
-						expandablelist.setPullLoadEnable(true);
-						// myExpandableListAdapter.notifyDataSetChanged();
+						settaskInfoRcview();
+						// adapter.setList(newList);
+						// adapter.notifyDataSetChanged();
 						// // 展开所有group
-						// for (int i = 0, count = expandablelist.getCount(); i
+						// for (int i = 0, count = taskInfoRcview.getCount(); i
 						// < count; i++) {
-						// expandablelist.expandGroup(i);
+						// taskInfoRcview.expandGroup(i);
 						// }
 
 					} else {
@@ -349,15 +341,15 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 						// adapter.setList(newList);
 						// adapter.notifyDataSetChanged();
 
-						setExpandableList();
+						settaskInfoRcview();
 					}
 
 					onLoad();
-					if (totalCount <= 10 || currentPage * 10 >= totalCount) {
-						expandablelist.setIsShow(false);
-					} else {
-						expandablelist.setIsShow(true);
-					}
+//					if (totalCount <= 10 || currentPage * 10 >= totalCount) {
+//						taskInfoRcview.setIsShow(false);
+//					} else {
+//						taskInfoRcview.setIsShow(true);
+//					}
 					break;
 					
 				case Contanst.CREATECOMMENT:
@@ -377,7 +369,7 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 					clock_main_alertText.setText("你将得到气球 +2");
 					clock_main_alertText.setVisibility(View.VISIBLE);
 					animAlertStart();
-					setExpandableList();
+					settaskInfoRcview();
 					break;
 				case Contanst.CREATEVOTE:
 					isConn = false; 
@@ -398,7 +390,7 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 						animAlertStart();
 					}
 
-					setExpandableList();
+					settaskInfoRcview();
 					break;
 					
 				case Contanst.DELETEJOB:
@@ -438,20 +430,20 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 		}
 	};
 	
-	public void setExpandableList() {
-		myExpandableListAdapter.setList(newList);
+	public void settaskInfoRcview() {
+		adapter.setList(newList);
 
-		// 这句话不能注释掉，设置数据要不expandableListView 不能展开
-		myExpandableListAdapter.notifyDataSetChanged();
+		// 这句话不能注释掉，设置数据要不taskInfoRcviewView 不能展开
+//		adapter.notifyDataSetChanged();
 
-		for (int i = 0, count = expandablelist.getCount(); i < count; i++) {
-			expandablelist.expandGroup(i);
-		}
+//		for (int i = 0, count = taskInfoRcview.getCount(); i < count; i++) {
+//			taskInfoRcview.expandGroup(i);
+//		}
 
-		Tools.getLog(Tools.i, "aaa",
-				"expandablelist myExpandableListAdapter  ======== "
-						+ myExpandableListAdapter.getGroupCount());
-		myExpandableListAdapter.notifyDataSetChanged();
+//		Tools.getLog(Tools.i, "aaa",
+//				"taskInfoRcview adapter  ======== "
+//						+ adapter.getGroupCount());
+//		adapter.notifyDataSetChanged();
 	}
 	
 	private void onLoad() {
@@ -459,7 +451,12 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 			loadingView.setVisibility(View.GONE);
 		}
 		// infoListView.stopRefresh();
-		expandablelist.stopLoadMore();
+//		taskInfoRcview.stopLoadMore();
+		if (currentPage * 10 >= totalCount) {
+			taskInfoRcview.notifyMoreFinish(false);
+		} else {
+			taskInfoRcview.notifyMoreFinish(true);
+		}
 		isConn = false;
 		isReflush = false;
 	}
@@ -583,10 +580,10 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 	}
 	
 	AddCommentDialog dialog;
-	TaskInfoOnClick taskInfoOnClick = new TaskInfoOnClick() {
+	TaskInfoListAdapter.TaskInfoOnClick taskInfoOnClick = new TaskInfoListAdapter.TaskInfoOnClick() {
 
 		@Override
-		public void clickVote(String jobid, int groupPosition,
+		public void clickVote(String jobid,
 				int childPosition, String type,int x, int y) {
 			// TODO Auto-generated method stub
 			if(isConn){
@@ -594,13 +591,8 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 				return;
 			}
 			isConn = true;
-			int index = 0;
-			// i=1 第0个是表格
-			for (int i = 1; i < groupPosition; i++) {
-				index += myExpandableListAdapter.getChildrenCount(i);
-			}
 			qiQiuUtils.startFly((int)(x+6*BaseActivity.DENSITY), (int)(y-54*BaseActivity.DENSITY));
-			mClickPosition = index + childPosition;
+			mClickPosition = childPosition;
 			if (type.equals("0")) {
 				addVoteConn(jobid);
 			} else {
@@ -616,17 +608,13 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 
 		@Override
 		public void clickComment(final TaskItemBean taskItemBean,
-				int groupPosition, int childPosition, final int itemBeanIndex) {
+				int childPosition, final int itemBeanIndex) {
 			// TODO Auto-generated method stub
-			int index = 0;
-			for (int i = 1; i < groupPosition; i++) {
-				index += myExpandableListAdapter.getChildrenCount(i);
-			}
 			String name = null;
 			if (itemBeanIndex != -1) {
 				name = taskItemBean.getComments().get(itemBeanIndex).getName();
 			}
-			mClickPosition = index + childPosition;
+			mClickPosition = childPosition;
 			dialog = new AddCommentDialog(taskInfoActivity, name);
 			dialog.setOnClickCommentSuccess(new onCLickCommentSuccess() {
 
@@ -641,19 +629,13 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 	};
 	GiveUpJobDialog upJobDialog;
 	boolean isToday;
-	giveUpFlagClick upFlagClick = new giveUpFlagClick() {
+	TaskInfoListAdapter.giveUpFlagClick upFlagClick =
+			new TaskInfoListAdapter.giveUpFlagClick() {
 		@Override
-		public void setGiveUp(int groupPosition, int childPosition) {
+		public void setGiveUp(int childPosition) {
 			// TODO Auto-generated method stub
 
-			int index = 0;
-			// i=1 第0个是表格
-			for (int i = 1; i < groupPosition; i++) {
-				index += myExpandableListAdapter.getChildrenCount(i);
-			}
-
-
-			TaskItemBean taskItemBean = newList.get(index + childPosition);
+			TaskItemBean taskItemBean = newList.get(childPosition);
 			String today = TimeUtil.getYYMMDD(System.currentTimeMillis());
 			String curTitle = TimeUtil.getYYMMDD(taskItemBean.getCheck_time());
 			if(curTitle.equals(today)){
@@ -672,7 +654,7 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 	TaskInfoDialog taskDialog;
 	String sharedialogStr;
 	boolean isAlone;
-	SharedThisJob sharedThisJob = new SharedThisJob() {
+	TaskInfoListAdapter.SharedThisJob sharedThisJob = new TaskInfoListAdapter.SharedThisJob() {
 
 		@Override
 		public void thisJob(TaskItemBean item) {
@@ -878,46 +860,46 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 
 		}
 	};
-	setClickHeadViewlistener clickHeadViewlistener = new setClickHeadViewlistener() {
-
-		@Override
-		public void clickHead(int position) {
-			// TODO Auto-generated method stub
-//			Tools.getLog(Tools.d, "aaa", "点击的position：" + position
-//					+ " lastTwoJobBean =========== "
-//					+ lastTwoJobBean.getLastThrees().size());
-			if (position == -1) {
-				if (byIdDetailBean.getBuildingId() != null) {
-					Intent in = new Intent(taskInfoActivity,
-							ClockGroupInfoFragmentActivity.class);
-					in.putExtra("buildingId", byIdDetailBean.getBuildingId());
-					taskInfoActivity.startActivity(in);
-				}
-			}
-			return;
-		}
-	};
-
-
+//	setClickHeadViewlistener clickHeadViewlistener = new setClickHeadViewlistener() {
+//
+//		@Override
+//		public void clickHead(int position) {
+//			// TODO Auto-generated method stub
+////			Tools.getLog(Tools.d, "aaa", "点击的position：" + position
+////					+ " lastTwoJobBean =========== "
+////					+ lastTwoJobBean.getLastThrees().size());
+//			if (position == -1) {
+//				if (byIdDetailBean.getBuildingId() != null) {
+//					Intent in = new Intent(taskInfoActivity,
+//							ClockGroupInfoFragmentActivity.class);
+//					in.putExtra("buildingId", byIdDetailBean.getBuildingId());
+//					taskInfoActivity.startActivity(in);
+//				}
+//			}
+//			return;
+//		}
+//	};
 
 
-	@Override
-	public View getPinnedHeader() {
-		// TODO Auto-generated method stub
-		View headerView = (ViewGroup) taskInfoActivity.getLayoutInflater().inflate(
-				R.layout.group, null);
-		headerView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
-		return headerView;
-	}
 
-	@Override
-	public void updatePinnedHeader(View headerView, int firstVisibleGroupPos) {
-		// TODO Auto-generated method stub
-		if (firstVisibleGroupPos < 0) {
-			return;
+
+//	@Override
+//	public View getPinnedHeader() {
+//		// TODO Auto-generated method stub
+//		View headerView = (ViewGroup) taskInfoActivity.getLayoutInflater().inflate(
+//				R.layout.group, null);
+//		headerView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+//				LayoutParams.WRAP_CONTENT));
+//		return headerView;
+//	}
+//
+//	@Override
+//	public void updatePinnedHeader(View headerView, int firstVisibleGroupPos) {
+//		// TODO Auto-generated method stub
+//		if (firstVisibleGroupPos < 0) {
+//			return;
 //		} else if (firstVisibleGroupPos == 0) {
-//			Group firstVisibleGroup = (Group) myExpandableListAdapter
+//			Group firstVisibleGroup = (Group) adapter
 //					.getGroup(firstVisibleGroupPos);
 //			TextView textView = (TextView) headerView.findViewById(R.id.group);
 //			TextView textView1 = (TextView) headerView.findViewById(R.id.day);
@@ -925,31 +907,18 @@ ExpandableListView.OnGroupClickListener, OnHeaderUpdateListener{
 //			textView.setText(firstVisibleGroup.getTitle());
 //			textView.setVisibility(View.GONE);
 //			textView1.setVisibility(View.GONE);
+//
+//		} else {
+//			Group firstVisibleGroup = (Group) adapter
+//					.getGroup(firstVisibleGroupPos);
+//			TextView textView = (TextView) headerView.findViewById(R.id.group);
+//			TextView textView1 = (TextView) headerView.findViewById(R.id.day);
+//			textView1.setText("Day");
+//			textView.setVisibility(View.VISIBLE);
+//			textView1.setVisibility(View.VISIBLE);
+//			textView.setText(firstVisibleGroup.getTitle().substring(5));
+//		}
+//	}
 
-		} else {
-			Group firstVisibleGroup = (Group) myExpandableListAdapter
-					.getGroup(firstVisibleGroupPos);
-			TextView textView = (TextView) headerView.findViewById(R.id.group);
-			TextView textView1 = (TextView) headerView.findViewById(R.id.day);
-			textView1.setText("Day");
-			textView.setVisibility(View.VISIBLE);
-			textView1.setVisibility(View.VISIBLE);
-			textView.setText(firstVisibleGroup.getTitle().substring(5));
-		}
-	}
-
-	@Override
-	public boolean onGroupClick(ExpandableListView arg0, View arg1, int arg2,
-			long arg3) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onChildClick(ExpandableListView arg0, View arg1, int arg2,
-			int arg3, long arg4) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

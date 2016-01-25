@@ -46,8 +46,6 @@
         android:visibility="gone" />
   <include
         android:id="@+id/clock_other_user_headLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/clock_other_user_headLayout"
         layout="@layout/clock_my_fristitem" />
     
     <LinearLayout

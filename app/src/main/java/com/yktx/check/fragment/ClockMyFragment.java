@@ -1,8 +1,15 @@
 package com.yktx.check.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +24,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.yktx.check.ClockSetActivity;
@@ -37,12 +46,6 @@ import com.yktx.check.util.Contanst;
 import com.yktx.check.util.LvHeightUtil;
 import com.yktx.check.util.MyScrollView;
 import com.yktx.check.util.Tools;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressLint({ "ValidFragment", "NewApi" })
 public class ClockMyFragment extends BaseFragment implements ServiceListener{
@@ -368,8 +371,6 @@ public class ClockMyFragment extends BaseFragment implements ServiceListener{
 //		AnimationAdapter animAdapter = new SwingRightInAnimationAdapter(
 //				mNewAdapter);
 //		animAdapter.setAbsListView(listView);
-//		SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(mNewAdapter);
-//		swingBottomInAnimationAdapter.setAbsListView(listView);
 		listView.setAdapter(mNewAdapter);
 //		listView.setAdapter(animAdapter);
 	}

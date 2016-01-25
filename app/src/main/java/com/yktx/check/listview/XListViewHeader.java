@@ -60,7 +60,7 @@ public class XListViewHeader extends LinearLayout {
 
 	private void initView(Context context) {
 		// 初始情况，设置下拉刷新view高度为0
-		LayoutParams lp = new LayoutParams(
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, 0);
 		if (isMyProgressBar) {
 			mContainer = (LinearLayout) LayoutInflater.from(context).inflate(
@@ -155,7 +155,7 @@ public class XListViewHeader extends LinearLayout {
 	public void setVisiableHeight(int height) {
 		if (height < 0)
 			height = 0;
-		LayoutParams lp = (LayoutParams) mContainer
+		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mContainer
 				.getLayoutParams();
 		lp.height = height;
 		mContainer.setLayoutParams(lp);

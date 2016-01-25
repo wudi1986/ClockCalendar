@@ -82,17 +82,17 @@ public class VPHorizontalListView extends AdapterView<ListAdapter> {
 	}
 
 	@Override
-	public void setOnItemSelectedListener(OnItemSelectedListener listener) {
+	public void setOnItemSelectedListener(AdapterView.OnItemSelectedListener listener) {
 		mOnItemSelected = listener;
 	}
 
 	@Override
-	public void setOnItemClickListener(OnItemClickListener listener){
+	public void setOnItemClickListener(AdapterView.OnItemClickListener listener){
 		mOnItemClicked = listener;
 	}
 
 	@Override
-	public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+	public void setOnItemLongClickListener(AdapterView.OnItemLongClickListener listener) {
 		mOnItemLongClicked = listener;
 	}
 

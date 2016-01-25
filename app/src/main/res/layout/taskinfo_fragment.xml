@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/expandablelist_Layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_below="@+id/task_info_titleLayout" >
+    android:layout_height="match_parent">
 
     <!-- <com.yktx.check.listview.XListView -->
     <!-- android:id="@+id/infoListView" -->
@@ -14,39 +13,48 @@
     <!-- android:scrollbars="none" -->
     <!-- app:isMyProgressBar="false" /> -->
 
-    <com.yktx.check.listview.PinnedHeaderExpandableListView
-        android:id="@+id/expandablelist"
+    <!--<com.yktx.check.listview.PinnedHeaderExpandableListView-->
+        <!--android:id="@+id/expandablelist"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:cacheColorHint="@color/white"-->
+        <!--android:childIndicatorLeft="0dp"-->
+        <!--android:divider="@null"-->
+        <!--android:dividerHeight="0dp"-->
+        <!--android:groupIndicator="@null"-->
+        <!--android:scrollbarAlwaysDrawHorizontalTrack="false"-->
+        <!--android:background="@color/meibao_color_15" >-->
+    <!--</com.yktx.check.listview.PinnedHeaderExpandableListView>-->
+
+    <com.yktx.check.listview.LoadMoreRecyclerView
+        android:id="@+id/taskInfoRcview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:cacheColorHint="@color/white"
-        android:childIndicatorLeft="0dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:groupIndicator="@null"
-        android:scrollbarAlwaysDrawHorizontalTrack="false"
         android:background="@color/meibao_color_15" >
-    </com.yktx.check.listview.PinnedHeaderExpandableListView>
 
-    <include
-        android:id="@+id/loadingView"
-        layout="@layout/loading_view_anim" />
-    <RelativeLayout
-        android:id="@+id/clock_main_alertLayout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black90"
-        android:visibility="gone" >
+    </com.yktx.check.listview.LoadMoreRecyclerView>
 
-        <ImageView
-            android:id="@+id/leftImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/home_dakashibai" />
 
-        <!-- <LinearLayout -->
+<include
+    android:id="@+id/loadingView"
+    layout="@layout/loading_view_anim" />
+<RelativeLayout
+    android:id="@+id/clock_main_alertLayout"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_alignParentBottom="true"
+    android:background="@color/black90"
+    android:visibility="gone" >
+
+    <ImageView
+        android:id="@+id/leftImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/home_dakashibai" />
+
+    <!-- <LinearLayout -->
         <!-- android:layout_width="wrap_content" -->
         <!-- android:layout_height="wrap_content" -->
         <!-- android:layout_centerVertical="true" -->

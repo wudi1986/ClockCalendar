@@ -1,5 +1,11 @@
 package com.yktx.check.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -35,12 +41,6 @@ import com.yktx.check.service.Service;
 import com.yktx.check.square.fragment.BaseFragment;
 import com.yktx.check.util.Contanst;
 import com.yktx.check.util.Tools;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressLint("ValidFragment")
 public class ClockFansFragment extends BaseFragment implements ServiceListener{
@@ -146,10 +146,8 @@ public class ClockFansFragment extends BaseFragment implements ServiceListener{
 //		AnimationAdapter animAdapter = new SwingRightInAnimationAdapter(
 //				mNewAdapter);
 //		animAdapter.setAbsListView(listView);
-//		SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
-//		swingBottomInAnimationAdapter.setAbsListView(listView);
-//		listView.setAdapter(swingBottomInAnimationAdapter);
-//		listView.setAdapter(adapter);
+		listView.setAdapter(adapter);
+//		listView.setAdapter(animAdapter);
 	}
 
 	protected void setListeners() {

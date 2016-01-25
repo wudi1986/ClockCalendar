@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -41,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/xq_liaotian"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/title_item_createJob"
@@ -107,25 +106,25 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/font5" />
 
-                    <TextView
-                        android:id="@+id/taskUserMaxNum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="4dp"
-                        android:layout_toRightOf="@id/taskUserName"
-                        android:gravity="center"
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/font5" />
-
                     <ImageView
+                        android:id="@+id/iv_rightImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="8dp"
+                        android:layout_marginRight="16dp"
                         android:src="@drawable/xq_jiantou3" />
+                    <TextView
+                        android:id="@+id/taskUserMaxNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/iv_rightImage"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="6dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font5" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -157,8 +156,8 @@
             android:id="@+id/taskinfo_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/expandablelist_Layout"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-            android:layout_below="@+id/expandablelist_Layout" />
 
         <View
             android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package com.yktx.check.adapter;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,8 +39,6 @@ import com.yktx.check.bean.MsgToUserListBean;
 import com.yktx.check.square.fragment.NewFragment;
 import com.yktx.check.util.TimeUtil;
 import com.yktx.check.util.Tools;
-
-import java.util.ArrayList;
 
 public class DynamicFragmentListViewAdapter extends BaseAdapter{
 	private ImageLoader imageLoader = ImageLoader.getInstance();

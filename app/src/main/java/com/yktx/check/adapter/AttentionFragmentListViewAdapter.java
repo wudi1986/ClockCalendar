@@ -373,8 +373,10 @@ public class AttentionFragmentListViewAdapter extends BaseAdapter {
 			.setVisibility(View.VISIBLE);
 		}
 		holdView.attention_fragment_item_name.setText(itemBean.getName());
+		holdView.attention_fragment_item_currentStreak.setVisibility(View.GONE);
 		holdView.attention_fragment_item_currentStreak.setText(itemBean.getTaskCount()
 				+ "");
+
 		holdView.attention_fragment_item_clockName.setText(itemBean.getTitle());
 		String singnature = itemBean.getSignature();
 		if (singnature != null && singnature.length() != 0) {
@@ -747,13 +749,13 @@ public class AttentionFragmentListViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-//				Intent in = new Intent(context, ClockGroupInfoActivity.class);
-//				in.putExtra("buildingId", itemBean.getBuildingId());
-//				context.startActivity(in);
-				Intent in = new Intent(context, TaskInfoActivity.class);
-				in.putExtra("taskid", itemBean.getTaskId());
-				in.putExtra("userid", itemBean.getUserId());
+				Intent in = new Intent(context, ClockGroupInfoFragmentActivity.class);
+				in.putExtra("buildingId", itemBean.getBuildingId());
 				context.startActivity(in);
+//				Intent in = new Intent(context, TaskInfoActivity.class);
+//				in.putExtra("taskid", itemBean.getTaskId());
+//				in.putExtra("userid", itemBean.getUserId());
+//				context.startActivity(in);
 			}
 		});
 		holdView.attention_fragment_item_IQSLayout.setOnClickListener(new OnClickListener() {
@@ -761,13 +763,13 @@ public class AttentionFragmentListViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-//				Intent in = new Intent(context, TaskInfoActivity.class);s
-//				in.putExtra("taskid", itemBean.getTaskId());
-//				in.putExtra("userid", itemBean.getUserId());
-//				context.startActivity(in);
-				Intent in = new Intent(context, ClockGroupInfoFragmentActivity.class);
-				in.putExtra("buildingId", itemBean.getBuildingId());
+				Intent in = new Intent(context, TaskInfoActivity.class);
+				in.putExtra("taskid", itemBean.getTaskId());
+				in.putExtra("userid", itemBean.getUserId());
 				context.startActivity(in);
+//				Intent in = new Intent(context, ClockGroupInfoFragmentActivity.class);
+//				in.putExtra("buildingId", itemBean.getBuildingId());
+//				context.startActivity(in);
 			}
 		});
 		holdView.attention_fragment_item_votesUsersContent

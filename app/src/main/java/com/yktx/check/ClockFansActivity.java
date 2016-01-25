@@ -1,15 +1,10 @@
 package com.yktx.check;
 
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import com.yktx.check.adapter.FansFragmentAdapter;
 import com.yktx.check.adapter.FansFragmentAdapter.OnFansFragmentItemClick;
@@ -18,17 +13,32 @@ import com.yktx.check.bean.FansBean;
 import com.yktx.check.bean.FansItemBean;
 import com.yktx.check.conn.ServiceListener;
 import com.yktx.check.conn.UrlParams;
+import com.yktx.check.fragment.ClockFollowFragment;
 import com.yktx.check.listview.XListView;
 import com.yktx.check.listview.XListView.IXListViewListener;
 import com.yktx.check.service.Service;
 import com.yktx.check.util.Contanst;
 import com.yktx.check.util.Tools;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.view.Menu;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class ClockFansActivity extends BaseActivity implements ServiceListener{
 	/** 第几页 */
@@ -93,7 +103,7 @@ public class ClockFansActivity extends BaseActivity implements ServiceListener{
 		// TODO Auto-generated method stub
 //		SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
 //		swingBottomInAnimationAdapter.setAbsListView(listView);
-//		listView.setAdapter(adapter);
+		listView.setAdapter(adapter);
 		listView.setIsShow(true);
 		listView.setPullGoHome(false);
 		listView.setPullLoadEnable(false);

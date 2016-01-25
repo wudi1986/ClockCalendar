@@ -109,7 +109,7 @@ public class AllTaskFinishDialog2 extends Dialog {
 		window.setAttributes(wl);
 	}
 
-	View.OnClickListener click = new View.OnClickListener() {
+	android.view.View.OnClickListener click = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View view) {

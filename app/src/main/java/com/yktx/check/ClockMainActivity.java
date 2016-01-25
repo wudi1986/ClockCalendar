@@ -1,5 +1,16 @@
 package com.yktx.check;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,8 +35,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -41,6 +53,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.socialize.sso.UMSsoHandler;
+import com.yktx.check.adapter.ClockMainTodayAdapter;
 import com.yktx.check.adapter.SlideAdapter;
 import com.yktx.check.adapter.SlideAdapter.OnClickButton;
 import com.yktx.check.bean.ByDateBean;
@@ -82,17 +95,6 @@ import com.yktx.check.widget.TaskCaledarView;
 import com.yktx.view.StickyLayout;
 import com.yktx.view.StickyLayout.OnGiveUpTouchEventListener;
 import com.yktx.view.StickyLayout.OnMoveOver;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @SuppressLint("NewApi")
 public class ClockMainActivity extends BaseActivity implements CallBack,
@@ -353,10 +355,10 @@ public class ClockMainActivity extends BaseActivity implements CallBack,
 						byDateBeanList.get(positioniItemClick)
 						.getCurrentStreak() + "");
 				Window win = sharedDialog.getWindow();
-				WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+				android.view.WindowManager.LayoutParams params = new android.view.WindowManager.LayoutParams();
 				// params.x = -80;//设置x坐标
 				// params.y = -60;//设置y坐标
-				win.setAttributes((WindowManager.LayoutParams) params);
+				win.setAttributes((android.view.WindowManager.LayoutParams) params);
 				sharedDialog.setCanceledOnTouchOutside(true);//
 				// 设置点击Dialog外部任意区域关闭Dialog
 				sharedDialog.show();
@@ -1265,7 +1267,7 @@ public class ClockMainActivity extends BaseActivity implements CallBack,
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (OutOfMemoryError e) {
+				}  catch (OutOfMemoryError e) {
 					ImageLoader.getInstance().clearMemoryCache();
 				}
 
@@ -1388,7 +1390,7 @@ public class ClockMainActivity extends BaseActivity implements CallBack,
 			taskItemBean.setCheck_time(checkTime);
 			taskItemBean.setPicCount(imageNum+"");
 
-			Log
+			android.util.Log
 			.i("aaa", "allPath ============== " + sb.toString());
 			String allPath = sb.toString();
 			if (allPath != null && allPath.length() > 0) {
@@ -1439,7 +1441,7 @@ public class ClockMainActivity extends BaseActivity implements CallBack,
 		 * 修改TakeClockDialog 的图片
 		 */
 		public void setImage(ArrayList<ImageListBean> beans,
-							 boolean isTakePicture);
+				boolean isTakePicture);
 
 	}
 

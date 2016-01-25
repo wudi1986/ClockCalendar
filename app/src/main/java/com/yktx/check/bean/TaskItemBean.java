@@ -84,9 +84,6 @@ public class TaskItemBean implements Serializable{
 	private int stickFlag;
 	/** 置顶理由, 只有置顶的项有此字段 */
 	private String stickJobPraise;
-	
-	
-
 	/** city如果没有就是0 */
 	private String city;
 

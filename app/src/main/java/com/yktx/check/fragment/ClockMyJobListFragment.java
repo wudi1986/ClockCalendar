@@ -1,7 +1,28 @@
 package com.yktx.check.fragment;
 
+import java.util.ArrayList;
+
+import com.yktx.check.R;
+import com.yktx.check.TaskInfoActivity;
+import com.yktx.check.adapter.NewFragmentListViewAdapter;
+import com.yktx.check.adapter.NewFragmentListViewAdapter.OnNewFragmentItemClick;
+import com.yktx.check.bean.ByTaskIdBean;
+import com.yktx.check.bean.MyTaskBean;
+import com.yktx.check.bean.TaskItemBean;
+import com.yktx.check.conn.ServiceListener;
+import com.yktx.check.conn.UrlParams;
+import com.yktx.check.listview.XListView;
+import com.yktx.check.listview.XListView.IXListViewListener;
+import com.yktx.check.service.Service;
+import com.yktx.check.square.fragment.BaseFragment;
+import com.yktx.check.square.fragment.NewFragment;
+import com.yktx.check.util.Contanst;
+import com.yktx.check.util.LvHeightUtil;
+import com.yktx.check.util.Tools;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,24 +32,10 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import com.yktx.check.R;
-import com.yktx.check.TaskInfoActivity;
-import com.yktx.check.adapter.NewFragmentListViewAdapter;
-import com.yktx.check.adapter.NewFragmentListViewAdapter.OnNewFragmentItemClick;
-import com.yktx.check.bean.ByTaskIdBean;
-import com.yktx.check.bean.TaskItemBean;
-import com.yktx.check.conn.ServiceListener;
-import com.yktx.check.conn.UrlParams;
-import com.yktx.check.listview.XListView;
-import com.yktx.check.listview.XListView.IXListViewListener;
-import com.yktx.check.service.Service;
-import com.yktx.check.square.fragment.BaseFragment;
-import com.yktx.check.util.Contanst;
-import com.yktx.check.util.Tools;
-
-import java.util.ArrayList;
+import android.widget.ScrollView;
 
 @SuppressLint({ "ValidFragment", "NewApi" })
 public class ClockMyJobListFragment extends BaseFragment implements ServiceListener{
@@ -240,8 +247,6 @@ public class ClockMyJobListFragment extends BaseFragment implements ServiceListe
 						//						adapter.setDistance(latitude, longitude);
 						listView.setPullLoadEnable(true);
 
-//						SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
-//						swingBottomInAnimationAdapter.setAbsListView(listView);
 						listView.setAdapter(adapter);
 
 					} else {
