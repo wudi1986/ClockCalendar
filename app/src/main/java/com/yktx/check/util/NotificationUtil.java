@@ -15,7 +15,7 @@ public class NotificationUtil {
         Notification notification = new Notification(R.drawable.bottom,msg, when);
         notification.flags=Notification.FLAG_AUTO_CANCEL;
 //        PendingIntent pi = PendingIntent.getActivity(context, 0, new Intent(context,NewMainActivity.class), 0);
-//		notification.setLatestEventInfo(context, "Pat∑¢ÀÕ÷–", msg, null);
+//		notification.setLatestEventInfo(context, "PatÂèëÈÄÅ‰∏≠", msg, null);
 //        nm.notify(1, notification);
         
         new  Thread(new Runnable() {

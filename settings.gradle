@@ -1,2 +1,2 @@
-include ':app', 'LoadMoreRecyclerView-master'
+include ':app', 'LoadMoreRecyclerView-master', ':BDIntegrationSDK_LibProject'
 include ':easeUI'

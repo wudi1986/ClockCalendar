@@ -15,6 +15,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
+import com.baidu.autoupdatesdk.UICheckUpdateCallback;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.umeng.analytics.AnalyticsConfig;
@@ -46,7 +48,7 @@ public class MainActivity extends BaseActivity {
 		/** 友盟自动更新 */
 //		MobclickAgent.updateOnlineConfig(mContext);
 		/** 百度自动更新 */
-//		BDAutoUpdateSDK.uiUpdateAction(this, new MyUICheckUpdateCallback());
+		BDAutoUpdateSDK.uiUpdateAction(this, new MyUICheckUpdateCallback());
 		/**360自动更新 */
 //		UpdateManager.checkUpdate(this);
 		
@@ -55,15 +57,15 @@ public class MainActivity extends BaseActivity {
 		isFirstOpen = settings.getBoolean("isFirstOpen", true);
 
 	}
-//	private class MyUICheckUpdateCallback implements UICheckUpdateCallback {
-//
-//		@Override
-//		public void onCheckComplete() {
-////			dialog.dismiss();
-//			Tools.getLog(Tools.d, "aaa", "百度自动gengxing!!!!");
-//		}
-//
-//	}
+	private class MyUICheckUpdateCallback implements UICheckUpdateCallback {
+
+		@Override
+		public void onCheckComplete() {
+//			dialog.dismiss();
+			Tools.getLog(Tools.d, "aaa", "百度自动gengxing!!!!");
+		}
+
+	}
 	
 	boolean isFirst = true;
 
