@@ -14,8 +14,6 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
 
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
@@ -23,6 +21,9 @@ import com.umeng.analytics.AnalyticsConfig;
 import com.umeng.analytics.MobclickAgent;
 import com.yktx.check.util.Tools;
 import com.yktx.first.viewpager.FirstViewPagerActivity;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class MainActivity extends BaseActivity {
 	private ImageView mMainImage,circleBg;
@@ -41,13 +42,13 @@ public class MainActivity extends BaseActivity {
 		userName = settings.getString("username", null);
 		main_Layout = (RelativeLayout) findViewById(R.id.main_Layout);
 		/** 渠道号 */
-		AnalyticsConfig.setChannel("yyb");
+		AnalyticsConfig.setChannel("baidu");
 		/** 友盟自动更新 */
 //		MobclickAgent.updateOnlineConfig(mContext);
 		/** 百度自动更新 */
 //		BDAutoUpdateSDK.uiUpdateAction(this, new MyUICheckUpdateCallback());
 		/**360自动更新 */
-//		UpdateManager.checkUpdate(this); 
+//		UpdateManager.checkUpdate(this);
 		
 		/** 设置是否对日志信息进行加密, 默认false(不加密). */
 		AnalyticsConfig.enableEncrypt(false);

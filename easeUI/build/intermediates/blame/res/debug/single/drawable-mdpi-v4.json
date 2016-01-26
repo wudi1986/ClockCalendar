@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\android test\\ClockCalendar2016\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_launcher.png",
+        "source": "C:\\android test\\ClockCalendar2016\\easeUI\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    },
+    {
         "merged": "C:\\android test\\ClockCalendar3\\easeUI\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_launcher.png",
         "source": "C:\\android test\\ClockCalendar3\\easeUI\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
     },

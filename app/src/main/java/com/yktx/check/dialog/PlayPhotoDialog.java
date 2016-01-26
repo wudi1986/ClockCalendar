@@ -76,9 +76,9 @@ public class PlayPhotoDialog extends Dialog implements ServiceListener {
 	ArrayList<TaskGetImageBean> curList = new ArrayList<TaskGetImageBean>(10);
 
 	public DisplayImageOptions options = new DisplayImageOptions.Builder()
-			.showImageOnLoading(R.drawable.signin_local_gallry)
-			.showImageForEmptyUri(R.drawable.signin_local_gallry)
-			.showImageOnFail(R.drawable.signin_local_gallry)
+			.showImageOnLoading(R.drawable.toumingimg)
+			.showImageForEmptyUri(R.drawable.toumingimg)
+			.showImageOnFail(R.drawable.toumingimg)
 			.bitmapConfig(Bitmap.Config.RGB_565).cacheOnDisk(true)
 			.cacheInMemory(false)
 			// 启用内存缓存

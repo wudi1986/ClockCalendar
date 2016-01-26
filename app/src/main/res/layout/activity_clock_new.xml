@@ -18,7 +18,7 @@
         android:background="@color/color_line"
         android:visibility="gone" />
 
-    <com.yktx.check.widget.ScrollEditLayout
+    <ScrollView
         android:id="@+id/parentScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -283,7 +283,7 @@
                 </com.yktx.check.widget.ListViewAndScrollView>
             </RelativeLayout>
         </LinearLayout>
-    </com.yktx.check.widget.ScrollEditLayout>
+    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/snakbarLayout"

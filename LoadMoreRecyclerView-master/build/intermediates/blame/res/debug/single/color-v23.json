@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\android test\\ClockCalendar2016\\LoadMoreRecyclerView-master\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_color_highlight_material.xml",
+        "source": "C:\\android test\\ClockCalendar2016\\LoadMoreRecyclerView-master\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\color-v23\\abc_color_highlight_material.xml"
+    },
+    {
         "merged": "C:\\android test\\ClockCalendar3\\LoadMoreRecyclerView-master\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_color_highlight_material.xml",
         "source": "C:\\android test\\ClockCalendar3\\LoadMoreRecyclerView-master\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\color-v23\\abc_color_highlight_material.xml"
     }

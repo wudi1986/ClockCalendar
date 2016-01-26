@@ -140,6 +140,7 @@ public class TaskGridViewFragment extends BaseFragment implements
         gridView = (RecyclerView) layout
                 .findViewById(R.id.pull_refresh_grid);
         task_gridview_Play = (ImageView) layout.findViewById(R.id.task_gridview_Play);
+
         settings = mContext.getSharedPreferences("clock", mContext.MODE_PRIVATE);
         userID = settings.getString("userid", null);
         myUMSDK = new MyUMSDK(getActivity());

@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.yktx.check.bean.AlarmBean;
+import com.yktx.check.util.CrashHandler;
 import com.yktx.check.util.FileURl;
 
 import java.io.File;
@@ -57,8 +58,8 @@ public class ClockApplication extends Application {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		// 获取异常信息
-//		 CrashHandler crashHandler = CrashHandler.getInstance();
-//		 crashHandler.init(getApplicationContext());
+		 CrashHandler crashHandler = CrashHandler.getInstance();
+		 crashHandler.init(getApplicationContext());
 
 		clockApplication = this;
 		aboutimageloder();// 初始化ImageLoders

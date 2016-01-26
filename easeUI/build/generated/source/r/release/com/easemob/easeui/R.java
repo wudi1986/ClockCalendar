@@ -480,7 +480,7 @@ containing a value of this type.
         public static int chatting_size_iv=0x7f090036;
         public static int chatting_status_btn=0x7f090038;
         public static int chatting_video_data_area=0x7f090035;
-        public static int close=0x7f090001;
+        public static int close=0x7f090000;
         public static int contact_list=0x7f090019;
         public static int content_container=0x7f090018;
         public static int edittext_layout=0x7f09004d;
@@ -518,7 +518,7 @@ containing a value of this type.
         public static int msg_state=0x7f090024;
         public static int msg_status=0x7f09003d;
         public static int name=0x7f090022;
-        public static int open=0x7f090000;
+        public static int open=0x7f090001;
         public static int pager_view=0x7f090056;
         public static int pb_load_local=0x7f090006;
         public static int percentage=0x7f090033;
@@ -970,7 +970,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:numColumns
         */
-        public static final int EaseChatExtendMenu_numColumns = 0;
+        public static int EaseChatExtendMenu_numColumns = 0;
         /** Attributes that can be used with a EaseChatMessageList.
            <p>Includes the following attributes:</p>
            <table>
@@ -999,7 +999,7 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.easemob.easeui:msgListMyBubbleBackground
         */
-        public static final int EaseChatMessageList_msgListMyBubbleBackground = 0;
+        public static int EaseChatMessageList_msgListMyBubbleBackground = 0;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#msgListOtherBubbleBackground}
           attribute's value can be found in the {@link #EaseChatMessageList} array.
@@ -1009,7 +1009,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.easemob.easeui:msgListOtherBubbleBackground
         */
-        public static final int EaseChatMessageList_msgListOtherBubbleBackground = 1;
+        public static int EaseChatMessageList_msgListOtherBubbleBackground = 1;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#msgListShowUserAvatar}
           attribute's value can be found in the {@link #EaseChatMessageList} array.
@@ -1023,7 +1023,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:msgListShowUserAvatar
         */
-        public static final int EaseChatMessageList_msgListShowUserAvatar = 2;
+        public static int EaseChatMessageList_msgListShowUserAvatar = 2;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#msgListShowUserNick}
           attribute's value can be found in the {@link #EaseChatMessageList} array.
@@ -1037,7 +1037,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:msgListShowUserNick
         */
-        public static final int EaseChatMessageList_msgListShowUserNick = 3;
+        public static int EaseChatMessageList_msgListShowUserNick = 3;
         /** Attributes that can be used with a EaseContactList.
            <p>Includes the following attributes:</p>
            <table>
@@ -1071,7 +1071,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
           @attr name com.easemob.easeui:ctsListInitialLetterBg
         */
-        public static final int EaseContactList_ctsListInitialLetterBg = 3;
+        public static int EaseContactList_ctsListInitialLetterBg = 3;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#ctsListInitialLetterColor}
           attribute's value can be found in the {@link #EaseContactList} array.
@@ -1086,7 +1086,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:ctsListInitialLetterColor
         */
-        public static final int EaseContactList_ctsListInitialLetterColor = 4;
+        public static int EaseContactList_ctsListInitialLetterColor = 4;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#ctsListPrimaryTextColor}
           attribute's value can be found in the {@link #EaseContactList} array.
@@ -1101,7 +1101,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:ctsListPrimaryTextColor
         */
-        public static final int EaseContactList_ctsListPrimaryTextColor = 0;
+        public static int EaseContactList_ctsListPrimaryTextColor = 0;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#ctsListPrimaryTextSize}
           attribute's value can be found in the {@link #EaseContactList} array.
@@ -1117,7 +1117,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:ctsListPrimaryTextSize
         */
-        public static final int EaseContactList_ctsListPrimaryTextSize = 1;
+        public static int EaseContactList_ctsListPrimaryTextSize = 1;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#ctsListShowSiderBar}
           attribute's value can be found in the {@link #EaseContactList} array.
@@ -1131,7 +1131,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:ctsListShowSiderBar
         */
-        public static final int EaseContactList_ctsListShowSiderBar = 2;
+        public static int EaseContactList_ctsListShowSiderBar = 2;
         /** Attributes that can be used with a EaseConversationList.
            <p>Includes the following attributes:</p>
            <table>
@@ -1170,7 +1170,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:cvsListPrimaryTextColor
         */
-        public static final int EaseConversationList_cvsListPrimaryTextColor = 0;
+        public static int EaseConversationList_cvsListPrimaryTextColor = 0;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#cvsListPrimaryTextSize}
           attribute's value can be found in the {@link #EaseConversationList} array.
@@ -1186,7 +1186,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:cvsListPrimaryTextSize
         */
-        public static final int EaseConversationList_cvsListPrimaryTextSize = 3;
+        public static int EaseConversationList_cvsListPrimaryTextSize = 3;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#cvsListSecondaryTextColor}
           attribute's value can be found in the {@link #EaseConversationList} array.
@@ -1201,7 +1201,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:cvsListSecondaryTextColor
         */
-        public static final int EaseConversationList_cvsListSecondaryTextColor = 1;
+        public static int EaseConversationList_cvsListSecondaryTextColor = 1;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#cvsListSecondaryTextSize}
           attribute's value can be found in the {@link #EaseConversationList} array.
@@ -1217,7 +1217,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:cvsListSecondaryTextSize
         */
-        public static final int EaseConversationList_cvsListSecondaryTextSize = 4;
+        public static int EaseConversationList_cvsListSecondaryTextSize = 4;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#cvsListTimeTextColor}
           attribute's value can be found in the {@link #EaseConversationList} array.
@@ -1232,7 +1232,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:cvsListTimeTextColor
         */
-        public static final int EaseConversationList_cvsListTimeTextColor = 2;
+        public static int EaseConversationList_cvsListTimeTextColor = 2;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#cvsListTimeTextSize}
           attribute's value can be found in the {@link #EaseConversationList} array.
@@ -1248,7 +1248,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:cvsListTimeTextSize
         */
-        public static final int EaseConversationList_cvsListTimeTextSize = 5;
+        public static int EaseConversationList_cvsListTimeTextSize = 5;
         /** Attributes that can be used with a EaseEmojiconMenu.
            <p>Includes the following attributes:</p>
            <table>
@@ -1277,7 +1277,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:bigEmojiconRows
         */
-        public static final int EaseEmojiconMenu_bigEmojiconRows = 0;
+        public static int EaseEmojiconMenu_bigEmojiconRows = 0;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#emojiconColumns}
           attribute's value can be found in the {@link #EaseEmojiconMenu} array.
@@ -1291,7 +1291,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:emojiconColumns
         */
-        public static final int EaseEmojiconMenu_emojiconColumns = 1;
+        public static int EaseEmojiconMenu_emojiconColumns = 1;
         /** Attributes that can be used with a EaseSwitchButton.
            <p>Includes the following attributes:</p>
            <table>
@@ -1318,7 +1318,7 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.easemob.easeui:switchCloseImage
         */
-        public static final int EaseSwitchButton_switchCloseImage = 1;
+        public static int EaseSwitchButton_switchCloseImage = 1;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#switchOpenImage}
           attribute's value can be found in the {@link #EaseSwitchButton} array.
@@ -1328,7 +1328,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.easemob.easeui:switchOpenImage
         */
-        public static final int EaseSwitchButton_switchOpenImage = 0;
+        public static int EaseSwitchButton_switchOpenImage = 0;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#switchStatus}
           attribute's value can be found in the {@link #EaseSwitchButton} array.
@@ -1345,7 +1345,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 </table>
           @attr name com.easemob.easeui:switchStatus
         */
-        public static final int EaseSwitchButton_switchStatus = 2;
+        public static int EaseSwitchButton_switchStatus = 2;
         /** Attributes that can be used with a EaseTitleBar.
            <p>Includes the following attributes:</p>
            <table>
@@ -1376,7 +1376,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
           @attr name com.easemob.easeui:titleBarBackground
         */
-        public static final int EaseTitleBar_titleBarBackground = 3;
+        public static int EaseTitleBar_titleBarBackground = 3;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#titleBarLeftImage}
           attribute's value can be found in the {@link #EaseTitleBar} array.
@@ -1386,7 +1386,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.easemob.easeui:titleBarLeftImage
         */
-        public static final int EaseTitleBar_titleBarLeftImage = 1;
+        public static int EaseTitleBar_titleBarLeftImage = 1;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#titleBarRightImage}
           attribute's value can be found in the {@link #EaseTitleBar} array.
@@ -1396,7 +1396,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.easemob.easeui:titleBarRightImage
         */
-        public static final int EaseTitleBar_titleBarRightImage = 2;
+        public static int EaseTitleBar_titleBarRightImage = 2;
         /**
           <p>This symbol is the offset where the {@link com.easemob.easeui.R.attr#titleBarTitle}
           attribute's value can be found in the {@link #EaseTitleBar} array.
@@ -1410,6 +1410,6 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.easemob.easeui:titleBarTitle
         */
-        public static final int EaseTitleBar_titleBarTitle = 0;
+        public static int EaseTitleBar_titleBarTitle = 0;
     };
 }

@@ -16,10 +16,10 @@ android {
     }
     defaultConfig {
         applicationId "com.yktx.check"
-        minSdkVersion 14
+        minSdkVersion 9
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 70
+        versionName "1.4.0"
         multiDexEnabled true
     }
     buildTypes {

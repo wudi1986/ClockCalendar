@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
@@ -65,6 +66,7 @@ import com.yktx.check.conn.UrlParams;
 import com.yktx.check.dialog.AddCommentDialog;
 import com.yktx.check.dialog.AllTaskFinishDialog2;
 import com.yktx.check.dialog.GiveUpJobDialog;
+import com.yktx.check.dialog.PlayPhotoDialog;
 import com.yktx.check.dialog.TakeClockDialog;
 import com.yktx.check.dialog.TakeClockDialog.TaskClockDialogOnCLickClockSuccess;
 import com.yktx.check.dialog.TakeClockSuccessDialog;
@@ -93,686 +95,734 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskInfoActivity extends FragmentActivity implements
-		ServiceListener {
+        ServiceListener {
 
-	public static String mTaskId;
-	public static String mTotalCheckCount;
-	public static String mTotalDateCount;
-	public static String mDescription;
-	private String mTitleContent;
-	private LastTwoUsersBean lastTwoJobBean = new LastTwoUsersBean();
-	private ImageView title_item_leftImage, title_item_createJob;
-	public static ByIdDetailBean byIdDetailBean;
+    public static String mTaskId;
+    public static String mTotalCheckCount;
+    public static String mTotalDateCount;
+    public static String mDescription;
+    private String mTitleContent;
+    private LastTwoUsersBean lastTwoJobBean = new LastTwoUsersBean();
+    private ImageView title_item_leftImage, title_item_createJob, title_item_play;
+    public static ByIdDetailBean byIdDetailBean;
 
-	ArrayList<JobStatsBean> jobList = new ArrayList<JobStatsBean>(10);
-	boolean isConn, isReflush = true;
-	int mClickPosition;
-	AddCommentDialog dialog;
-	public DisplayImageOptions options = new DisplayImageOptions.Builder()
-			.showImageForEmptyUri(R.drawable.zw_image)
-			.showImageOnLoading(R.anim.loading_image_animation)
-			.showImageOnFail(R.drawable.zw_image).showImageOnLoading(null)
-			.showImageOnFail(null).bitmapConfig(Bitmap.Config.RGB_565)
-			.cacheOnDisk(true)
-			// .displayer(new RoundedBitmapDisplayer(400))
-			.cacheInMemory(false)
-			.imageScaleType(ImageScaleType.EXACTLY_STRETCHED).build();
+    ArrayList<JobStatsBean> jobList = new ArrayList<JobStatsBean>(10);
+    boolean isConn, isReflush = true;
+    int mClickPosition;
+    AddCommentDialog dialog;
+    public DisplayImageOptions options = new DisplayImageOptions.Builder()
+            .showImageForEmptyUri(R.drawable.zw_image)
+            .showImageOnLoading(R.anim.loading_image_animation)
+            .showImageOnFail(R.drawable.zw_image).showImageOnLoading(null)
+            .showImageOnFail(null).bitmapConfig(Bitmap.Config.RGB_565)
+            .cacheOnDisk(true)
+            // .displayer(new RoundedBitmapDisplayer(400))
+            .cacheInMemory(false)
+            .imageScaleType(ImageScaleType.EXACTLY_STRETCHED).build();
 
-	private MyUMSDK myShare;
-	private String thisJobUserid;
-	TakeClockDialog taskClockDialog;
-	private TextView shareTitle, clock_main_alertText;
-	private ImageView leftImage;
-	private RelativeLayout clock_main_alertLayout;
+    private MyUMSDK myShare;
+    private String thisJobUserid;
+    TakeClockDialog taskClockDialog;
+    private TextView shareTitle, clock_main_alertText;
+    private ImageView leftImage;
+    private RelativeLayout clock_main_alertLayout;
 
-	private boolean isOther;
-	boolean isCannotDaka;
+    private boolean isOther;
+    boolean isCannotDaka;
 
-	QiQiuUtils qiQiuUtils;
-	FrameLayout donghua;
-	boolean isAlone;
+    QiQiuUtils qiQiuUtils;
+    FrameLayout donghua;
+    boolean isAlone;
 
-	DBHelper dbHelper;
-	private ArrayList<ByDateBean> byDateBeanList = new ArrayList<ByDateBean>();
-	String today;
+    DBHelper dbHelper;
+    private ArrayList<ByDateBean> byDateBeanList = new ArrayList<ByDateBean>();
+    String today;
 
-	OldPagerSlidingTabStrip taskInfo_tabs;
-	ViewPager taskInfo_pager;
+    OldPagerSlidingTabStrip taskInfo_tabs;
+    ViewPager taskInfo_pager;
 
-	/**
-	 * 获取当前屏幕的密度
-	 */
-	private DisplayMetrics dm;
-	private SharedPreferences settings;
-	private Editor mEditor;
-	private String userID;
-	private Activity mContext;
-	/**
-	 * 日历
-	 */
-	TaskGridViewFragment gridViewFragment;
+    /**
+     * 获取当前屏幕的密度
+     */
+    private DisplayMetrics dm;
+    private SharedPreferences settings;
+    private Editor mEditor;
+    private String userID;
+    private Activity mContext;
+    /**
+     * 日历
+     */
+    TaskGridViewFragment gridViewFragment;
 
-	/**
-	 * task详情
-	 */
-	TaskInfoFragment taskInfoFragment;
+    /**
+     * task详情
+     */
+    TaskInfoFragment taskInfoFragment;
 
-	TextView taskinfo_top_layout_name, taskinfo_top_layout_State,
-			taskinfo_top_layout_info, taskUserName, taskUserMaxNum;
+    TextView taskinfo_top_layout_name, taskinfo_top_layout_State,
+            taskinfo_top_layout_info, taskUserName, taskUserMaxNum;
 
-	ImageView taskinfo_top_layout_Image, taskinfo_top_layout_Yinsi,
-			title_item_chat, taskinfo_top_layout_progress1,
-			taskinfo_top_layout_progress2, taskinfo_top_layout_progress3,
-			taskinfo_top_layout_progress4, taskinfo_top_layout_progress5,
-			taskinfo_top_layout_progress6, taskinfo_top_layout_progress7,
-			taskinfo_top_layout_set;
+    ImageView taskinfo_top_layout_Image, taskinfo_top_layout_Yinsi,
+            title_item_chat, taskinfo_top_layout_progress1,
+            taskinfo_top_layout_progress2, taskinfo_top_layout_progress3,
+            taskinfo_top_layout_progress4, taskinfo_top_layout_progress5,
+            taskinfo_top_layout_progress6, taskinfo_top_layout_progress7,
+            taskinfo_top_layout_set;
 
-	RelativeLayout taskLastTwoTitleLayout, loadingView;
+    RelativeLayout taskLastTwoTitleLayout, loadingView;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_task_info);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
+        setContentView(R.layout.activity_task_info);
 
-		dm = getResources().getDisplayMetrics();
-		settings = getSharedPreferences("clock", MODE_PRIVATE);
-		mEditor = settings.edit();
-		userID = settings.getString("userid", null);
-		mContext = TaskInfoActivity.this;
+        dm = getResources().getDisplayMetrics();
+        settings = getSharedPreferences("clock", MODE_PRIVATE);
+        mEditor = settings.edit();
+        userID = settings.getString("userid", null);
+        mContext = TaskInfoActivity.this;
+        myUMSDK = new MyUMSDK(this);
 
-		findViews();
-		init();
-		setListeners();
-	}
+        findViews();
+        init();
+        setListeners();
+    }
 
-	protected void findViews() {
-		// TODO Auto-generated method stub
+    protected void findViews() {
+        // TODO Auto-generated method stub
 
-		mTaskId = getIntent().getStringExtra("taskid");
-		thisJobUserid = getIntent().getStringExtra("userid");
-		isCannotDaka = getIntent().getBooleanExtra("isCannotDaka", false);
-		if (thisJobUserid == null || thisJobUserid.length() == 0) {
-			thisJobUserid = userID;
-		}
-		Tools.getLog(Tools.d, "aaa", "mTotalDateCount" + mTotalCheckCount
-				+ ",currentStreak" + mTotalDateCount);
-		title_item_leftImage = (ImageView) findViewById(R.id.title_item_leftImage);
-		title_item_createJob = (ImageView) findViewById(R.id.title_item_createJob);
+        mTaskId = getIntent().getStringExtra("taskid");
+        thisJobUserid = getIntent().getStringExtra("userid");
+        isCannotDaka = getIntent().getBooleanExtra("isCannotDaka", false);
+        if (thisJobUserid == null || thisJobUserid.length() == 0) {
+            thisJobUserid = userID;
+        }
+        Tools.getLog(Tools.d, "aaa", "mTotalDateCount" + mTotalCheckCount
+                + ",currentStreak" + mTotalDateCount);
+        title_item_leftImage = (ImageView) findViewById(R.id.title_item_leftImage);
+        title_item_createJob = (ImageView) findViewById(R.id.title_item_createJob);
+        title_item_play = (ImageView) findViewById(R.id.title_item_play);
 
-		clock_main_alertLayout = (RelativeLayout) findViewById(R.id.clock_main_alertLayout);
-		clock_main_alertText = (TextView) findViewById(R.id.clock_main_alertText);
-		shareTitle = (TextView) findViewById(R.id.shareTitle);
-		leftImage = (ImageView) findViewById(R.id.leftImage);
+        clock_main_alertLayout = (RelativeLayout) findViewById(R.id.clock_main_alertLayout);
+        clock_main_alertText = (TextView) findViewById(R.id.clock_main_alertText);
+        shareTitle = (TextView) findViewById(R.id.shareTitle);
+        leftImage = (ImageView) findViewById(R.id.leftImage);
 
-		taskInfo_tabs = (OldPagerSlidingTabStrip) findViewById(R.id.taskinfo_tabs);
-		taskInfo_pager = (ViewPager) findViewById(R.id.taskinfo_pager);
+        taskInfo_tabs = (OldPagerSlidingTabStrip) findViewById(R.id.taskinfo_tabs);
+        taskInfo_pager = (ViewPager) findViewById(R.id.taskinfo_pager);
 
-		taskinfo_top_layout_name = (TextView) findViewById(R.id.taskinfo_top_layout_name);
-		taskinfo_top_layout_State = (TextView) findViewById(R.id.taskinfo_top_layout_State);
-		taskinfo_top_layout_info = (TextView) findViewById(R.id.taskinfo_top_layout_info);
-		taskUserName = (TextView) findViewById(R.id.taskUserName);
-		taskUserMaxNum = (TextView) findViewById(R.id.taskUserMaxNum);
-		taskLastTwoTitleLayout = (RelativeLayout)findViewById(R.id.taskLastTwoTitleLayout);
-		taskinfo_top_layout_Image = (ImageView) findViewById(R.id.taskinfo_top_layout_Image);
-		taskinfo_top_layout_Yinsi = (ImageView) findViewById(R.id.taskinfo_top_layout_Yinsi);
-		taskinfo_top_layout_progress1 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress1);
-		taskinfo_top_layout_progress2 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress2);
-		taskinfo_top_layout_progress3 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress3);
-		taskinfo_top_layout_progress4 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress4);
-		taskinfo_top_layout_progress5 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress5);
-		taskinfo_top_layout_progress6 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress6);
-		taskinfo_top_layout_progress7 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress7);
-		taskinfo_top_layout_set = (ImageView) findViewById(R.id.taskinfo_top_layout_set);
-		title_item_chat = (ImageView) findViewById(R.id.title_item_chat);
+        taskinfo_top_layout_name = (TextView) findViewById(R.id.taskinfo_top_layout_name);
+        taskinfo_top_layout_State = (TextView) findViewById(R.id.taskinfo_top_layout_State);
+        taskinfo_top_layout_info = (TextView) findViewById(R.id.taskinfo_top_layout_info);
+        taskUserName = (TextView) findViewById(R.id.taskUserName);
+        taskUserMaxNum = (TextView) findViewById(R.id.taskUserMaxNum);
+        taskLastTwoTitleLayout = (RelativeLayout) findViewById(R.id.taskLastTwoTitleLayout);
+        taskinfo_top_layout_Image = (ImageView) findViewById(R.id.taskinfo_top_layout_Image);
+        taskinfo_top_layout_Yinsi = (ImageView) findViewById(R.id.taskinfo_top_layout_Yinsi);
+        taskinfo_top_layout_progress1 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress1);
+        taskinfo_top_layout_progress2 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress2);
+        taskinfo_top_layout_progress3 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress3);
+        taskinfo_top_layout_progress4 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress4);
+        taskinfo_top_layout_progress5 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress5);
+        taskinfo_top_layout_progress6 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress6);
+        taskinfo_top_layout_progress7 = (ImageView) findViewById(R.id.taskinfo_top_layout_progress7);
+        taskinfo_top_layout_set = (ImageView) findViewById(R.id.taskinfo_top_layout_set);
+        title_item_chat = (ImageView) findViewById(R.id.title_item_chat);
 
-		loadingView = (RelativeLayout) findViewById(R.id.loadingView);
+        loadingView = (RelativeLayout) findViewById(R.id.loadingView);
 
-		donghua = new FrameLayout(mContext);
-		qiQiuUtils = new QiQiuUtils(donghua, mContext);
+        donghua = new FrameLayout(mContext);
+        qiQiuUtils = new QiQiuUtils(donghua, mContext);
 
-		dbHelper = new DBHelper(mContext);
+        dbHelper = new DBHelper(mContext);
 
-	}
+    }
 
-	protected void init() {
-		// TODO Auto-generated method stub
+    protected void init() {
+        // TODO Auto-generated method stub
 
-		today = TimeUtil.getYYMMDD(System.currentTimeMillis());
-		byDateBeanList = dbHelper.getTaskList();
-		myShare = new MyUMSDK(mContext);
-		isOther = getIntent().getBooleanExtra("isother", false);
-		if (isCannotDaka) {
-			title_item_createJob.setVisibility(View.GONE);
-		}
+        today = TimeUtil.getYYMMDD(System.currentTimeMillis());
+        byDateBeanList = dbHelper.getTaskList();
+        myShare = new MyUMSDK(mContext);
+        isOther = getIntent().getBooleanExtra("isother", false);
+        if (isCannotDaka) {
+            title_item_createJob.setVisibility(View.GONE);
+        }
 
-		if (isOther || !thisJobUserid.equals(userID)) {
-			isOther = true;
-			title_item_createJob.setVisibility(View.GONE);
-		}
-		getByIdConn();// 个人信息
+        if (isOther || !thisJobUserid.equals(userID)) {
+            isOther = true;
+            title_item_createJob.setVisibility(View.GONE);
+        }
+        getByIdConn();// 个人信息
 
-	}
+    }
 
-	private int curTabIndex;
-	TaskInfoDialog taskDialog;
-	String sharedialogStr;
-	private onCLickClockSuccess mCLickClockSuccess = new onCLickClockSuccess() {
-		// 详情分享的dialog
-		@Override
-		public void onClickSuccess(int index) {
-			// TODO Auto-generated method stub
+    private int curTabIndex;
+    TaskInfoDialog taskDialog;
+    String sharedialogStr;
+    private onCLickClockSuccess mCLickClockSuccess = new onCLickClockSuccess() {
+        // 详情分享的dialog
+        @Override
+        public void onClickSuccess(int index) {
+            // TODO Auto-generated method stub
 
-			switch (index) {
-			case 0: // 新浪
-				if (isShareImage) {
+            switch (index) {
+                case 0: // 新浪
+                    if (isShareImage) {
 
-					// if(isOther){
-					if (isAlone) {
-						MobclickAgent.onEvent(mContext,
-								"detailJobshareWeiboclick");
-						myShare.sinaUMShared(sharedialogStr, shareTaskUrl,
-								shareBitmap, true, 4);// 最后一个参数是那一页 1 为主页打卡成功
-														// 2为打卡成就 3详情页Task打卡成就
-														// 4详情页Job
-					} else {
-						MobclickAgent.onEvent(mContext,
-								"detailTaskshareWeiboclick");
-						myShare.sinaUMShared(sharedialogStr, shareTaskUrl,
-								shareBitmap, true, 3);// 最后一个参数是那一页 1 为主页打卡成功
-														// 2为打卡成就 3详情页Task打卡成就
-														// 4详情页Job
-					}
+                        // if(isOther){
+                        if (isAlone) {
+                            MobclickAgent.onEvent(mContext,
+                                    "detailJobshareWeiboclick");
+                            myShare.sinaUMShared(sharedialogStr, shareTaskUrl,
+                                    shareBitmap, true, 4);// 最后一个参数是那一页 1 为主页打卡成功
+                            // 2为打卡成就 3详情页Task打卡成就
+                            // 4详情页Job
+                        } else {
+                            MobclickAgent.onEvent(mContext,
+                                    "detailTaskshareWeiboclick");
+                            myShare.sinaUMShared(sharedialogStr, shareTaskUrl,
+                                    shareBitmap, true, 3);// 最后一个参数是那一页 1 为主页打卡成功
+                            // 2为打卡成就 3详情页Task打卡成就
+                            // 4详情页Job
+                        }
 
-				} else {
-					if (isAlone) {
-						MobclickAgent.onEvent(mContext,
-								"detailJobshareWeiboclick");
-						myShare.sinaUMShared(sharedialogStr, shareTaskUrl,
-								shareBitmap, true, 4);// 最后一个参数是那一页 1 为主页打卡成功
-														// 2为打卡成就 3详情页Task打卡成就
-														// 4详情页Job
-					} else {
-						MobclickAgent.onEvent(mContext,
-								"detailTaskshareWeiboclick");
-						myShare.sinaUMShared(sharedialogStr, shareTaskUrl,
-								shareBitmap, true, 3);// 最后一个参数是那一页 1 为主页打卡成功
-														// 2为打卡成就 3详情页Task打卡成就
-														// 4详情页Job
-					}
-				}
+                    } else {
+                        if (isAlone) {
+                            MobclickAgent.onEvent(mContext,
+                                    "detailJobshareWeiboclick");
+                            myShare.sinaUMShared(sharedialogStr, shareTaskUrl,
+                                    shareBitmap, true, 4);// 最后一个参数是那一页 1 为主页打卡成功
+                            // 2为打卡成就 3详情页Task打卡成就
+                            // 4详情页Job
+                        } else {
+                            MobclickAgent.onEvent(mContext,
+                                    "detailTaskshareWeiboclick");
+                            myShare.sinaUMShared(sharedialogStr, shareTaskUrl,
+                                    shareBitmap, true, 3);// 最后一个参数是那一页 1 为主页打卡成功
+                            // 2为打卡成就 3详情页Task打卡成就
+                            // 4详情页Job
+                        }
+                    }
 
-				Toast.makeText(mContext, "分享成功！", Toast.LENGTH_SHORT).show();
-				taskDialog.dismiss();
-				break;
-			case 1: // 朋友圈
-				if (isShareImage)
-					if (isAlone) {
-						MobclickAgent.onEvent(mContext,
-								"detailTaskshareWeChatclick");
-						myShare.friendsterUMShared("打卡7", sharedialogStr,
-								shareTaskUrl, shareBitmap, false, 4);// 最后一个参数是那一页
-																		// 1
-																		// 为主页打卡成功
-																		// 2为打卡成就
-																		// 3详情页Task打卡成就
-																		// 4详情页Job
-					} else {
-						MobclickAgent.onEvent(mContext,
-								"detailJobshareWeChatclick");
-						myShare.friendsterUMShared("打卡7", sharedialogStr,
-								shareTaskUrl, shareBitmap, false, 3);// 最后一个参数是那一页
-																		// 1
-																		// 为主页打卡成功
-																		// 2为打卡成就
-																		// 3详情页Task打卡成就
-																		// 4详情页Job
-					}
+                    Toast.makeText(mContext, "分享成功！", Toast.LENGTH_SHORT).show();
+                    taskDialog.dismiss();
+                    break;
+                case 1: // 朋友圈
+                    if (isShareImage)
+                        if (isAlone) {
+                            MobclickAgent.onEvent(mContext,
+                                    "detailTaskshareWeChatclick");
+                            myShare.friendsterUMShared("打卡7", sharedialogStr,
+                                    shareTaskUrl, shareBitmap, false, 4);// 最后一个参数是那一页
+                            // 1
+                            // 为主页打卡成功
+                            // 2为打卡成就
+                            // 3详情页Task打卡成就
+                            // 4详情页Job
+                        } else {
+                            MobclickAgent.onEvent(mContext,
+                                    "detailJobshareWeChatclick");
+                            myShare.friendsterUMShared("打卡7", sharedialogStr,
+                                    shareTaskUrl, shareBitmap, false, 3);// 最后一个参数是那一页
+                            // 1
+                            // 为主页打卡成功
+                            // 2为打卡成就
+                            // 3详情页Task打卡成就
+                            // 4详情页Job
+                        }
 
-				else if (isAlone) {
-					MobclickAgent.onEvent(mContext,
-							"detailTaskshareWeChatclick");
-					myShare.friendsterUMShared("打卡7", sharedialogStr,
-							shareTaskUrl, null, false, 4);// 最后一个参数是那一页 1
-															// 为主页打卡成功 2为打卡成就
-															// 3详情页Task打卡成就
-															// 4详情页Job
-				} else {
-					MobclickAgent
-							.onEvent(mContext, "detailJobshareWeChatclick");
-					myShare.friendsterUMShared("打卡7", sharedialogStr,
-							shareTaskUrl, null, false, 3);// 最后一个参数是那一页 1
-															// 为主页打卡成功 2为打卡成就
-															// 3详情页Task打卡成就
-															// 4详情页Job
-				}
+                    else if (isAlone) {
+                        MobclickAgent.onEvent(mContext,
+                                "detailTaskshareWeChatclick");
+                        myShare.friendsterUMShared("打卡7", sharedialogStr,
+                                shareTaskUrl, null, false, 4);// 最后一个参数是那一页 1
+                        // 为主页打卡成功 2为打卡成就
+                        // 3详情页Task打卡成就
+                        // 4详情页Job
+                    } else {
+                        MobclickAgent
+                                .onEvent(mContext, "detailJobshareWeChatclick");
+                        myShare.friendsterUMShared("打卡7", sharedialogStr,
+                                shareTaskUrl, null, false, 3);// 最后一个参数是那一页 1
+                        // 为主页打卡成功 2为打卡成就
+                        // 3详情页Task打卡成就
+                        // 4详情页Job
+                    }
 
-				taskDialog.dismiss();
-				break;
-			case 2: // QQ空间
-				MobclickAgent.onEvent(mContext, "mainmodalQQclick");
-				if (isShareImage)
-					if (isAlone) {
-						MobclickAgent.onEvent(mContext,
-								"detailTaskshareQQclick");
-						myShare.qzeroUMShared(mContext, sharedialogStr, "打卡7",
-								shareTaskUrl, shareBitmap, 4);// 最后一个参数是那一页 1
-																// 为主页打卡成功
-																// 2为打卡成就
-																// 3详情页Task打卡成就
-																// 4详情页Job
-					} else {
-						MobclickAgent
-								.onEvent(mContext, "detailJobshareQQclick");
-						myShare.qzeroUMShared(mContext, sharedialogStr, "打卡7",
-								shareTaskUrl, shareBitmap, 3);// 最后一个参数是那一页 1
-																// 为主页打卡成功
-																// 2为打卡成就
-																// 3详情页Task打卡成就
-																// 4详情页Job
-					}
+                    taskDialog.dismiss();
+                    break;
+                case 2: // QQ空间
+                    MobclickAgent.onEvent(mContext, "mainmodalQQclick");
+                    if (isShareImage)
+                        if (isAlone) {
+                            MobclickAgent.onEvent(mContext,
+                                    "detailTaskshareQQclick");
+                            myShare.qzeroUMShared(mContext, sharedialogStr, "打卡7",
+                                    shareTaskUrl, shareBitmap, 4);// 最后一个参数是那一页 1
+                            // 为主页打卡成功
+                            // 2为打卡成就
+                            // 3详情页Task打卡成就
+                            // 4详情页Job
+                        } else {
+                            MobclickAgent
+                                    .onEvent(mContext, "detailJobshareQQclick");
+                            myShare.qzeroUMShared(mContext, sharedialogStr, "打卡7",
+                                    shareTaskUrl, shareBitmap, 3);// 最后一个参数是那一页 1
+                            // 为主页打卡成功
+                            // 2为打卡成就
+                            // 3详情页Task打卡成就
+                            // 4详情页Job
+                        }
 
-				else if (isAlone) {
-					MobclickAgent.onEvent(mContext, "detailTaskshareQQclick");
-					myShare.qzeroUMShared(mContext, sharedialogStr, "打卡7",
-							shareTaskUrl, null, 4);// 最后一个参数是那一页 1 为主页打卡成功
-													// 2为打卡成就 3详情页Task打卡成就
-													// 4详情页Job
-				} else {
-					MobclickAgent.onEvent(mContext, "detailJobshareQQclick");
-					myShare.qzeroUMShared(mContext, sharedialogStr, "打卡7",
-							shareTaskUrl, null, 3);// 最后一个参数是那一页 1 为主页打卡成功
-													// 2为打卡成就 3详情页Task打卡成就
-													// 4详情页Job
-				}
+                    else if (isAlone) {
+                        MobclickAgent.onEvent(mContext, "detailTaskshareQQclick");
+                        myShare.qzeroUMShared(mContext, sharedialogStr, "打卡7",
+                                shareTaskUrl, null, 4);// 最后一个参数是那一页 1 为主页打卡成功
+                        // 2为打卡成就 3详情页Task打卡成就
+                        // 4详情页Job
+                    } else {
+                        MobclickAgent.onEvent(mContext, "detailJobshareQQclick");
+                        myShare.qzeroUMShared(mContext, sharedialogStr, "打卡7",
+                                shareTaskUrl, null, 3);// 最后一个参数是那一页 1 为主页打卡成功
+                        // 2为打卡成就 3详情页Task打卡成就
+                        // 4详情页Job
+                    }
 
-				taskDialog.dismiss();
-				break;
+                    taskDialog.dismiss();
+                    break;
 
-			case 3: // 邀请
-				// inviteDialog();
-				break;
+                case 3: // 邀请
+                    // inviteDialog();
+                    break;
 
-			case 4: // 设置
-				Intent intent = new Intent(mContext, ClockSetActivity.class);
-				if (byIdDetailBean != null) {
-					intent.putExtra("byid", byIdDetailBean);
-				}
-				startActivityForResult(intent, 111);
-				taskDialog.dismiss();
-				break;
+                case 4: // 设置
+                    Intent intent = new Intent(mContext, ClockSetActivity.class);
+                    if (byIdDetailBean != null) {
+                        intent.putExtra("byid", byIdDetailBean);
+                    }
+                    startActivityForResult(intent, 111);
+                    taskDialog.dismiss();
+                    break;
 
-			case 5: // 删除
-				showdialogFinish();
-				taskDialog.dismiss();
-				break;
+                case 5: // 删除
+                    showdialogFinish();
+                    taskDialog.dismiss();
+                    break;
 
-			}
+            }
 
-		}
-	};
+        }
+    };
 
-	private void showdialogFinish() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(
-				new ContextThemeWrapper(this, R.style.CustomDiaLog_by_SongHang));
-		builder.setTitle("提示");
-		builder.setMessage("是否确认删除？之前打卡数据将无法恢复");
-		builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// deleteDialog();
-				deleteTaskConn();
-			}
-		});
-		builder.setNeutralButton("暂停", new DialogInterface.OnClickListener() {
+    private void showdialogFinish() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, R.style.CustomDiaLog_by_SongHang));
+        builder.setTitle("提示");
+        builder.setMessage("是否确认删除？之前打卡数据将无法恢复");
+        builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // deleteDialog();
+                deleteTaskConn();
+            }
+        });
+        builder.setNeutralButton("暂停", new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(mContext, ClockSetActivity.class);
-				if (byIdDetailBean != null) {
-					intent.putExtra("byid", byIdDetailBean);
-				}
-				startActivityForResult(intent, 111);
-			}
-		});
-		builder.setNegativeButton("返回", null);
-		builder.show();
-	}
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(mContext, ClockSetActivity.class);
+                if (byIdDetailBean != null) {
+                    intent.putExtra("byid", byIdDetailBean);
+                }
+                startActivityForResult(intent, 111);
+            }
+        });
+        builder.setNegativeButton("返回", null);
+        builder.show();
+    }
 
-	boolean isShareImage;
-	Bitmap shareBitmap;
-	String shareTaskUrl = "", shareTaskStr;
+    boolean isShareImage;
+    Bitmap shareBitmap;
+    String shareTaskUrl = "", shareTaskStr;
 
-	private void deleteTaskConn() {
+    private void deleteTaskConn() {
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		try {
-			params.add(new BasicNameValuePair("taskId", mTaskId));
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Service.getService(Contanst.HTTP_TASK_DELETE, null, null,
-				TaskInfoActivity.this).addList(params).request(UrlParams.POST);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        try {
+            params.add(new BasicNameValuePair("taskId", mTaskId));
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        Service.getService(Contanst.HTTP_TASK_DELETE, null, null,
+                TaskInfoActivity.this).addList(params).request(UrlParams.POST);
 
-	}
+    }
 
-	public void getChatGroupConn() {
-		if (byIdDetailBean != null) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("?buildingId=");
-			sb.append(byIdDetailBean.getBuildingId());
+    public void getChatGroupConn() {
+        if (byIdDetailBean != null) {
+            StringBuffer sb = new StringBuffer();
+            sb.append("?buildingId=");
+            sb.append(byIdDetailBean.getBuildingId());
 //			sb.append("145956070676759040");
-			
-			 
-			Service.getService(Contanst.HTTP_CHAT_GETCHATGROUP, null,
-					sb.toString(), TaskInfoActivity.this).addList(null)
-					.request(UrlParams.GET);
-		} else {
-			Toast.makeText(TaskInfoActivity.this, "您的手速超快。请稍后再试。",
-					Toast.LENGTH_SHORT).show();
-		}
-	}
 
-	/**
-	 * 进群联网通知app服务器
-	 */
-	public void addUserToGroupConn(String chatGroupId) {
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		try {
-			params.add(new BasicNameValuePair("chatGroupId", chatGroupId));
-			params.add(new BasicNameValuePair("userId", userID));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            Service.getService(Contanst.HTTP_CHAT_GETCHATGROUP, null,
+                    sb.toString(), TaskInfoActivity.this).addList(null)
+                    .request(UrlParams.GET);
+        } else {
+            Toast.makeText(TaskInfoActivity.this, "您的手速超快。请稍后再试。",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
-		Service
-				.getService(Contanst.HTTP_CHAT_ADDUSERTOCHATGROUP, null, null,
-						TaskInfoActivity.this).addList(params)
-				.request(UrlParams.POST);
-	}
+    /**
+     * 进群联网通知app服务器
+     */
+    public void addUserToGroupConn(String chatGroupId) {
 
-	protected void setListeners() {
-		// TODO Auto-generated method stub
-		title_item_chat.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				getChatGroupConn();
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        try {
+            params.add(new BasicNameValuePair("chatGroupId", chatGroupId));
+            params.add(new BasicNameValuePair("userId", userID));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-			}
-		});
-		title_item_leftImage.setOnClickListener(new OnClickListener() {
+        Service
+                .getService(Contanst.HTTP_CHAT_ADDUSERTOCHATGROUP, null, null,
+                        TaskInfoActivity.this).addList(params)
+                .request(UrlParams.POST);
+    }
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-		});
-		title_item_createJob.setOnClickListener(new OnClickListener() {
+    PlayPhotoDialog playPhotoDialog;
+    protected void setListeners() {
+        // TODO Auto-generated method stub
+        title_item_chat.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				// 打卡
-				if (byIdDetailBean.getTimeLimitFlag() == "1") {
-					String today = TimeUtil.getYYMMDD(System
-							.currentTimeMillis());
-					String startTime = today + " "
-							+ byIdDetailBean.getBeginTime() + ":00";
-					String endTime = today + " " + byIdDetailBean.getEndTime()
-							+ ":00";
-					Tools.getLog(Tools.d, "aaa", "start:" + startTime);
-					Tools.getLog(Tools.d, "aaa", "end:" + endTime);
-					if (TimeUtil.getUnixLong(startTime) >= System
-							.currentTimeMillis()
-							|| TimeUtil.getUnixLong(endTime) <= System
-									.currentTimeMillis()) {
-						shareTitle.setText("打卡失败！");
-						leftImage.setImageResource(R.drawable.home_dakashibai);
-						clock_main_alertText.setText("请在时间内打卡。");
-						Message msg = new Message();
-						msg.what = Contanst.CreateJobFail;
-						mHandler.sendMessage(msg);
-						animAlertStart();
-						return;
-					}
-				}
-				taskClockDialog = new TakeClockDialog(TaskInfoActivity.this);
-				taskClockDialog.setOnClickClockSuccess(cLickClockSuccess);
-				taskClockDialog.setTaskNameStr(byIdDetailBean.getTitle());
-				taskClockDialog.show();
-			}
-		});
-	}
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                getChatGroupConn();
 
-	public ArrayList<ImageListBean> filenames = new ArrayList<ImageListBean>(3);// 相册选取的集合的名字
-	String jobid;
-	boolean isShowAllTast;
-	int imageNum = 0;// 上传图片数量
+            }
+        });
+        title_item_leftImage.setOnClickListener(new OnClickListener() {
 
-	String signature, quantity;
-	TaskClockDialogOnCLickClockSuccess cLickClockSuccess = new TaskClockDialogOnCLickClockSuccess() {
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                finish();
+            }
+        });
+        title_item_createJob.setOnClickListener(new OnClickListener() {
 
-		@Override
-		public void onClickSuccess(String content, String num, String unit,
-				ArrayList<ImageListBean> list) {
-			filenames = list;
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                // 打卡
+                if (byIdDetailBean.getTimeLimitFlag() == "1") {
+                    String today = TimeUtil.getYYMMDD(System
+                            .currentTimeMillis());
+                    String startTime = today + " "
+                            + byIdDetailBean.getBeginTime() + ":00";
+                    String endTime = today + " " + byIdDetailBean.getEndTime()
+                            + ":00";
+                    Tools.getLog(Tools.d, "aaa", "start:" + startTime);
+                    Tools.getLog(Tools.d, "aaa", "end:" + endTime);
+                    if (TimeUtil.getUnixLong(startTime) >= System
+                            .currentTimeMillis()
+                            || TimeUtil.getUnixLong(endTime) <= System
+                            .currentTimeMillis()) {
+                        shareTitle.setText("打卡失败！");
+                        leftImage.setImageResource(R.drawable.home_dakashibai);
+                        clock_main_alertText.setText("请在时间内打卡。");
+                        Message msg = new Message();
+                        msg.what = Contanst.CreateJobFail;
+                        mHandler.sendMessage(msg);
+                        animAlertStart();
+                        return;
+                    }
+                }
+                taskClockDialog = new TakeClockDialog(TaskInfoActivity.this);
+                taskClockDialog.setOnClickClockSuccess(cLickClockSuccess);
+                taskClockDialog.setTaskNameStr(byIdDetailBean.getTitle());
+                taskClockDialog.show();
+            }
+        });
 
-			signature = content;
-			quantity = num;
-			connBaiduLocation();
+        title_item_play.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                {
+                    // TODO Auto-generated method stub
 
-		}
-	};
+                    playPhotoDialog = new PlayPhotoDialog(
+                            TaskInfoActivity.this,
+                            "",
+                            byIdDetailBean.getTitle(),
+                            byIdDetailBean.getTotalDateCount(),
+                            thisJobUserid,
+                            mTaskId,
+                            byIdDetailBean.getUserName(),
+                            "",
+                            "", 0);
 
-	private Vibrator vibrator;
+                    playPhotoDialog.setSharedClockPhoto(mSharedClockPhoto);
 
-	private void jobSound() {
-		vibrator.vibrate(500); // 重复两次上面的pattern 如果只想震动一次，index设为
-		SoundPool soundPool;
-		soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+                    playPhotoDialog.show();
+                }
+            }
+        });
+    }
 
-		soundPool.load(this, R.raw.a6, 1);
-		soundPool.play(1, 1, 1, 0, 0, 1);
-	}
+    private MyUMSDK myUMSDK;
 
-	public void animAlertStart() {
-		int height = clock_main_alertLayout.getHeight();
-		TranslateAnimation animationStart = new TranslateAnimation(0, 0,
-				height, 0);
+    PlayPhotoDialog.SharedClockPhoto mSharedClockPhoto = new PlayPhotoDialog.SharedClockPhoto() {
 
-		animationStart.setDuration(500L);// 设置动画持续时间
-		clock_main_alertLayout.startAnimation(animationStart);
-		animationStart.setAnimationListener(new AnimationListener() {
+        @Override
+        public void shared(String taskName, Bitmap mShareImageBitmap) {
+            // TODO Auto-generated method stub
+                MobclickAgent.onEvent(mContext, "infoSuccessWechatShare");
 
-			@Override
-			public void onAnimationStart(Animation arg0) {
-				// TODO Auto-generated method stub
-				clock_main_alertLayout.setVisibility(View.VISIBLE);
-			}
+            StringBuffer sb = new StringBuffer();
+            sb.append("拍照" + byIdDetailBean.getTotalDateCount() + "天 | ");
+            sb.append("记录#" + taskName + "#");
+            String shareUrl = "http://hit7.cn:8087/architect/imageBrowser?taskId=" + mTaskId + "&userId=" + userID;
+//			myUMSDK.friendsterUMShared("打卡7", sb.toString(), shareUrl,
+//					mShareImageBitmap, false);//最后一个参数是那一页 1 为主页打卡成功 2为打卡成就 3详情页Task打卡成就 4详情页Job
 
-			@Override
-			public void onAnimationRepeat(Animation arg0) {
-				// TODO Auto-generated method stub
+            myUMSDK.friendsterUMShared("打卡7", sb.toString(), shareUrl, mShareImageBitmap, false, 5);
+        }
+    };
 
-			}
+    public ArrayList<ImageListBean> filenames = new ArrayList<ImageListBean>(3);// 相册选取的集合的名字
+    String jobid;
+    boolean isShowAllTast;
+    int imageNum = 0;// 上传图片数量
 
-			@Override
-			public void onAnimationEnd(Animation arg0) {
-				// TODO Auto-generated method stub
-				clock_main_alertLayout.setVisibility(View.VISIBLE);
-				new Handler().postDelayed(new Runnable() {
+    String signature, quantity;
+    TaskClockDialogOnCLickClockSuccess cLickClockSuccess = new TaskClockDialogOnCLickClockSuccess() {
 
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						int height = clock_main_alertLayout.getHeight();
-						Animation mAnimation = new TranslateAnimation(0, 0, 0,
-								height);
-						mAnimation.setDuration(250L);
-						// clock_main_alertLayout.setAnimation(mAnimation);
-						clock_main_alertLayout.startAnimation(mAnimation);
+        @Override
+        public void onClickSuccess(String content, String num, String unit,
+                                   ArrayList<ImageListBean> list) {
+            filenames = list;
 
-						mAnimation
-								.setAnimationListener(new AnimationListener() {
+            signature = content;
+            quantity = num;
+            connBaiduLocation();
 
-									@Override
-									public void onAnimationStart(Animation arg0) {
-										// TODO Auto-generated method stub
-										clock_main_alertLayout
-												.setVisibility(View.VISIBLE);
-									}
+        }
+    };
 
-									@Override
-									public void onAnimationRepeat(Animation arg0) {
-										// TODO Auto-generated method stub
+    private Vibrator vibrator;
 
-									}
+    private void jobSound() {
+        vibrator.vibrate(500); // 重复两次上面的pattern 如果只想震动一次，index设为
+        SoundPool soundPool;
+        soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
 
-									@Override
-									public void onAnimationEnd(Animation arg0) {
-										// TODO Auto-generated method stub
-										clock_main_alertLayout
-												.setVisibility(View.GONE);
+        soundPool.load(this, R.raw.a6, 1);
+        soundPool.play(1, 1, 1, 0, 0, 1);
+    }
 
-									}
-								});
-					}
-				}, 3000L);
+    public void animAlertStart() {
+        int height = clock_main_alertLayout.getHeight();
+        TranslateAnimation animationStart = new TranslateAnimation(0, 0,
+                height, 0);
 
-			}
-		});
+        animationStart.setDuration(500L);// 设置动画持续时间
+        clock_main_alertLayout.startAnimation(animationStart);
+        animationStart.setAnimationListener(new AnimationListener() {
 
-	}
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                // TODO Auto-generated method stub
+                clock_main_alertLayout.setVisibility(View.VISIBLE);
+            }
 
-	GiveUpJobDialog upJobDialog;
-	boolean isToday;
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+                // TODO Auto-generated method stub
 
-	public void getLastTwoJobsConn() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("?taskId=");
-		sb.append(mTaskId);
-		Service.getService(Contanst.HTTP_BUILDING_GETLASTTWOUSERS, null,
-				sb.toString(), TaskInfoActivity.this).addList(null)
-				.request(UrlParams.GET);
-	}
+            }
 
-	private void getByIdConn() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("?taskId=");
-		sb.append(mTaskId);
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                // TODO Auto-generated method stub
+                clock_main_alertLayout.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(new Runnable() {
 
-		Service.getService(Contanst.HTTP_GETBYIDTASK, null, sb.toString(),
-				TaskInfoActivity.this).addList(null).request(UrlParams.GET);
-	}
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        int height = clock_main_alertLayout.getHeight();
+                        Animation mAnimation = new TranslateAnimation(0, 0, 0,
+                                height);
+                        mAnimation.setDuration(250L);
+                        // clock_main_alertLayout.setAnimation(mAnimation);
+                        clock_main_alertLayout.startAnimation(mAnimation);
 
-	@Override
-	public void getJOSNdataSuccess(Object bean, String sccmsg, int connType) {
-		// TODO Auto-generated method stub
-		Message msg = new Message();
-		msg.what = Contanst.BEST_INFO_OK;
-		msg.obj = bean;
-		msg.arg1 = connType;
-		mHandler.sendMessage(msg);
-	}
+                        mAnimation
+                                .setAnimationListener(new AnimationListener() {
 
-	@Override
-	public void getJOSNdataFail(String errcode, String errmsg, int connType) {
-		// TODO Auto-generated method stub
-		Message msg = new Message();
-		msg.what = Contanst.BEST_INFO_FAIL;
-		msg.obj = errmsg;
-		msg.arg1 = connType;
-		mHandler.sendMessage(msg);
-	}
+                                    @Override
+                                    public void onAnimationStart(Animation arg0) {
+                                        // TODO Auto-generated method stub
+                                        clock_main_alertLayout
+                                                .setVisibility(View.VISIBLE);
+                                    }
 
-	ChatGroupInfoBean chatGroupInfoBean;
-	@SuppressLint("HandlerLeak")
-	private Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case Contanst.BEST_INFO_OK:
-				switch (msg.arg1) {
+                                    @Override
+                                    public void onAnimationRepeat(Animation arg0) {
+                                        // TODO Auto-generated method stub
 
-				case Contanst.BAIDU_LOCATION:
-					createJobConn((String) msg.obj);
-					break;
+                                    }
 
-				case Contanst.GETSTATISTIC:
-					// jobList = (ArrayList<JobStatsBean>) msg.obj;
-					curTabIndex = 1;
+                                    @Override
+                                    public void onAnimationEnd(Animation arg0) {
+                                        // TODO Auto-generated method stub
+                                        clock_main_alertLayout
+                                                .setVisibility(View.GONE);
 
-					break;
-				case Contanst.BUILDING_GETLASTTWOUSERS:
-					lastTwoJobBean = (LastTwoUsersBean) msg.obj;
-					showTitle(byIdDetailBean);
+                                    }
+                                });
+                    }
+                }, 3000L);
 
-					Tools.getLog(Tools.i, "aaa", "刷新！！！！！！");
-					// getByTaskIdConn(1);
-					if (loadingView.getVisibility() == View.VISIBLE) {
-						loadingView.setVisibility(View.GONE);
-					}
-					break;
-				case Contanst.GETBYIDTASK:
-					byIdDetailBean = (ByIdDetailBean) msg.obj;
-					setOverflowShowingAlways();
-					taskInfo_pager.setAdapter(new MyPagerAdapter(
-							getSupportFragmentManager()));
-					taskInfo_tabs.setViewPager(taskInfo_pager);
-					setTabsValue();
-					getLastTwoJobsConn();
-					break;
-				case Contanst.GET_MSGTOUSER:
-					MsgToUserBean msgBean = (MsgToUserBean) msg.obj;
-					break;
-				case Contanst.TASK_DELETE:
-					TaskInfoActivity.this.finish();
-					break;
+            }
+        });
 
-				case Contanst.CHAT_GETCHATGROUP:
-					// 进群接口
-					chatGroupInfoBean = (ChatGroupInfoBean) msg.obj;
+    }
 
-					addUserToGroupConn(chatGroupInfoBean.getChatGroupId());
-					break;
-				case Contanst.CHAT_ADDUSERTOCHATGROUP:
-					final String chatGroupId = chatGroupInfoBean
-							.getChatGroupId();
-					new Thread(new Runnable() {
+    GiveUpJobDialog upJobDialog;
+    boolean isToday;
 
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							try {
-								EMGroupManager.getInstance().joinGroup(
-										chatGroupId);
-								runOnUiThread(new Runnable() {
-									public void run() {
-										Intent in = new Intent(
-												TaskInfoActivity.this,
-												ChatActivity.class);
-										in.putExtra("chatType",
-												EasemobConstant.CHATTYPE_GROUP);
-										in.putExtra("userId", chatGroupId);
-										startActivityForResult(in, 0);
-									}
-								});
-								
-							} catch (EaseMobException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}//需异步处理
-						}
-					}).start();
+    public void getLastTwoJobsConn() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("?taskId=");
+        sb.append(mTaskId);
+        Service.getService(Contanst.HTTP_BUILDING_GETLASTTWOUSERS, null,
+                sb.toString(), TaskInfoActivity.this).addList(null)
+                .request(UrlParams.GET);
+    }
+
+    private void getByIdConn() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("?taskId=");
+        sb.append(mTaskId);
+
+        Service.getService(Contanst.HTTP_GETBYIDTASK, null, sb.toString(),
+                TaskInfoActivity.this).addList(null).request(UrlParams.GET);
+    }
+
+    @Override
+    public void getJOSNdataSuccess(Object bean, String sccmsg, int connType) {
+        // TODO Auto-generated method stub
+        Message msg = new Message();
+        msg.what = Contanst.BEST_INFO_OK;
+        msg.obj = bean;
+        msg.arg1 = connType;
+        mHandler.sendMessage(msg);
+    }
+
+    @Override
+    public void getJOSNdataFail(String errcode, String errmsg, int connType) {
+        // TODO Auto-generated method stub
+        Message msg = new Message();
+        msg.what = Contanst.BEST_INFO_FAIL;
+        msg.obj = errmsg;
+        msg.arg1 = connType;
+        mHandler.sendMessage(msg);
+    }
+
+    ChatGroupInfoBean chatGroupInfoBean;
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Contanst.BEST_INFO_OK:
+                    switch (msg.arg1) {
+
+                        case Contanst.BAIDU_LOCATION:
+                            createJobConn((String) msg.obj);
+                            break;
+
+                        case Contanst.GETSTATISTIC:
+                            // jobList = (ArrayList<JobStatsBean>) msg.obj;
+                            curTabIndex = 1;
+
+                            break;
+                        case Contanst.BUILDING_GETLASTTWOUSERS:
+                            lastTwoJobBean = (LastTwoUsersBean) msg.obj;
+                            showTitle(byIdDetailBean);
+
+                            Tools.getLog(Tools.i, "aaa", "刷新！！！！！！");
+                            // getByTaskIdConn(1);
+                            if (loadingView.getVisibility() == View.VISIBLE) {
+                                loadingView.setVisibility(View.GONE);
+                            }
+                            break;
+                        case Contanst.GETBYIDTASK:
+                            byIdDetailBean = (ByIdDetailBean) msg.obj;
+                            setOverflowShowingAlways();
+                            taskInfo_pager.setAdapter(new MyPagerAdapter(
+                                    getSupportFragmentManager()));
+                            taskInfo_tabs.setViewPager(taskInfo_pager);
+                            setTabsValue();
+                            getLastTwoJobsConn();
+                            break;
+                        case Contanst.GET_MSGTOUSER:
+                            MsgToUserBean msgBean = (MsgToUserBean) msg.obj;
+                            break;
+                        case Contanst.TASK_DELETE:
+                            TaskInfoActivity.this.finish();
+                            break;
+
+                        case Contanst.CHAT_GETCHATGROUP:
+                            // 进群接口
+                            chatGroupInfoBean = (ChatGroupInfoBean) msg.obj;
+
+                            addUserToGroupConn(chatGroupInfoBean.getChatGroupId());
+                            break;
+                        case Contanst.CHAT_ADDUSERTOCHATGROUP:
+                            final String chatGroupId = chatGroupInfoBean
+                                    .getChatGroupId();
+                            new Thread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    // TODO Auto-generated method stub
+                                    try {
+                                        EMGroupManager.getInstance().joinGroup(
+                                                chatGroupId);
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Intent in = new Intent(
+                                                        TaskInfoActivity.this,
+                                                        ChatActivity.class);
+                                                in.putExtra("chatType",
+                                                        EasemobConstant.CHATTYPE_GROUP);
+                                                in.putExtra("userId", chatGroupId);
+                                                startActivityForResult(in, 0);
+                                            }
+                                        });
+
+                                    } catch (EaseMobException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }//需异步处理
+                                }
+                            }).start();
 //					if(){
 //						Intent in = new Intent(TaskInfoActivity.this,
 //								ChatActivity.class);
@@ -780,353 +830,353 @@ public class TaskInfoActivity extends FragmentActivity implements
 //						in.putExtra("userId", chatGroupName);
 //						startActivity(in);
 //					}
-				
-					break;
-				case Contanst.CREATEJOB:
-					createJobBean = (CreateJobBean) msg.obj;
-					for (int i = 0; i < byDateBeanList.size(); i++) {
-						if (byDateBeanList.get(i).getTaskId()
-								.equals(createJobBean.getTaskId())) {
-							byDateBeanList.get(i).setJobCount(
-									byDateBeanList.get(i).getJobCount() + 1);
-						}
-					}
-					Tools.getLog(Tools.i, "aaa", "打卡成功！！！！！！！！");
-					if (filenames.size() > 0) {
-						Intent intent_baonew = new Intent(
-								TaskInfoActivity.this,
-								AddShowPhotoService.class);
-						intent_baonew.putExtra("state",
-								AddShowPhotoService.AddShowPhotoRun);
-						intent_baonew.putExtra("productid", userID);
-						intent_baonew.putExtra("list", filenames);
-						intent_baonew.putExtra("uuid", jobid);
-						intent_baonew.putExtra("type", 1);
-						startService(intent_baonew);
-					}
-					TakeClockSuccessDialog clockSuccessDialog;
 
-					int index = 0;
+                            break;
+                        case Contanst.CREATEJOB:
+                            createJobBean = (CreateJobBean) msg.obj;
+                            for (int i = 0; i < byDateBeanList.size(); i++) {
+                                if (byDateBeanList.get(i).getTaskId()
+                                        .equals(createJobBean.getTaskId())) {
+                                    byDateBeanList.get(i).setJobCount(
+                                            byDateBeanList.get(i).getJobCount() + 1);
+                                }
+                            }
+                            Tools.getLog(Tools.i, "aaa", "打卡成功！！！！！！！！");
+                            if (filenames.size() > 0) {
+                                Intent intent_baonew = new Intent(
+                                        TaskInfoActivity.this,
+                                        AddShowPhotoService.class);
+                                intent_baonew.putExtra("state",
+                                        AddShowPhotoService.AddShowPhotoRun);
+                                intent_baonew.putExtra("productid", userID);
+                                intent_baonew.putExtra("list", filenames);
+                                intent_baonew.putExtra("uuid", jobid);
+                                intent_baonew.putExtra("type", 1);
+                                startService(intent_baonew);
+                            }
+                            TakeClockSuccessDialog clockSuccessDialog;
 
-					if (signature != null && signature.length() != 0) {
-						index = 1;
-					}
-					if (quantity != null && quantity.length() != 0) {
-						index = 1;
-					}
-					if (imageNum == 0) {
-						clockSuccessDialog = new TakeClockSuccessDialog(
-								mContext, index,
-								createJobBean.getManCountToday(),
-								createJobBean.getBuildingId(),
-								byIdDetailBean.getTitle(),
-								createJobBean.getCheckDateCount());
-					} else {
-						clockSuccessDialog = new TakeClockSuccessDialog(
-								mContext, 2, createJobBean.getManCountToday(),
-								createJobBean.getBuildingId(),
-								byIdDetailBean.getTitle(),
-								createJobBean.getCheckDateCount());
-					}
-					clockSuccessDialog
-							.setOnCLickSuccessShare(onCLickSuccessShare);
-					clockSuccessDialog
-							.setOnDismissListener(new OnDismissListener() {
+                            int index = 0;
 
-								@Override
-								public void onDismiss(DialogInterface arg0) {
-									// TODO Auto-generated method stub
-									Tools.getLog(Tools.d, "aaa",
-											"clockSuccessDialog ===================== setOnDismissListener");
-									updateDateColor();
-								}
-							});
-					clockSuccessDialog.show();
-					getByIdConn();// 个人信息
-					isReflush = true;
-					isConn = true;
-					break;
+                            if (signature != null && signature.length() != 0) {
+                                index = 1;
+                            }
+                            if (quantity != null && quantity.length() != 0) {
+                                index = 1;
+                            }
+                            if (imageNum == 0) {
+                                clockSuccessDialog = new TakeClockSuccessDialog(
+                                        mContext, index,
+                                        createJobBean.getManCountToday(),
+                                        createJobBean.getBuildingId(),
+                                        byIdDetailBean.getTitle(),
+                                        createJobBean.getCheckDateCount());
+                            } else {
+                                clockSuccessDialog = new TakeClockSuccessDialog(
+                                        mContext, 2, createJobBean.getManCountToday(),
+                                        createJobBean.getBuildingId(),
+                                        byIdDetailBean.getTitle(),
+                                        createJobBean.getCheckDateCount());
+                            }
+                            clockSuccessDialog
+                                    .setOnCLickSuccessShare(onCLickSuccessShare);
+                            clockSuccessDialog
+                                    .setOnDismissListener(new OnDismissListener() {
 
-				}
-				break;
-			case Contanst.BEST_INFO_FAIL:// 通过Id获得详细信息的
-				String message = (String) msg.obj;
-				switch (msg.arg1) {
+                                        @Override
+                                        public void onDismiss(DialogInterface arg0) {
+                                            // TODO Auto-generated method stub
+                                            Tools.getLog(Tools.d, "aaa",
+                                                    "clockSuccessDialog ===================== setOnDismissListener");
+                                            updateDateColor();
+                                        }
+                                    });
+                            clockSuccessDialog.show();
+                            getByIdConn();// 个人信息
+                            isReflush = true;
+                            isConn = true;
+                            break;
 
-				case Contanst.BAIDU_LOCATION:
-					createJobConn(null);
-					break;
+                    }
+                    break;
+                case Contanst.BEST_INFO_FAIL:// 通过Id获得详细信息的
+                    String message = (String) msg.obj;
+                    switch (msg.arg1) {
 
-				case Contanst.BUILDING_GETLASTTWOUSERS:
-					break;
-				case Contanst.GETBYTASKID:
-					onLoad();
-					break;
-				case Contanst.GETBYIDTASK:
-					break;
-				}
-				break;
-			}
-		}
-	};
+                        case Contanst.BAIDU_LOCATION:
+                            createJobConn(null);
+                            break;
 
-	CreateJobBean createJobBean;
-	OnCLickSuccessShare onCLickSuccessShare = new OnCLickSuccessShare() {
-		// 拍照打卡的Dialog
-		@Override
-		public void onClickSuccess(final int shareID) {
-			// TODO Auto-generated method stub
+                        case Contanst.BUILDING_GETLASTTWOUSERS:
+                            break;
+                        case Contanst.GETBYTASKID:
+                            onLoad();
+                            break;
+                        case Contanst.GETBYIDTASK:
+                            break;
+                    }
+                    break;
+            }
+        }
+    };
 
-			final MyUMSDK myUMSDK = new MyUMSDK(TaskInfoActivity.this);
-			final StringBuffer sb = new StringBuffer();
-			boolean isContentHave = false;
-			sb.append("#" + byIdDetailBean.getTitle() + "#");
-			sb.append("Day1");
-			String Signature = createJobBean.getSignature();
-			String Quantity = createJobBean.getQuantity();
-			if (Signature != null && Signature.length() != 0) {
-				sb.append(Signature);
-				isContentHave = true;
-			}
-			if (Quantity != null && Quantity.length() != 0) {
-				if (isContentHave) {
-					sb.append(";");
-				}
-				sb.append(Quantity);
+    CreateJobBean createJobBean;
+    OnCLickSuccessShare onCLickSuccessShare = new OnCLickSuccessShare() {
+        // 拍照打卡的Dialog
+        @Override
+        public void onClickSuccess(final int shareID) {
+            // TODO Auto-generated method stub
 
-			}
-			Tools.getLog(Tools.d, "aaa", "shareID:" + shareID);
-			final String shareUrl = "http://123.57.5.108:8087/architect/share?jobId="
-					+ jobid;
-			if (imageNum > 0) {
-				String url = "";
-				for (int i = 0; i < filenames.size(); i++) {
-					if (filenames.get(i).getIsCheck()) {
-						url = FileURl.LOAD_FILE
-								+ filenames.get(i).getImageUrl();
-					}
-				}
-				// 最后一个参数是那一页 1 为主页打卡成功 2为打卡成就 3详情页Task打卡成就 4详情页Job
-				ImageLoader.getInstance().loadImage(url,
-						new ImageLoadingListener() {
+            final MyUMSDK myUMSDK = new MyUMSDK(TaskInfoActivity.this);
+            final StringBuffer sb = new StringBuffer();
+            boolean isContentHave = false;
+            sb.append("#" + byIdDetailBean.getTitle() + "#");
+            sb.append("Day1");
+            String Signature = createJobBean.getSignature();
+            String Quantity = createJobBean.getQuantity();
+            if (Signature != null && Signature.length() != 0) {
+                sb.append(Signature);
+                isContentHave = true;
+            }
+            if (Quantity != null && Quantity.length() != 0) {
+                if (isContentHave) {
+                    sb.append(";");
+                }
+                sb.append(Quantity);
 
-							@Override
-							public void onLoadingStarted(String imageUri,
-									View view) {
-								// TODO Auto-generated method stub
-							}
+            }
+            Tools.getLog(Tools.d, "aaa", "shareID:" + shareID);
+            final String shareUrl = "http://123.57.5.108:8087/architect/share?jobId="
+                    + jobid;
+            if (imageNum > 0) {
+                String url = "";
+                for (int i = 0; i < filenames.size(); i++) {
+                    if (filenames.get(i).getIsCheck()) {
+                        url = FileURl.LOAD_FILE
+                                + filenames.get(i).getImageUrl();
+                    }
+                }
+                // 最后一个参数是那一页 1 为主页打卡成功 2为打卡成就 3详情页Task打卡成就 4详情页Job
+                ImageLoader.getInstance().loadImage(url,
+                        new ImageLoadingListener() {
 
-							@Override
-							public void onLoadingFailed(String imageUri,
-									View view, FailReason failReason) {
-								// TODO Auto-generated method stub
-							}
+                            @Override
+                            public void onLoadingStarted(String imageUri,
+                                                         View view) {
+                                // TODO Auto-generated method stub
+                            }
 
-							@Override
-							public void onLoadingComplete(String imageUri,
-									View view, Bitmap mShareImageBitmap) {
-								// TODO Auto-generated method stub
+                            @Override
+                            public void onLoadingFailed(String imageUri,
+                                                        View view, FailReason failReason) {
+                                // TODO Auto-generated method stub
+                            }
 
-								switch (shareID) {
-								case 0: // sina
-									MobclickAgent.onEvent(mContext,
-											"mainmodalWeiboclick");
-									myUMSDK.sinaUMShared(sb.toString(),
-											shareUrl, mShareImageBitmap, false,
-											1);
-									// }
-									break;
-								case 1: // 朋友圈
-									// if (imageNum == 0) {
-									MobclickAgent.onEvent(mContext,
-											"mainmodalWeChatclick");
-									myUMSDK.friendsterUMShared("打卡7",
-											sb.toString(), shareUrl,
-											mShareImageBitmap, false, 1);
-									break;
-								case 2: // QQ空间
-									// if (imageNum == 0){
-									MobclickAgent.onEvent(mContext,
-											"mainmodalQQclick");
-									int i = myUMSDK.qzeroUMShared(mContext,
-											sb.toString(), "打卡7", shareUrl,
-											mShareImageBitmap, 1);
-									Tools.getLog(Tools.d, "aaa", "i:" + i);
-									break;
-								}
-							}
+                            @Override
+                            public void onLoadingComplete(String imageUri,
+                                                          View view, Bitmap mShareImageBitmap) {
+                                // TODO Auto-generated method stub
 
-							@Override
-							public void onLoadingCancelled(String imageUri,
-									View view) {
-								// TODO Auto-generated method stub
+                                switch (shareID) {
+                                    case 0: // sina
+                                        MobclickAgent.onEvent(mContext,
+                                                "mainmodalWeiboclick");
+                                        myUMSDK.sinaUMShared(sb.toString(),
+                                                shareUrl, mShareImageBitmap, false,
+                                                1);
+                                        // }
+                                        break;
+                                    case 1: // 朋友圈
+                                        // if (imageNum == 0) {
+                                        MobclickAgent.onEvent(mContext,
+                                                "mainmodalWeChatclick");
+                                        myUMSDK.friendsterUMShared("打卡7",
+                                                sb.toString(), shareUrl,
+                                                mShareImageBitmap, false, 1);
+                                        break;
+                                    case 2: // QQ空间
+                                        // if (imageNum == 0){
+                                        MobclickAgent.onEvent(mContext,
+                                                "mainmodalQQclick");
+                                        int i = myUMSDK.qzeroUMShared(mContext,
+                                                sb.toString(), "打卡7", shareUrl,
+                                                mShareImageBitmap, 1);
+                                        Tools.getLog(Tools.d, "aaa", "i:" + i);
+                                        break;
+                                }
+                            }
 
-							}
-						});
+                            @Override
+                            public void onLoadingCancelled(String imageUri,
+                                                           View view) {
+                                // TODO Auto-generated method stub
 
-			} else {
+                            }
+                        });
 
-				switch (shareID) {
-				case 0: // sina
-					// if (imageNum == 0) {
-					myUMSDK.sinaUMShared(sb.toString(), shareUrl, null, false,
-							1);
-					break;
-				case 1: // 朋友圈
-					// if (imageNum == 0) {
-					myUMSDK.friendsterUMShared("打卡7", sb.toString(), shareUrl,
-							null, false, 1);
-					break;
-				case 2: // QQ空间
-					// if (imageNum == 0){
-					int i = myUMSDK.qzeroUMShared(mContext, sb.toString(),
-							"打卡7", shareUrl, null, 1);
-					Tools.getLog(Tools.d, "aaa", "i:" + i);
+            } else {
 
-					break;
-				}
-			}
+                switch (shareID) {
+                    case 0: // sina
+                        // if (imageNum == 0) {
+                        myUMSDK.sinaUMShared(sb.toString(), shareUrl, null, false,
+                                1);
+                        break;
+                    case 1: // 朋友圈
+                        // if (imageNum == 0) {
+                        myUMSDK.friendsterUMShared("打卡7", sb.toString(), shareUrl,
+                                null, false, 1);
+                        break;
+                    case 2: // QQ空间
+                        // if (imageNum == 0){
+                        int i = myUMSDK.qzeroUMShared(mContext, sb.toString(),
+                                "打卡7", shareUrl, null, 1);
+                        Tools.getLog(Tools.d, "aaa", "i:" + i);
 
-		}
-	};
+                        break;
+                }
+            }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == 5668 && resultCode == RESULT_OK) {
-			/** 使用SSO授权必须添加如下代码 */
-			UMSsoHandler ssoHandler = MyUMSDK.mController.getConfig()
-					.getSsoHandler(requestCode);
-			if (ssoHandler != null) {
-				ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-			}
-			return;
-		}
-		Tools.getLog(Tools.d, "aaa", "设置的返回！！！！！！！！");
-		if (requestCode == 111) {
-			if (resultCode == 222) {
-				finish();
-				return;
-			}
-			getByIdConn();
-			return;
-		}
+        }
+    };
 
-		Tools.getLog(Tools.i, "aaa", "Activity.RESULT_OK === "
-				+ Activity.RESULT_OK);
-		Tools.getLog(Tools.i, "aaa", "resultCode === " + resultCode);
-		Bitmap bitmap = null;
-		String ImageUrl = null;
-		if (resultCode == Activity.RESULT_OK) {
-			filenames = taskClockDialog.getFilenames();
-			String sdStatus = Environment.getExternalStorageState();
-			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
-				Tools.getLog(Tools.i, "aaa",
-						"SD card is not avaiable/writeable right now.");
-				return;
-			}
-			if (requestCode == taskClockDialog.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE) {
-				Bitmap photo = null;
-				// 根据需要，也可以加上Option这个参数
-				try {
-					String path = FileURl.ImageFilePath + "/"
-							+ taskClockDialog.cameraPhotoName;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 5668 && resultCode == RESULT_OK) {
+            /** 使用SSO授权必须添加如下代码 */
+            UMSsoHandler ssoHandler = MyUMSDK.mController.getConfig()
+                    .getSsoHandler(requestCode);
+            if (ssoHandler != null) {
+                ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+            }
+            return;
+        }
+        Tools.getLog(Tools.d, "aaa", "设置的返回！！！！！！！！");
+        if (requestCode == 111) {
+            if (resultCode == 222) {
+                finish();
+                return;
+            }
+            getByIdConn();
+            return;
+        }
 
-					int degree = ImageTool.getBitmapDegree(path);
-					Tools.getLog(Tools.i, "aaa", "degree ============ "
-							+ degree);
+        Tools.getLog(Tools.i, "aaa", "Activity.RESULT_OK === "
+                + Activity.RESULT_OK);
+        Tools.getLog(Tools.i, "aaa", "resultCode === " + resultCode);
+        Bitmap bitmap = null;
+        String ImageUrl = null;
+        if (resultCode == Activity.RESULT_OK) {
+            filenames = taskClockDialog.getFilenames();
+            String sdStatus = Environment.getExternalStorageState();
+            if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+                Tools.getLog(Tools.i, "aaa",
+                        "SD card is not avaiable/writeable right now.");
+                return;
+            }
+            if (requestCode == taskClockDialog.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE) {
+                Bitmap photo = null;
+                // 根据需要，也可以加上Option这个参数
+                try {
+                    String path = FileURl.ImageFilePath + "/"
+                            + taskClockDialog.cameraPhotoName;
 
-					FileInputStream in = new FileInputStream(path);
+                    int degree = ImageTool.getBitmapDegree(path);
+                    Tools.getLog(Tools.i, "aaa", "degree ============ "
+                            + degree);
 
-					BitmapFactory.Options options = new BitmapFactory.Options();
-					options.inSampleSize = 10;
+                    FileInputStream in = new FileInputStream(path);
 
-					photo = ImageTool.rotateBitMap(
-							BitmapFactory.decodeStream(in, null, options),
-							degree);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 10;
 
-					// TODO Auto-generated catch block
-					if (ImageTool.saveBitmapToAlbum(TaskInfoActivity.this,
-							photo)) {
-						taskClockDialog.reflashCanmera();
-					}
+                    photo = ImageTool.rotateBitMap(
+                            BitmapFactory.decodeStream(in, null, options),
+                            degree);
 
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (OutOfMemoryError e) {
-					ImageLoader.getInstance().clearDiskCache();
-					ImageLoader.getInstance().clearMemoryCache();
-				}
+                    // TODO Auto-generated catch block
+                    if (ImageTool.saveBitmapToAlbum(TaskInfoActivity.this,
+                            photo)) {
+                        taskClockDialog.reflashCanmera();
+                    }
 
-				// }
-			} else {
-				Tools.getLog(Tools.d, "aaa", "返回相册选着的照片！！！！");
-				List<String> list = (List<String>) data
-						.getSerializableExtra("selectimage");
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (OutOfMemoryError e) {
+                    ImageLoader.getInstance().clearDiskCache();
+                    ImageLoader.getInstance().clearMemoryCache();
+                }
 
-				for (int j = 0; j < list.size(); j++) {
+                // }
+            } else {
+                Tools.getLog(Tools.d, "aaa", "返回相册选着的照片！！！！");
+                List<String> list = (List<String>) data
+                        .getSerializableExtra("selectimage");
 
-					for (int i = filenames.size() - 1; i >= 0; i--) {
-						if (!filenames.get(i).getIsCheck()) {
-							filenames.remove(i);
-							break;
-						}
-					}
-					ImageListBean bean = new ImageListBean();
-					bean.setImageUrl(list.get(j));
-					bean.setCheck(true);
-					filenames.add(0, bean);
-				}
+                for (int j = 0; j < list.size(); j++) {
 
-				taskClockDialog.reflashList(filenames);
-			}
-			Tools.getLog(Tools.d, "aaa", "图片的转换：" + ImageUrl);
-		}
-		if (requestCode == taskClockDialog.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE) {
-			Tools.getLog(Tools.d, "aaa", "从相册选择完图片的情况：" + filenames.toString());
-			for (int i = filenames.size() - 1; i >= 3; i--) {
-				filenames.remove(i);
-			}
-		}
+                    for (int i = filenames.size() - 1; i >= 0; i--) {
+                        if (!filenames.get(i).getIsCheck()) {
+                            filenames.remove(i);
+                            break;
+                        }
+                    }
+                    ImageListBean bean = new ImageListBean();
+                    bean.setImageUrl(list.get(j));
+                    bean.setCheck(true);
+                    filenames.add(0, bean);
+                }
 
-	}
+                taskClockDialog.reflashList(filenames);
+            }
+            Tools.getLog(Tools.d, "aaa", "图片的转换：" + ImageUrl);
+        }
+        if (requestCode == taskClockDialog.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Tools.getLog(Tools.d, "aaa", "从相册选择完图片的情况：" + filenames.toString());
+            for (int i = filenames.size() - 1; i >= 3; i--) {
+                filenames.remove(i);
+            }
+        }
 
-	private void onLoad() {
-		// infoListView.stopRefresh();
-		isConn = false;
-		isReflush = false;
-	}
+    }
 
-	public void showTitle(final ByIdDetailBean byIdDetailBean) {
-		mDescription = byIdDetailBean.getDescription();
-		taskinfo_top_layout_name.setText(byIdDetailBean.getTitle());
-		ImageLoader.getInstance().displayImage(
-				Tools.getImagePath(byIdDetailBean.getBadgeSource())
-						+ byIdDetailBean.getBadgePath(),
-				taskinfo_top_layout_Image, options);
-		if (byIdDetailBean.getPrivateFlag().equals("1")) {
-			taskinfo_top_layout_Yinsi.setVisibility(View.VISIBLE);
-		} else {
-			taskinfo_top_layout_Yinsi.setVisibility(View.GONE);
-		}
-		String description = byIdDetailBean.getDescription();
-		if (description != null && description.length() != 0) {
-			taskinfo_top_layout_State.setText(description);
-			taskinfo_top_layout_State.setVisibility(View.VISIBLE);
-		} else {
-			if (isOther) {
-				taskinfo_top_layout_State.setText("Ta很懒还没有编写卡片说明");
-			} else {
-				taskinfo_top_layout_State.setText("点击右边设置按钮编写卡片说明");
-			}
+    private void onLoad() {
+        // infoListView.stopRefresh();
+        isConn = false;
+        isReflush = false;
+    }
 
-		}
-		StringBuffer sb = new StringBuffer();
-		String checkNum = byIdDetailBean.getTotalCheckCount();
-		int dateNum = byIdDetailBean.getTotalDateCount();
-		String point = byIdDetailBean.getPoint();
+    public void showTitle(final ByIdDetailBean byIdDetailBean) {
+        mDescription = byIdDetailBean.getDescription();
+        taskinfo_top_layout_name.setText(byIdDetailBean.getTitle());
+        ImageLoader.getInstance().displayImage(
+                Tools.getImagePath(byIdDetailBean.getBadgeSource())
+                        + byIdDetailBean.getBadgePath(),
+                taskinfo_top_layout_Image, options);
+        if (byIdDetailBean.getPrivateFlag().equals("1")) {
+            taskinfo_top_layout_Yinsi.setVisibility(View.VISIBLE);
+        } else {
+            taskinfo_top_layout_Yinsi.setVisibility(View.GONE);
+        }
+        String description = byIdDetailBean.getDescription();
+        if (description != null && description.length() != 0) {
+            taskinfo_top_layout_State.setText(description);
+            taskinfo_top_layout_State.setVisibility(View.VISIBLE);
+        } else {
+            if (isOther) {
+                taskinfo_top_layout_State.setText("Ta很懒还没有编写卡片说明");
+            } else {
+                taskinfo_top_layout_State.setText("点击右边设置按钮编写卡片说明");
+            }
+
+        }
+        StringBuffer sb = new StringBuffer();
+        String checkNum = byIdDetailBean.getTotalCheckCount();
+        int dateNum = byIdDetailBean.getTotalDateCount();
+        String point = byIdDetailBean.getPoint();
 
 //		if (checkNum != null && !checkNum.equals("0")) {
 //			sb.append(checkNum + "次");
@@ -1139,400 +1189,398 @@ public class TaskInfoActivity extends FragmentActivity implements
 //			sb.append("  ");
 //			sb.append(point + "个气球");
 //		}
-		sb.append(checkNum + "次");
-		sb.append("  ");
-		sb.append(dateNum + "天");
-		sb.append("  ");
-		sb.append(point + "个气球");
-		taskinfo_top_layout_info.setText(sb.toString());
-		Tools.getLog(Tools.d, "ccc",
-				"对方那四大速度快了敬爱塑料袋口============" + sb.toString());
+        sb.append(checkNum + "次");
+        sb.append("  ");
+        sb.append(dateNum + "天");
+        sb.append("  ");
+        sb.append(point + "个气球");
+        taskinfo_top_layout_info.setText(sb.toString());
+        Tools.getLog(Tools.d, "ccc",
+                "对方那四大速度快了敬爱塑料袋口============" + sb.toString());
 
-		if (lastTwoJobBean.getUsers().equals("")) {
-			taskLastTwoTitleLayout.setVisibility(View.GONE);
-		} else {
-			taskLastTwoTitleLayout.setVisibility(View.VISIBLE);
-		}
-		taskUserName.setText(lastTwoJobBean.getUsers());
-		taskUserMaxNum.setText("等" + lastTwoJobBean.getTotalManCount()
-				+ "人也在打卡");
+        if (lastTwoJobBean.getUsers().equals("")) {
+            taskLastTwoTitleLayout.setVisibility(View.GONE);
+        } else {
+            taskLastTwoTitleLayout.setVisibility(View.VISIBLE);
+        }
+        taskUserName.setText(lastTwoJobBean.getUsers() + "等也在打卡");
+        taskUserMaxNum.setText(lastTwoJobBean.getTotalManCount() + "人");
+        int progress = byIdDetailBean.getProgress();
+        switch (progress) {
+            case 0:
+                taskinfo_top_layout_progress1.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress2.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress3.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress4.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress5.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress6.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress7.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                break;
+            case 1:
+                taskinfo_top_layout_progress1.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress2.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress3.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress4.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress5.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress6.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress7.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                break;
+            case 2:
+                taskinfo_top_layout_progress1.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress2.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress3.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress4.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress5.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress6.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress7.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                break;
+            case 3:
+                taskinfo_top_layout_progress1.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress2.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress3.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress4.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress5.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress6.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress7.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                break;
+            case 4:
+                taskinfo_top_layout_progress1.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress2.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress3.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress4.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress5.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress6.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress7.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                break;
+            case 5:
+                taskinfo_top_layout_progress1.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress2.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress3.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress4.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress5.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress6.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                taskinfo_top_layout_progress7.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                break;
+            case 6:
+                taskinfo_top_layout_progress1.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress2.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress3.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress4.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress5.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress6.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1));
+                taskinfo_top_layout_progress7.setBackgroundColor(mContext
+                        .getResources().getColor(R.color.meibao_color_1_light));
+                break;
+        }
 
-		int progress = byIdDetailBean.getProgress();
-		switch (progress) {
-		case 0:
-			taskinfo_top_layout_progress1.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress2.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress3.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress4.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress5.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress6.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress7.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			break;
-		case 1:
-			taskinfo_top_layout_progress1.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress2.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress3.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress4.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress5.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress6.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress7.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			break;
-		case 2:
-			taskinfo_top_layout_progress1.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress2.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress3.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress4.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress5.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress6.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress7.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			break;
-		case 3:
-			taskinfo_top_layout_progress1.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress2.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress3.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress4.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress5.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress6.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress7.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			break;
-		case 4:
-			taskinfo_top_layout_progress1.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress2.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress3.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress4.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress5.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress6.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress7.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			break;
-		case 5:
-			taskinfo_top_layout_progress1.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress2.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress3.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress4.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress5.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress6.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			taskinfo_top_layout_progress7.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			break;
-		case 6:
-			taskinfo_top_layout_progress1.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress2.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress3.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress4.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress5.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress6.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1));
-			taskinfo_top_layout_progress7.setBackgroundColor(mContext
-					.getResources().getColor(R.color.meibao_color_1_light));
-			break;
-		}
 
-		
-		taskinfo_top_layout_set.setOnClickListener(new OnClickListener() {
+        taskinfo_top_layout_set.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				shareTaskUrl = "http://123.57.5.108:8087/architect/taskAchievement?taskId="
-						+ mTaskId;
-				isAlone = false;
-				taskDialog = new TaskInfoDialog(TaskInfoActivity.this, isOther);
-				taskDialog.setOnClickClockSuccess(mCLickClockSuccess);
-				sharedialogStr = "#" + byIdDetailBean.getTitle() + "#已累计坚持"
-						+ byIdDetailBean.getTotalDateCount() + "天";
-				taskDialog.show();
-				isShareImage = false;
-				shareBitmap = null;
-			}
-		});
-		taskLastTwoTitleLayout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Tools.getLog(Tools.d, "aaa", "点击更多进入buliding页！");
-				Intent in = new Intent(mContext,
-						ClockGroupInfoFragmentActivity.class);
-				in.putExtra("buildingId", lastTwoJobBean.getBuildingId());
-				mContext.startActivity(in);
-			}
-		});
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                shareTaskUrl = "http://123.57.5.108:8087/architect/taskAchievement?taskId="
+                        + mTaskId;
+                isAlone = false;
+                taskDialog = new TaskInfoDialog(TaskInfoActivity.this, isOther);
+                taskDialog.setOnClickClockSuccess(mCLickClockSuccess);
+                sharedialogStr = "#" + byIdDetailBean.getTitle() + "#已累计坚持"
+                        + byIdDetailBean.getTotalDateCount() + "天";
+                taskDialog.show();
+                isShareImage = false;
+                shareBitmap = null;
+            }
+        });
+        taskLastTwoTitleLayout.setOnClickListener(new OnClickListener() {
 
-	}
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                Tools.getLog(Tools.d, "aaa", "点击更多进入buliding页！");
+                Intent in = new Intent(mContext,
+                        ClockGroupInfoFragmentActivity.class);
+                in.putExtra("buildingId", lastTwoJobBean.getBuildingId());
+                mContext.startActivity(in);
+            }
+        });
 
-	private void createJobConn(String city) {
-		// TODO Auto-generated method stub
+    }
 
-		imageNum = 0;
-		String url = "";
-		for (int i = 0; i < filenames.size(); i++) {
-			if (filenames.get(i).getIsCheck()) {
-				url = FileURl.LOAD_FILE + filenames.get(i).getImageUrl();
-				imageNum++;
+    private void createJobConn(String city) {
+        // TODO Auto-generated method stub
 
-			}
-		}
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		try {
-			jobid = Tools.getUuid();
-			params.add(new BasicNameValuePair("jobId", jobid));
-			params.add(new BasicNameValuePair("taskId", byIdDetailBean.getId()));
-			if (signature != null && signature.length() != 0) {
-				params.add(new BasicNameValuePair("signature", signature));
-			}
-			if (quantity != null && quantity.length() != 0) {
-				params.add(new BasicNameValuePair("quantity", quantity));
-			}
+        imageNum = 0;
+        String url = "";
+        for (int i = 0; i < filenames.size(); i++) {
+            if (filenames.get(i).getIsCheck()) {
+                url = FileURl.LOAD_FILE + filenames.get(i).getImageUrl();
+                imageNum++;
 
-			params.add(new BasicNameValuePair("giveUpFlag", "0"));
-			params.add(new BasicNameValuePair("picNum", imageNum + ""));
-			params.add(new BasicNameValuePair("checkTime", System
-					.currentTimeMillis() + ""));
-			params.add(new BasicNameValuePair("onlineFlag", "1"));
-			params.add(new BasicNameValuePair("clientLocalTime", System
-					.currentTimeMillis() + ""));
-			params.add(new BasicNameValuePair("currentGiveUpFlag", "0"));
+            }
+        }
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        try {
+            jobid = Tools.getUuid();
+            params.add(new BasicNameValuePair("jobId", jobid));
+            params.add(new BasicNameValuePair("taskId", byIdDetailBean.getId()));
+            if (signature != null && signature.length() != 0) {
+                params.add(new BasicNameValuePair("signature", signature));
+            }
+            if (quantity != null && quantity.length() != 0) {
+                params.add(new BasicNameValuePair("quantity", quantity));
+            }
 
-			if (city != null) {
-				params.add(new BasicNameValuePair("city", city));
-				params.add(new BasicNameValuePair("longitude", longitude));
-				params.add(new BasicNameValuePair("latitude", latitude));
-			}
-			Tools.getLog(Tools.i, "aaa", "params ======================= "
-					+ params.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		Service.getService(Contanst.HTTP_CREATEJOB, null, null,
-				TaskInfoActivity.this).addList(params).request(UrlParams.POST);
-		if (!settings.getBoolean("sound", false)) {
-			jobSound();
-		}
+            params.add(new BasicNameValuePair("giveUpFlag", "0"));
+            params.add(new BasicNameValuePair("picNum", imageNum + ""));
+            params.add(new BasicNameValuePair("checkTime", System
+                    .currentTimeMillis() + ""));
+            params.add(new BasicNameValuePair("onlineFlag", "1"));
+            params.add(new BasicNameValuePair("clientLocalTime", System
+                    .currentTimeMillis() + ""));
+            params.add(new BasicNameValuePair("currentGiveUpFlag", "0"));
 
-	}
+            if (city != null) {
+                params.add(new BasicNameValuePair("city", city));
+                params.add(new BasicNameValuePair("longitude", longitude));
+                params.add(new BasicNameValuePair("latitude", latitude));
+            }
+            Tools.getLog(Tools.i, "aaa", "params ======================= "
+                    + params.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Service.getService(Contanst.HTTP_CREATEJOB, null, null,
+                TaskInfoActivity.this).addList(params).request(UrlParams.POST);
+        if (!settings.getBoolean("sound", false)) {
+            jobSound();
+        }
 
-	String latitude, longitude;
+    }
 
-	private void connBaiduLocation() {
-		latitude = settings.getString("latitude", "-1");
-		longitude = settings.getString("longitude", "-1");
-		if (latitude.equals("-1")) {
-			createJobConn(null);
-		} else {
-			Service.getService(Contanst.HTTP_BAIDU_LOCATION, null,
-					latitude + "," + longitude, TaskInfoActivity.this)
-					.addList(null).request(UrlParams.GET);
-		}
-	}
+    String latitude, longitude;
 
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		MobclickAgent.onPageEnd("SplashScreen"); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证
-		// onPageEnd 在onPause
-		// 之前调用,因为 onPause 中会保存信息
-		MobclickAgent.onPause(this);
-	}
+    private void connBaiduLocation() {
+        latitude = settings.getString("latitude", "-1");
+        longitude = settings.getString("longitude", "-1");
+        if (latitude.equals("-1")) {
+            createJobConn(null);
+        } else {
+            Service.getService(Contanst.HTTP_BAIDU_LOCATION, null,
+                    latitude + "," + longitude, TaskInfoActivity.this)
+                    .addList(null).request(UrlParams.GET);
+        }
+    }
 
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-		MobclickAgent.onPageStart("SplashScreen"); // 统计页面(仅有Activity的应用中SDK自动调用，不需要单独写)
-		MobclickAgent.onResume(this);
-	}
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        MobclickAgent.onPageEnd("SplashScreen"); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证
+        // onPageEnd 在onPause
+        // 之前调用,因为 onPause 中会保存信息
+        MobclickAgent.onPause(this);
+    }
 
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		vibrator.cancel();
-	}
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        MobclickAgent.onPageStart("SplashScreen"); // 统计页面(仅有Activity的应用中SDK自动调用，不需要单独写)
+        MobclickAgent.onResume(this);
+    }
 
-	private void updateDateColor() {
-		int total = 0;
-		for (int i = 0; i < byDateBeanList.size(); i++) {
-			Tools.getLog(Tools.d, "aaa",
-					"byDateBeanList.get(i).getJobCount()====="
-							+ byDateBeanList.get(i).getJobCount());
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        vibrator.cancel();
+    }
 
-			if (byDateBeanList.get(i).getJobCount() > 0) {
-				total++;
-			}
-		}
-		if (total == 0) {
-			ClockMainActivity.curMap.put(today, "0");
-		} else if (total == byDateBeanList.size()) {
-			// 今天的卡全部打完
-			if (ClockMainActivity.curMap == null) {
-				return;
-			}
+    private void updateDateColor() {
+        int total = 0;
+        for (int i = 0; i < byDateBeanList.size(); i++) {
+            Tools.getLog(Tools.d, "aaa",
+                    "byDateBeanList.get(i).getJobCount()====="
+                            + byDateBeanList.get(i).getJobCount());
 
-			if (!ClockMainActivity.curMap.get(today).equals("2")) {
-				ClockMainActivity.curMap.put(today, "2");
-				AllTaskFinishDialog2 allDialog = new AllTaskFinishDialog2(
-						TaskInfoActivity.this);
-				allDialog.show();
-				allDialog.shareImage.setOnClickListener(new OnClickListener() {
+            if (byDateBeanList.get(i).getJobCount() > 0) {
+                total++;
+            }
+        }
+        if (total == 0) {
+            ClockMainActivity.curMap.put(today, "0");
+        } else if (total == byDateBeanList.size()) {
+            // 今天的卡全部打完
+            if (ClockMainActivity.curMap == null) {
+                return;
+            }
 
-					@Override
-					public void onClick(View arg0) {
-						// TODO Auto-generated method stub
-						MobclickAgent.onEvent(mContext,
-								"mainhomepageshareclick");
-						Intent in = new Intent(mContext,
-								ShareAchievementActivity.class);
-						in.putExtra("userid", userID);
-						startActivity(in);
-						overridePendingTransition(R.anim.slide_alpha_in_right,
-								R.anim.slide_alpha_out_left);
-					}
-				});
-			}
+            if (!ClockMainActivity.curMap.get(today).equals("2")) {
+                ClockMainActivity.curMap.put(today, "2");
+                AllTaskFinishDialog2 allDialog = new AllTaskFinishDialog2(
+                        TaskInfoActivity.this);
+                allDialog.show();
+                allDialog.shareImage.setOnClickListener(new OnClickListener() {
 
-		} else {
-			ClockMainActivity.curMap.put(today, "1");
-		}
-	}
+                    @Override
+                    public void onClick(View arg0) {
+                        // TODO Auto-generated method stub
+                        MobclickAgent.onEvent(mContext,
+                                "mainhomepageshareclick");
+                        Intent in = new Intent(mContext,
+                                ShareAchievementActivity.class);
+                        in.putExtra("userid", userID);
+                        startActivity(in);
+                        overridePendingTransition(R.anim.slide_alpha_in_right,
+                                R.anim.slide_alpha_out_left);
+                    }
+                });
+            }
 
-	private void setOverflowShowingAlways() {
-		try {
-			ViewConfiguration config = ViewConfiguration.get(this);
-			Field menuKeyField = ViewConfiguration.class
-					.getDeclaredField("sHasPermanentMenuKey");
+        } else {
+            ClockMainActivity.curMap.put(today, "1");
+        }
+    }
 
-			menuKeyField.setAccessible(true);
-			menuKeyField.setBoolean(config, false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    private void setOverflowShowingAlways() {
+        try {
+            ViewConfiguration config = ViewConfiguration.get(this);
+            Field menuKeyField = ViewConfiguration.class
+                    .getDeclaredField("sHasPermanentMenuKey");
 
-	/**
-	 * 对PagerSlidingTabStrip的各项属性进行赋值。
-	 */
-	private void setTabsValue() {
-		// 设置Tab是自动填充满屏幕的
-		taskInfo_tabs.setShouldExpand(true);
-		// 设置Tab的分割线是透明的
-		taskInfo_tabs.setDividerColor(Color.TRANSPARENT);
-		// 设置Tab底部线的高度
-		taskInfo_tabs.setUnderlineHeight((int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, 0, dm));
-		// 设置Tab Indicator的高度
-		taskInfo_tabs.setIndicatorHeight((int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, 2, dm));
-		// 设置Tab标题文字的大小
-		taskInfo_tabs.setTextSize((int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_SP, 14, dm));
-		taskInfo_tabs.setSelectTextSice((int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_SP, 14, dm));
-		// 设置Tab Indicator的颜色
-		taskInfo_tabs.setIndicatorColor(getResources().getColor(
-				R.color.meibao_color_1));
-		// 设置选中Tab文字的颜色 (这是我自定义的一个方法)
-		taskInfo_tabs.setSelectedTextColor(getResources().getColor(
-				R.color.meibao_color_1));
-		// 取消点击Tab时的背景色
-		taskInfo_tabs.setTabBackground(0);
-	}
+            menuKeyField.setAccessible(true);
+            menuKeyField.setBoolean(config, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	public class MyPagerAdapter extends FragmentStatePagerAdapter {
+    /**
+     * 对PagerSlidingTabStrip的各项属性进行赋值。
+     */
+    private void setTabsValue() {
+        // 设置Tab是自动填充满屏幕的
+        taskInfo_tabs.setShouldExpand(true);
+        // 设置Tab的分割线是透明的
+        taskInfo_tabs.setDividerColor(Color.TRANSPARENT);
+        // 设置Tab底部线的高度
+        taskInfo_tabs.setUnderlineHeight((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 0, dm));
+        // 设置Tab Indicator的高度
+        taskInfo_tabs.setIndicatorHeight((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 2, dm));
+        // 设置Tab标题文字的大小
+        taskInfo_tabs.setTextSize((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP, 14, dm));
+        taskInfo_tabs.setSelectTextSice((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP, 14, dm));
+        // 设置Tab Indicator的颜色
+        taskInfo_tabs.setIndicatorColor(getResources().getColor(
+                R.color.meibao_color_1));
+        // 设置选中Tab文字的颜色 (这是我自定义的一个方法)
+        taskInfo_tabs.setSelectedTextColor(getResources().getColor(
+                R.color.meibao_color_1));
+        // 取消点击Tab时的背景色
+        taskInfo_tabs.setTabBackground(0);
+    }
 
-		public MyPagerAdapter(FragmentManager fm) {
-			super(fm);
+    public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
-		}
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
 
-		private final String[] titles = {"明细","日历"};
+        }
 
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return titles[position];
-		}
+        private final String[] titles = {"明细", "日历"};
 
-		@Override
-		public int getCount() {
-			return titles.length;
-		}
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
 
-		@Override
-		public Fragment getItem(int position) {
-			switch (position) {
-			case 0:
-				if (taskInfoFragment == null) {
-					taskInfoFragment = new TaskInfoFragment(
-							TaskInfoActivity.this, mTaskId, thisJobUserid,
-							isOther, byIdDetailBean);// ,
-														// parentScrollView,tabLayout
-				}
-				return taskInfoFragment;
-			case 1:
-				if (gridViewFragment == null) {
-					int tota = byIdDetailBean.getTotalDateCount();
-					gridViewFragment = new TaskGridViewFragment(mContext,
-							thisJobUserid, 
-							byIdDetailBean.getcTime(), 
-							mTaskId,byIdDetailBean.getTitle(),
-							byIdDetailBean.getUserName(),
-							tota);
-				}	
-				return gridViewFragment;
-			
+        @Override
+        public int getCount() {
+            return titles.length;
+        }
 
-			default:
-				return null;
-			}
-		}
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    if (taskInfoFragment == null) {
+                        taskInfoFragment = new TaskInfoFragment(
+                                TaskInfoActivity.this, mTaskId, thisJobUserid,
+                                isOther, byIdDetailBean);// ,
+                        // parentScrollView,tabLayout
+                    }
+                    return taskInfoFragment;
+                case 1:
+                    if (gridViewFragment == null) {
+                        int tota = byIdDetailBean.getTotalDateCount();
+                        gridViewFragment = new TaskGridViewFragment(mContext,
+                                thisJobUserid,
+                                byIdDetailBean.getcTime(),
+                                mTaskId, byIdDetailBean.getTitle(),
+                                byIdDetailBean.getUserName(),
+                                tota);
+                    }
+                    return gridViewFragment;
 
-	}
+
+                default:
+                    return null;
+            }
+        }
+
+    }
 
 }

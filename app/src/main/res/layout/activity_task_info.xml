@@ -41,6 +41,11 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/xq_liaotian"
                 android:visibility="gone" />
+            <ImageView
+                android:id="@+id/title_item_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/xq_nav_bofang" />
 
             <ImageView
                 android:id="@+id/title_item_createJob"
@@ -59,6 +64,7 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/task_info_titleLayout"
             android:background="@color/white"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -102,6 +108,19 @@
                         android:ellipsize="end"
                         android:gravity="center"
                         android:maxWidth="100dp"
+                        android:text="asdfasdf"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text=" 也在打卡"
+                        android:layout_toRightOf="@id/taskUserName"
+                        android:ellipsize="end"
+                        android:gravity="center"
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="@dimen/font5" />
@@ -156,7 +175,6 @@
             android:id="@+id/taskinfo_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/expandablelist_Layout"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <View

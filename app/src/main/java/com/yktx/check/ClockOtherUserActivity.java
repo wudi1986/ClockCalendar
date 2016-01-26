@@ -154,6 +154,7 @@ public class ClockOtherUserActivity extends FragmentActivity implements
 
 	ViewPager ClockOther2_pager;
 	OldPagerSlidingTabStrip ClockOther2_tabs;
+	MyPagerAdapter myPagerAdapter;
 	boolean isUpdateGZ = false;
 	/**
 	 * 是否存储到聊天数据库
@@ -806,12 +807,17 @@ public class ClockOtherUserActivity extends FragmentActivity implements
 		titles[1] = sb2.toString();
 		titles[2] = sb3.toString();
 		titles[3] = sb4.toString();
-		
-		ClockOther2_pager.setAdapter(new MyPagerAdapter(
-				getSupportFragmentManager()));
+
+		if(myPagerAdapter == null) {
+			myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+					getSupportFragmentManager();
+//			ClockOther2_pager.setAdapter(new MyPagerAdapter(
+//					getSupportFragmentManager()));
+			ClockOther2_pager.setAdapter(myPagerAdapter);
+			ClockOther2_tabs.setViewPager(ClockOther2_pager);
+		}
 		// pager.setOffscreenPageLimit(4);
 
-		ClockOther2_tabs.setViewPager(ClockOther2_pager);
 		setTabsValue();
 
 		

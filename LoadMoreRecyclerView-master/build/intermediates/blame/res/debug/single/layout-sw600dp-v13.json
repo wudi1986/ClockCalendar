@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\android test\\ClockCalendar2016\\LoadMoreRecyclerView-master\\build\\intermediates\\res\\merged\\debug\\layout-sw600dp-v13\\design_layout_snackbar.xml",
+        "source": "C:\\android test\\ClockCalendar2016\\LoadMoreRecyclerView-master\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.1.1\\res\\layout-sw600dp\\design_layout_snackbar.xml"
+    },
+    {
         "merged": "C:\\android test\\ClockCalendar3\\LoadMoreRecyclerView-master\\build\\intermediates\\res\\merged\\debug\\layout-sw600dp-v13\\design_layout_snackbar.xml",
         "source": "C:\\android test\\ClockCalendar3\\LoadMoreRecyclerView-master\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.1.1\\res\\layout-sw600dp\\design_layout_snackbar.xml"
     }
