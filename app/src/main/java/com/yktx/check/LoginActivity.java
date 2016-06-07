@@ -37,6 +37,7 @@ import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.ui.DemoHelper;
+import com.news.qidian.pages.MainAty;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
@@ -233,13 +234,18 @@ public class LoginActivity extends BaseActivity implements ServiceListener {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if (!isConn) {
-					UMWXHandler wxHandler = new UMWXHandler(mContext,
-							mShareSDK.appID, mShareSDK.weixinappSecret);
-					wxHandler.addToSocialSDK();
-					loginWeiXin(SHARE_MEDIA.WEIXIN);
-					isConn = true;
-				}
+
+
+				Intent in = new Intent(LoginActivity.this, MainAty.class);
+				LoginActivity.this.startActivity(in);
+
+//				if (!isConn) {
+//					UMWXHandler wxHandler = new UMWXHandler(mContext,
+//							mShareSDK.appID, mShareSDK.weixinappSecret);
+//					wxHandler.addToSocialSDK();
+//					loginWeiXin(SHARE_MEDIA.WEIXIN);
+//					isConn = true;
+//				}
 			}
 		});
 		QQLogin.setOnClickListener(new OnClickListener() {

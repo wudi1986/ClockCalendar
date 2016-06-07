@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.easemob.chatuidemo.ui.DemoHelper;
 import com.easemob.easeui.controller.EaseUI;
+import com.news.qidian.application.QiDianApplication;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -60,7 +61,7 @@ public class ClockApplication extends Application {
 		// 获取异常信息
 		 CrashHandler crashHandler = CrashHandler.getInstance();
 		 crashHandler.init(getApplicationContext());
-
+		QiDianApplication.initQDApp(this);
 		clockApplication = this;
 		aboutimageloder();// 初始化ImageLoders
 		MobclickAgent.setDebugMode(false);

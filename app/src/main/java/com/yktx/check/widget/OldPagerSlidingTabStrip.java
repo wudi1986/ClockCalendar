@@ -43,7 +43,7 @@ import android.widget.TextView;
 import com.yktx.check.R;
 
 import java.util.Locale;
-
+@SuppressWarnings("ResourceType")
 public class OldPagerSlidingTabStrip extends HorizontalScrollView {
 
 	public interface IconTabProvider {
