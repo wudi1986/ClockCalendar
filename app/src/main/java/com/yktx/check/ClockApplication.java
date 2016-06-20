@@ -59,13 +59,13 @@ public class ClockApplication extends Application {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		// 获取异常信息
-		 CrashHandler crashHandler = CrashHandler.getInstance();
-		 crashHandler.init(getApplicationContext());
+//		 CrashHandler crashHandler = CrashHandler.getInstance();
+//		 crashHandler.init(getApplicationContext());
 		QiDianApplication.initQDApp(this);
 		clockApplication = this;
 		aboutimageloder();// 初始化ImageLoders
 		MobclickAgent.setDebugMode(false);
-		aboutjpush();// 激光推送初始化
+//		aboutjpush();// 激光推送初始化
 		//环信
 		EaseUI.getInstance().init(clockApplication);
 		 DemoHelper.getInstance().init(clockApplication);

@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by fengjigang on 16/2/26.
  */
 public class FeedRequest<T> extends GsonRequest<T> {
-    private HashMap mParams;
+    private HashMap mParams, mHeader;
 
     public FeedRequest(int method, Class clazz, String url, Response.Listener successListener, Response.ErrorListener listener) {
         super(method, clazz, url, successListener, listener);
@@ -28,17 +28,20 @@ public class FeedRequest<T> extends GsonRequest<T> {
     public void setRequestParams(HashMap params){
         this.mParams = params;
     }
+
+    public void setRequestHeader(HashMap header) {
+        this.mHeader = header;
+    }
+
     @Override
     protected String checkJsonData(String data, NetworkResponse response) {
         try {
             JSONObject jsonObject = new JSONObject(data);
-                String code = jsonObject.optString("code", "");
-                String message = jsonObject.optString("message", "");
-                Logger.e("jigang","code = "+code + ",message=" + message);
-                if ("0".equals(code) && "success".equals(message)){
-                    return jsonObject.optString("data","");
-                }else {
-                    return "";
+            String code = jsonObject.optString("code", "");
+            if ("2000".equals(code)) {
+                return jsonObject.optString("data", "");
+            } else {
+                return "";
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -48,5 +51,10 @@ public class FeedRequest<T> extends GsonRequest<T> {
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
         return mParams;
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        return mHeader;
     }
 }

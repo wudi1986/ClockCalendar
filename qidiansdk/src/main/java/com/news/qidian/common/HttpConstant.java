@@ -7,18 +7,24 @@ public class HttpConstant {
     /**
      * 服务器api 域名
      */
-    public static final String URL_SERVER_HOST = "http://api.deeporiginalx.com";
+    public static final String URL_SERVER_HOST = "http://bdp.deeporiginalx.com/v2";
+
+    public static final String URL_REGISTER_VISITOR = URL_SERVER_HOST + "/au/sin/g";//注册游客信息
+
+    public static final String URL_VISITOR_LOGIN = URL_SERVER_HOST + "/au/lin/g";//游客登录
+
+    public static final String URL_MERGE_USER_LOGIN = URL_SERVER_HOST + "/au/sin/s";//三方用户注册,1.包含第三方用户登录合并游客用户;2.包含新第三方用户登录覆盖三方用户
 
     public static final String URL_PRAISE = URL_SERVER_HOST + "/news/baijia/praise";
 
     public static final String URL_GET_NEWS_CONTENT = URL_SERVER_HOST + "/news/baijia/point";
 
-    /**新接口域名*/
-    public static final String URL_SERVER_HOST_NEW = "http://bdp.deeporiginalx.com";
+   // /**新接口域名*/
+    //public static final String URL_SERVER_HOST_NEW = "http://bdp.deeporiginalx.com";
     /**新接口游客注册*/
-    public static final String URL_POST_USER_REG = URL_SERVER_HOST_NEW +"/v2/au/sin/g";
-    /**新接口游客登录*/
-    public static final String URL_POST_USER_LOGIN = URL_SERVER_HOST_NEW + "/v2/au/lin/g";
+   // public static final String URL_POST_USER_REG = URL_SERVER_HOST_NEW +"/v2/au/sin/g";
+    ///**新接口游客登录*/
+   // public static final String URL_POST_USER_LOGIN = URL_SERVER_HOST_NEW + "/v2/au/lin/g";
 
 
 
@@ -77,43 +83,72 @@ public class HttpConstant {
     /**
      * feed流上拉加载更多
      */
-    public static final String URL_FEED_LOAD_MORE = URL_SERVER_HOST + "/bdp/news/load?";
+    public static final String URL_FEED_LOAD_MORE = URL_SERVER_HOST + "/ns/fed/l?";
 
     /**
      * feed流下拉刷新
      */
-    public static final String URL_FEED_PULL_DOWN = URL_SERVER_HOST + "/bdp/news/refresh?";
+    public static final String URL_FEED_PULL_DOWN = URL_SERVER_HOST + "/ns/fed/r?";
 
     /**
      * 获取新闻详情页
      */
-    public static final String URL_FETCH_CONTENT = URL_SERVER_HOST + "/bdp/news/content?";
+    public static final String URL_FETCH_CONTENT = URL_SERVER_HOST + "/ns/con?";
 
     /**
-     * 获取新闻评论
+     * 新闻普通评论列表
      */
-    public static final String URL_FETCH_COMMENTS = URL_SERVER_HOST + "/bdp/news/comment/ydzx?";
+    public static final String URL_FETCH_COMMENTS = URL_SERVER_HOST + "/ns/coms/c?";
+    /**
+     * 热点评论列表
+     */
+    public static final String URL_FETCH_HOTCOMMENTS = URL_SERVER_HOST + "/ns/coms/h?";
 
     /**
      * 新闻评论点赞
+     * 取消评论点赞
      */
-    public static final String URL_LOVE_COMMENT = URL_SERVER_HOST + "/bdp/news/comment/ydzx/love?";
+    public static final String URL_ADDORDELETE_LOVE_COMMENT = URL_SERVER_HOST + "/ns/coms/up?";
 
     /**
      * 添加新闻评论
      */
-    public static final String URL_ADD_COMMENT = URL_SERVER_HOST + "/bdp/news/comment/ydzx";
+    public static final String URL_ADD_COMMENT = URL_SERVER_HOST + "/ns/coms";
+    /**
+     * 查看评论列表
+     * 用户删除已创建评论**
+     */
+    public static final String URL_USER_CREATEORDELETE_COMMENTLIST = URL_SERVER_HOST + "/ns/au/coms?";
+
+
     /**
      * 日志上传
      */
-    public static final String URL_UPLOAD_LOG =  "http://bdp.deeporiginalx.com/rep?";
+    public static final String URL_UPLOAD_LOG =  "http://bdp.deeporiginalx.com/rep/v2/c?";// URL_SERVER_HOST+"/c?"
 
     /**
      * 新闻客户端-新闻相关属性集
      */
-    public static final String URL_NEWS_RELATED = URL_SERVER_HOST + "/bdp/news/related?";
+    public static final String URL_NEWS_RELATED = URL_SERVER_HOST + "/ns/asc?";
+    /**
+     * 添加新闻收藏
+     * 取消新闻收藏
+     */
+    public static final String URL_ADDORDELETE_FAVORITE = URL_SERVER_HOST + "/ns/cols?";
 
+    /**
+     * 查看收藏列表
+     */
+    public static final String URL_SELECT_FAVORITELIST = URL_SERVER_HOST + "/ns/au/cols?";
 
+    /**
+     * 添加关心
+     * 取消关心
+     */
+    public static final String URL_ADDORDELETE_CAREFOR = URL_SERVER_HOST + "/ns/cocs?";
 
-
+    /**
+     * 查看收藏列表
+     */
+    public static final String URL_SELECT_CAREFOR = URL_SERVER_HOST + "/ns/au/cocs?";
 }

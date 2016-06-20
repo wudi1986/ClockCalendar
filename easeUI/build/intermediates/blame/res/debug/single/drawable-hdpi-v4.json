@@ -76,12 +76,12 @@
         "source": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/src/main/res/drawable-hdpi/ease_chatto_voice_playing_f1.png"
     },
     {
-        "merged": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/build/intermediates/res/merged/debug/drawable-hdpi-v4/ee_17.png",
-        "source": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/src/main/res/drawable-hdpi/ee_17.png"
-    },
-    {
         "merged": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/build/intermediates/res/merged/debug/drawable-hdpi-v4/ease_chatfrom_bg_normal.9.png",
         "source": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/src/main/res/drawable-hdpi/ease_chatfrom_bg_normal.9.png"
+    },
+    {
+        "merged": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/build/intermediates/res/merged/debug/drawable-hdpi-v4/ee_17.png",
+        "source": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/src/main/res/drawable-hdpi/ee_17.png"
     },
     {
         "merged": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/build/intermediates/res/merged/debug/drawable-hdpi-v4/ease_chatting_setmode_keyboard_btn_normal.png",

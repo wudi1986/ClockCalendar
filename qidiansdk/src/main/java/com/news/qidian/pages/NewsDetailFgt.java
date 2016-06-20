@@ -18,6 +18,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -46,7 +47,7 @@ import com.news.qidian.entity.NewsDetailComment;
 import com.news.qidian.entity.RelatedEntity;
 import com.news.qidian.entity.RelatedItemEntity;
 import com.news.qidian.entity.User;
-import com.news.qidian.net.volley.NewsCommentRequest;
+//import com.news.qidian.net.volley.NewsCommentRequest;
 import com.news.qidian.net.volley.NewsDetailRequest;
 import com.news.qidian.net.volley.NewsLoveRequest;
 import com.news.qidian.utils.DateUtil;
@@ -114,10 +115,13 @@ public class NewsDetailFgt extends BaseFragment {
 
     private TextView footView_tv;
     private ProgressBar footView_progressbar;
+    private LinearLayout footerView_layout;
     private boolean isBottom;
 
     private boolean isLoadDate;
-
+    private boolean isNetWork;
+    public boolean isClickMyLike;
+    FrameLayout video;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,9 +153,11 @@ public class NewsDetailFgt extends BaseFragment {
         this.inflater = inflater;
         this.container = container;
         user = SharedPreManager.getUser(getActivity());
+        // 声明video，把之后的视频放到这里面去
+//        video = (FrameLayout) rootView.findViewById(R.id.video);
         mNewsDetailList = (PullToRefreshListView) rootView.findViewById(R.id.fgt_new_detail_PullToRefreshListView);
         bgLayout = (RelativeLayout) rootView.findViewById(R.id.bgLayout);
-
+        bgLayout.setVisibility(View.GONE);
         mNewsDetailList.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         mNewsDetailList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -179,7 +185,7 @@ public class NewsDetailFgt extends BaseFragment {
                                 mNewsDetailList.setMode(PullToRefreshBase.Mode.DISABLED);
                                 footView_tv.setText("内容加载完毕");
                             }
-
+                            isLoadDate = false;
                         }
                     }, 1000);
                 }
@@ -372,17 +378,10 @@ public class NewsDetailFgt extends BaseFragment {
 //                Log.e("aaa","1111");
             }
         });
-        mDetailWebView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-                Log.d("aaa", "newProgress==" + newProgress);
-            }
-        });
         //第2部分的CommentTitle
-        View mCommentTitleView = inflater.inflate(R.layout.detail_shared_layout, container, false);
+        final View mCommentTitleView = inflater.inflate(R.layout.detail_shared_layout, container, false);
         mCommentTitleView.setLayoutParams(layoutParams);
-        mNewsDetailHeaderView.addView(mCommentTitleView);
+//        mNewsDetailHeaderView.addView(mCommentTitleView);
         detail_shared_FriendCircleLayout = (LinearLayout) mCommentTitleView.findViewById(R.id.detail_shared_FriendCircleLayout);
         detail_shared_CareForLayout = (LinearLayout) mCommentTitleView.findViewById(R.id.detail_shared_PraiseLayout);
         mDetailSharedHotComment = (TextView) mCommentTitleView.findViewById(R.id.detail_shared_hotComment);
@@ -420,10 +419,16 @@ public class NewsDetailFgt extends BaseFragment {
         ////第3部分的CommentContent(这个内容是动态的获取数据后添加)
 
         //第4部分的viewPointContent
-        View mViewPointLayout = inflater.inflate(R.layout.detail_shared_layout, container, false);
+        final View mViewPointLayout = inflater.inflate(R.layout.detail_shared_layout, container, false);
         mViewPointLayout.setLayoutParams(layoutParams);
-        mNewsDetailHeaderView.addView(mViewPointLayout);
-
+        //延时加载热点评论和相关观点
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mNewsDetailHeaderView.addView(mCommentTitleView);
+                mNewsDetailHeaderView.addView(mViewPointLayout);
+            }
+        }, 1500);
 
         detail_shared_ShareImageLayout = (RelativeLayout) mViewPointLayout.findViewById(R.id.detail_shared_ShareImageLayout);
         detail_shared_Text = (TextView) mViewPointLayout.findViewById(R.id.detail_shared_Text);
@@ -454,8 +459,8 @@ public class NewsDetailFgt extends BaseFragment {
         lv.addFooterView(footerView);
         footView_tv = (TextView) footerView.findViewById(R.id.footerView_tv);
         footView_progressbar = (ProgressBar) footerView.findViewById(R.id.footerView_pb);
-
-
+        footerView_layout = (LinearLayout) footerView.findViewById(R.id.footerView_layout);
+        footerView_layout.setVisibility(View.GONE);
 
 
 
@@ -474,13 +479,15 @@ public class NewsDetailFgt extends BaseFragment {
 
     private void loadData() {
 
-        Logger.e("jigang", "fetch comments url=" + HttpConstant.URL_FETCH_COMMENTS + "docid=" + mDocid);
+        Logger.e("jigang", "fetch comments url=" + HttpConstant.URL_FETCH_HOTCOMMENTS + "did=" + TextUtil.getBase64(mDocid) + "&p=" + (1) + "&c=" + (20));
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        NewsCommentRequest<ArrayList<NewsDetailComment>> feedRequest = null;
-        NewsDetailRequest<RelatedEntity> related = null;
-        try {
-            feedRequest = new NewsCommentRequest<ArrayList<NewsDetailComment>>(Request.Method.GET, new TypeToken<ArrayList<NewsDetailComment>>() {
-            }.getType(), HttpConstant.URL_FETCH_COMMENTS + "docid=" + URLEncoder.encode(mDocid, "utf-8") + "&page=" + (1), new Response.Listener<ArrayList<NewsDetailComment>>() {
+        NewsDetailRequest<ArrayList<NewsDetailComment>> feedRequest = null;
+        NewsDetailRequest<ArrayList<RelatedItemEntity>> related = null;
+            feedRequest = new NewsDetailRequest<ArrayList<NewsDetailComment>>(Request.Method.GET, new TypeToken<ArrayList<NewsDetailComment>>() {
+            }.getType(), HttpConstant.URL_FETCH_HOTCOMMENTS + "did=" + TextUtil.getBase64(mDocid) +
+                    (user!=null?"&uid="+SharedPreManager.getUser(getActivity()).getMuid():"")+
+                    "&p=" + (1)+ "&c=" + (20)
+                    , new Response.Listener<ArrayList<NewsDetailComment>>() {
 
                 @Override
                 public void onResponse(ArrayList<NewsDetailComment> result) {
@@ -491,12 +498,17 @@ public class NewsDetailFgt extends BaseFragment {
 
                     if (!TextUtil.isListEmpty(result)) {
                         mComments = result;
+                        for(int i = 0;i<mComments.size();i++){
+                            if(i>2){
+                                mComments.remove(i);
+                            }
+                        }
 //                        mAdapter.setCommentList(mComments);
 //                        mAdapter.notifyDataSetChanged();
                         Logger.d("aaa", "评论加载完毕！！！！！！");
                         //同步服务器上的评论数据到本地数据库
-                      //  addCommentInfoToSql(mComments);
-                        mDetailSharedHotComment.setText("热门评论("+mResult.getCommentSize()+")");
+                        //  addCommentInfoToSql(mComments);
+                        mDetailSharedHotComment.setText("热门评论");//
                         addCommentContent(result);
                     } else {
                         detail_shared_CommentTitleLayout.setVisibility(View.GONE);
@@ -512,45 +524,42 @@ public class NewsDetailFgt extends BaseFragment {
                     mNewsDetailList.onRefreshComplete();
                     detail_shared_CommentTitleLayout.setVisibility(View.GONE);
                     detail_shared_MoreComment.setVisibility(View.GONE);
-                    Logger.e("jigang", "network fail");
+                    Logger.e("jigang", "URL_FETCH_HOTCOMMENTS  network fail");
+
                 }
             });
-            related = new NewsDetailRequest<RelatedEntity>(Request.Method.GET,
-                    new TypeToken<RelatedEntity>() {
-                    }.getType(),
-                    HttpConstant.URL_NEWS_RELATED + "url=" + TextUtil.getBase64(mNewID),
-                    new Response.Listener<RelatedEntity>() {
-                        @Override
-                        public void onResponse(RelatedEntity response) {
-                            isCorrelationSuccess = true;
-                            isBgLayoutSuccess();
-                            ArrayList<RelatedItemEntity> relatedItemEntities = response.getSearchItems();
-                            Logger.e("jigang", "network success RelatedEntity~~" + response);
+        Logger.e("jigang", "URL_NEWS_RELATED=" + HttpConstant.URL_NEWS_RELATED + "nid=" + mNewID);
+        related = new NewsDetailRequest<ArrayList<RelatedItemEntity>>(Request.Method.GET,
+                new TypeToken<ArrayList<RelatedItemEntity>>() {
+                }.getType(),
 
-                            if (!TextUtil.isListEmpty(relatedItemEntities)) {
-                                setBeanPageList(relatedItemEntities);
-                                detail_shared_ViewPointTitleLayout.setVisibility(View.VISIBLE);
-                            } else {
-                                RelatedItemEntity entity = new RelatedItemEntity();
-                                entity.setUrl("-1");
-                                relatedItemEntities.add(entity);
-                                mAdapter.setNewsFeed(relatedItemEntities);
-                                mAdapter.notifyDataSetChanged();
-                                detail_shared_ViewPointTitleLayout.setVisibility(View.GONE);
-                            }
+                HttpConstant.URL_NEWS_RELATED + "nid=" + mNewID,
+                new Response.Listener<ArrayList<RelatedItemEntity>>() {
+                    @Override
+                    public void onResponse(ArrayList<RelatedItemEntity> relatedItemEntities) {
+
+                        Logger.e("jigang", "URL_NEWS_RELATED  network success~~"+relatedItemEntities.toString());
+                        isCorrelationSuccess = true;
+                        isBgLayoutSuccess();
+//                            ArrayList<RelatedItemEntity> relatedItemEntities = response.getSearchItems();
+//                            Logger.e("jigang", "network success RelatedEntity~~" + response);
+
+                        if (!TextUtil.isListEmpty(relatedItemEntities)) {
+                            setBeanPageList(relatedItemEntities);
+                        } else {
+                            setNoRelatedDate();
                         }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            isCorrelationSuccess = true;
-                            isBgLayoutSuccess();
-                            Logger.e("jigang", "network error~~");
-                        }
-                    });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        isCorrelationSuccess = true;
+                        isBgLayoutSuccess();
+                        setNoRelatedDate();
+                        Logger.e("jigang", "URL_NEWS_RELATED  network error~~");
+                    }
+                });
 
 
         feedRequest.setRetryPolicy(new DefaultRetryPolicy(15000, 0, 0));
@@ -560,6 +569,22 @@ public class NewsDetailFgt extends BaseFragment {
         requestQueue.add(related);
 
 
+    }
+
+    public void setNoRelatedDate() {
+        RelatedItemEntity entity = new RelatedItemEntity();
+        entity.setUrl("-1");
+        ArrayList<RelatedItemEntity> relatedItemEntities = new ArrayList<RelatedItemEntity>();
+//        if(relatedItemEntities == null||relatedItemEntities.size() == 0){
+//            relatedItemEntities = new ArrayList<RelatedItemEntity>();
+//        }
+        relatedItemEntities.add(entity);
+        mAdapter.setNewsFeed(relatedItemEntities);
+        mAdapter.notifyDataSetChanged();
+        detail_shared_ViewPointTitleLayout.setVisibility(View.GONE);
+        if (footerView_layout.getVisibility() == View.VISIBLE) {
+            footerView_layout.setVisibility(View.GONE);
+        }
     }
 
     private void addCommentInfoToSql(ArrayList<NewsDetailComment> mComments) {
@@ -591,12 +616,12 @@ public class NewsDetailFgt extends BaseFragment {
     public void setBeanPageList(ArrayList<RelatedItemEntity> relatedItemEntities) {
         Logger.e("aaa", "time:================比较前=================");
         for (int i = 0; i < relatedItemEntities.size(); i++) {
-            Logger.e("aaa", "time:===" + relatedItemEntities.get(i).getUpdateTime());
+            Logger.e("aaa", "time:===" + relatedItemEntities.get(i).getPtime());
         }
         Collections.sort(relatedItemEntities);
         Logger.e("aaa", "time:================比较====后=================");
         for (int i = 0; i < relatedItemEntities.size(); i++) {
-            Logger.e("aaa", "time:===" + relatedItemEntities.get(i).getUpdateTime());
+            Logger.e("aaa", "time:===" + relatedItemEntities.get(i).getPtime());
         }
         int listSice = relatedItemEntities.size();
         int page = (listSice / pageSize) + (listSice % pageSize == 0 ? 0 : 1);
@@ -610,7 +635,7 @@ public class NewsDetailFgt extends BaseFragment {
                     break;
                 }
                 Logger.e("aaa", "page:" + itemPosition);
-                Calendar calendar = DateUtil.strToCalendarLong(relatedItemEntities.get(itemPosition).getUpdateTime());
+                Calendar calendar = DateUtil.strToCalendarLong(relatedItemEntities.get(itemPosition).getPtime());
 
                 int thisYear = calendar.get(Calendar.YEAR);//获取年份
                 if(thisYear != mYear){
@@ -622,14 +647,24 @@ public class NewsDetailFgt extends BaseFragment {
             }
             beanPageList.add(listBean);
         }
-        beanList.addAll(beanPageList.get(viewpointPage));
-        viewpointPage++;
-        mAdapter.setNewsFeed(beanList);
-        mAdapter.notifyDataSetChanged();
-        if(MAXPage <= viewpointPage){
-            mNewsDetailList.setMode(PullToRefreshBase.Mode.DISABLED);
-            footView_tv.setText("内容加载完毕");
-        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                beanList.addAll(beanPageList.get(viewpointPage));
+                viewpointPage++;
+                mAdapter.setNewsFeed(beanList);
+                mAdapter.notifyDataSetChanged();
+                if (MAXPage <= viewpointPage) {
+                    mNewsDetailList.setMode(PullToRefreshBase.Mode.DISABLED);
+                    footView_tv.setText("内容加载完毕");
+                }
+                if (footerView_layout.getVisibility() == View.GONE) {
+                    footerView_layout.setVisibility(View.VISIBLE);
+                }
+                detail_shared_ViewPointTitleLayout.setVisibility(View.VISIBLE);
+            }
+        }, 500);
+
     }
 
     private void addNewsLove(NewsDetailComment comment, final int position, final CommentHolder holder) {
@@ -641,33 +676,33 @@ public class NewsDetailFgt extends BaseFragment {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Logger.e("jigang", "love url=" + HttpConstant.URL_LOVE_COMMENT + "cid=" + comment.getId() + "&uuid=" + user.getUserId() + "&unam=" + user.getUserName());
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        NewsLoveRequest<String> loveRequest = new NewsLoveRequest<String>(Request.Method.PUT, new TypeToken<String>() {
-        }.getType(), HttpConstant.URL_LOVE_COMMENT + "cid=" + comment.getId() + "&uuid=" + user.getUserId() + "&unam=" + user.getUserName(), new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String result) {
-                mNewsDetailList.onRefreshComplete();
-                Logger.e("jigang", "network success, love" + result);
-                if (!TextUtil.isEmptyString(result)) {
-                    mComments.get(position).setPraise(true);
-                    mComments.get(position).setLove(Integer.parseInt(result));
-                    holder.ivPraise.setImageResource(R.drawable.bg_praised);
-                    holder.tvPraiseCount.setText(result);
-//                    viewList.get(position).invalidate();//刷新界面
-//                    mAdapter.notifyDataSetChanged();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mNewsDetailList.onRefreshComplete();
-                Logger.e("jigang", "network fail");
-            }
-        });
-        loveRequest.setRetryPolicy(new DefaultRetryPolicy(15000, 0, 0));
-        requestQueue.add(loveRequest);
+//        Logger.e("jigang", "love url=" + HttpConstant.URL_LOVE_COMMENT + "cid=" + comment.getId() + "&uuid=" + user.getUserId() + "&unam=" + user.getUserName());
+//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+//        NewsLoveRequest<String> loveRequest = new NewsLoveRequest<String>(Request.Method.PUT, new TypeToken<String>() {
+//        }.getType(), HttpConstant.URL_LOVE_COMMENT + "cid=" + comment.getId() + "&uuid=" + user.getUserId() + "&unam=" + user.getUserName(), new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String result) {
+//                mNewsDetailList.onRefreshComplete();
+//                Logger.e("jigang", "network success, love" + result);
+//                if (!TextUtil.isEmptyString(result)) {
+//                    mComments.get(position).setPraise(true);
+//                    mComments.get(position).setLove(Integer.parseInt(result));
+//                    holder.ivPraise.setImageResource(R.drawable.bg_praised);
+//                    holder.tvPraiseCount.setText(result);
+////                    viewList.get(position).invalidate();//刷新界面
+////                    mAdapter.notifyDataSetChanged();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                mNewsDetailList.onRefreshComplete();
+//                Logger.e("jigang", "network fail");
+//            }
+//        });
+//        loveRequest.setRetryPolicy(new DefaultRetryPolicy(15000, 0, 0));
+//        requestQueue.add(loveRequest);
     }
 
     ArrayList<CommentHolder> holderList = new ArrayList<CommentHolder>();
@@ -806,11 +841,11 @@ public class NewsDetailFgt extends BaseFragment {
 
     public void UpdateCCView(final CommentHolder holder, final NewsDetailComment comment, final int position) {
         final User user = SharedPreManager.getUser(getActivity());
-        if (!TextUtil.isEmptyString(comment.getProfile())) {
-            holder.ivHeadIcon.setImageURI(Uri.parse(comment.getProfile()));
+        if (!TextUtil.isEmptyString(comment.getAvatar())) {
+            holder.ivHeadIcon.setImageURI(Uri.parse(comment.getAvatar()));
         }
-        holder.tvName.setText(comment.getNickname());
-        holder.tvPraiseCount.setText(comment.getLove() + "");
+        holder.tvName.setText(comment.getUname());
+        holder.tvPraiseCount.setText(comment.getCommend() + "");
 
         holder.tvContent.setTextSize(mSharedPreferences.getInt("textSize", CommonConstant.TEXT_SIZE_NORMAL));
         holder.tvContent.setText(comment.getContent());
@@ -820,19 +855,22 @@ public class NewsDetailFgt extends BaseFragment {
                 Logger.e("aaa", "点击内容");
             }
         });
-        if (!comment.isPraise()) {
+
+        if (comment.getUpflag() == 0) {
             holder.ivPraise.setImageResource(R.drawable.bg_normal_praise);
         } else {
             holder.ivPraise.setImageResource(R.drawable.bg_praised);
         }
-        String commentUserid = comment.getUuid();
-        if (commentUserid != null && commentUserid.length() != 0) {
-            if (user.getUserId().equals(comment.getUuid())) {
-                holder.ivPraise.setVisibility(View.GONE);
-            } else {
-                holder.ivPraise.setVisibility(View.VISIBLE);
-            }
-        }
+
+//        String commentUserid = comment.getUid();
+//        if (commentUserid != null && commentUserid.length() != 0&&user != null) {
+//
+//            if ((user.getMuid()+"").equals(comment.getUid())) {
+//                holder.ivPraise.setVisibility(View.GONE);
+//            } else {
+//                holder.ivPraise.setVisibility(View.VISIBLE);
+//            }
+//        }
 
         holder.ivPraise.setOnClickListener(new View.OnClickListener() {
             @Override

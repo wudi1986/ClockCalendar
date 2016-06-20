@@ -235,7 +235,7 @@ public class MainAty extends BaseActivity implements View.OnClickListener, NewsF
             e.printStackTrace();
         }
 
-        DetailOperateRequest userRegisterRequest = new DetailOperateRequest(Request.Method.POST, HttpConstant.URL_POST_USER_REG,
+        DetailOperateRequest userRegisterRequest = new DetailOperateRequest(Request.Method.POST, HttpConstant.URL_REGISTER_VISITOR,
                 json.toString(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -279,12 +279,11 @@ public class MainAty extends BaseActivity implements View.OnClickListener, NewsF
             e.printStackTrace();
         }
         DetailOperateRequest userLoginRequest = new DetailOperateRequest(Request.Method.POST,
-                HttpConstant.URL_POST_USER_LOGIN, json.toString(), new Response.Listener<JSONObject>() {
+                HttpConstant.URL_VISITOR_LOGIN, json.toString(), new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 Log.i("aaa", "onResponse: userLoginRequest"+response);
-
             }
         }, new Response.ErrorListener() {
 

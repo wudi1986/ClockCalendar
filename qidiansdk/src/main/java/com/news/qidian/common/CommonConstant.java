@@ -31,10 +31,10 @@ public final class CommonConstant {
     public static final String US_BAINEWS_NOTIFICATION_OPENED = "notification_open";
 
     public static final String FILE_USER = "user";
-    public static final String FILE_VISITOR_USER = "visitor_user";
     public static final String FILE_JPUSH = "jpush";
     public static final String FILE_UMENG = "umeng";
     public static final String KEY_USER_INFO = "user_info";
+    public static final String KEY_VISITOR_INFO = "key_visitor_info";//游客信息
     public static final String KEY_JPUSH_ID = "jpush_id";
     public static final String KEY_UMENG_ID = "umeng_id";
     public static final String JINYU_JPUSH_ID = "0005150a7dd";

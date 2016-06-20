@@ -71,15 +71,15 @@ public class NewsFeedAdapter extends MultiItemCommonAdapter<NewsFeed> {
         super(context, datas, new MultiItemTypeSupport<NewsFeed>() {
             @Override
             public int getLayoutId(int position, NewsFeed newsFeed) {
-                switch (newsFeed.getImgStyle()) {
-                    case "0":
+                switch (newsFeed.getStyle()) {
+                    case 0:
                         return R.layout.qd_ll_news_item_no_pic;
-                    case "1":
-                    case "2":
+                    case 1:
+                    case 2:
                         return R.layout.qd_ll_news_item_one_pic;
-                    case "3":
+                    case 3:
                         return R.layout.qd_ll_news_card;
-                    case "900":
+                    case 900:
                         return R.layout.qd_ll_news_item_time_line;
                     default:
                         return 0;
@@ -93,15 +93,15 @@ public class NewsFeedAdapter extends MultiItemCommonAdapter<NewsFeed> {
 
             @Override
             public int getItemViewType(int position, NewsFeed newsFeed) {
-                switch (newsFeed.getImgStyle()) {
-                    case "0":
+                switch (newsFeed.getStyle()) {
+                    case 0:
                         return NewsFeed.NO_PIC;
-                    case "1":
-                    case "2":
+                    case 1:
+                    case 2:
                         return NewsFeed.ONE_AND_TWO_PIC;
-                    case "3":
+                    case 3:
                         return NewsFeed.THREE_PIC;
-                    case "900":
+                    case 900:
                         return NewsFeed.TIME_LINE;
                     default:
                         return 0;
@@ -168,16 +168,16 @@ public class NewsFeedAdapter extends MultiItemCommonAdapter<NewsFeed> {
                 setTitleTextBySpannable((TextView) holder.getView(R.id.title_textView), feed.getTitle(), feed.isRead());
             }
 
-            setSourceViewText((TextViewExtend) holder.getView(R.id.news_source_TextView), feed.getPubName());
-            setCommentViewText((TextViewExtend) holder.getView(R.id.comment_num_textView), feed.getCommentsCount());
-            if (feed.getPubTime() != null)
-                setNewsTime((TextViewExtend) holder.getView(R.id.comment_textView), feed.getPubTime());
+                setSourceViewText((TextViewExtend) holder.getView(R.id.news_source_TextView), feed.getPname());
+                setCommentViewText((TextViewExtend) holder.getView(R.id.comment_num_textView), feed.getComment()+"");
+                if (feed.getPtime() != null)
+                    setNewsTime((TextViewExtend) holder.getView(R.id.comment_textView), feed.getPtime());
             setNewsContentClick((RelativeLayout) holder.getView(R.id.news_content_relativeLayout), feed);
             setDeleteClick((ImageView) holder.getView(R.id.delete_imageView), feed, holder.getConvertView());
 //                break;
         } else if (layoutId == R.layout.qd_ll_news_item_one_pic) {
 //            case R.layout.qd_ll_news_item_one_pic:
-            holder.setSimpleDraweeViewURI(R.id.title_img_View, feed.getImgList().get(0));
+                holder.setSimpleDraweeViewURI(R.id.title_img_View, feed.getImgs().get(0));
             final String strTitle = feed.getTitle();
             if (isFavorite) {
                 setTitleTextBySpannable((TextView) holder.getView(R.id.title_textView), feed.getTitle(), false);
@@ -236,17 +236,17 @@ public class NewsFeedAdapter extends MultiItemCommonAdapter<NewsFeed> {
                 }
             });
 
-            setSourceViewText((TextViewExtend) holder.getView(R.id.news_source_TextView), feed.getPubName());
-            setCommentViewText((TextViewExtend) holder.getView(R.id.comment_num_textView), feed.getCommentsCount());
-            if (feed.getPubTime() != null) {
-                setNewsTime((TextViewExtend) holder.getView(R.id.comment_textView), feed.getPubTime());
+                setSourceViewText((TextViewExtend) holder.getView(R.id.news_source_TextView), feed.getPname());
+                setCommentViewText((TextViewExtend) holder.getView(R.id.comment_num_textView), feed.getComment()+"");
+                if (feed.getPtime() != null) {
+                    setNewsTime((TextViewExtend) holder.getView(R.id.comment_textView), feed.getPtime());
             }
             setNewsContentClick((RelativeLayout) holder.getView(R.id.news_content_relativeLayout), feed);
             setDeleteClick((ImageView) holder.getView(R.id.delete_imageView), feed, holder.getConvertView());
 //                break;
         } else if (layoutId == R.layout.qd_ll_news_card) {
 //            case R.layout.qd_ll_news_card:
-            ArrayList<String> strArrImgUrl = feed.getImgList();
+                ArrayList<String> strArrImgUrl = feed.getImgs();
             holder.setSimpleDraweeViewURI(R.id.image_card1, strArrImgUrl.get(0));
             holder.setSimpleDraweeViewURI(R.id.image_card2, strArrImgUrl.get(1));
             holder.setSimpleDraweeViewURI(R.id.image_card3, strArrImgUrl.get(2));
@@ -258,10 +258,10 @@ public class NewsFeedAdapter extends MultiItemCommonAdapter<NewsFeed> {
             } else {
                 setTitleTextBySpannable((TextView) holder.getView(R.id.title_textView), feed.getTitle(), feed.isRead());
             }
-            setSourceViewText((TextViewExtend) holder.getView(R.id.news_source_TextView), feed.getPubName());
-            setCommentViewText((TextViewExtend) holder.getView(R.id.comment_num_textView), feed.getCommentsCount());
-            if (feed.getPubTime() != null)
-                setNewsTime((TextViewExtend) holder.getView(R.id.comment_textView), feed.getPubTime());
+                setSourceViewText((TextViewExtend) holder.getView(R.id.news_source_TextView), feed.getPname());
+                setCommentViewText((TextViewExtend) holder.getView(R.id.comment_num_textView), feed.getComment()+"");
+                if (feed.getPtime() != null)
+                    setNewsTime((TextViewExtend) holder.getView(R.id.comment_textView), feed.getPtime());
             setNewsContentClick((RelativeLayout) holder.getView(R.id.news_content_relativeLayout), feed);
             setDeleteClick((ImageView) holder.getView(R.id.delete_imageView), feed, holder.getConvertView());
 //                break;
@@ -375,12 +375,10 @@ public class NewsFeedAdapter extends MultiItemCommonAdapter<NewsFeed> {
                 Intent intent = new Intent(mContext, NewsDetailAty2.class);
                 intent.putExtra(NewsFeedFgt.KEY_NEWS_FEED, feed);
 
-                ArrayList<String> imageList = feed.getImgList();
+                ArrayList<String> imageList = feed.getImgs();
                 if (imageList != null && imageList.size() != 0) {
                     intent.putExtra(NewsFeedFgt.KEY_NEWS_IMAGE, imageList.get(0));
                 }
-
-
                 if (mNewsFeedFgt != null) {
                     mNewsFeedFgt.startActivityForResult(intent, REQUEST_CODE);
                 } else {
@@ -392,7 +390,7 @@ public class NewsFeedAdapter extends MultiItemCommonAdapter<NewsFeed> {
                     BufferedWriter bis = null;
                     try {
                         bis = new BufferedWriter(new FileWriter(file));
-                        bis.write(feed.getTitle() + ",newsid=" + feed.getUrl());
+                        bis.write(feed.getTitle() + ",newsid=" + feed.getNid());
                         bis.newLine();
                         bis.flush();
                     } catch (Exception e) {
@@ -413,8 +411,8 @@ public class NewsFeedAdapter extends MultiItemCommonAdapter<NewsFeed> {
                 String channelName = "";
                 ChannelItemDao dao = new ChannelItemDao(mContext);
                 ArrayList<ChannelItem> channelItems = dao.queryForAll();
-                for (ChannelItem item : channelItems) {
-                    if (feed.getChannelId().equals(item.getId())) {
+                for (ChannelItem item: channelItems){
+                    if (Integer.valueOf(feed.getChannel()).equals(item.getId())){
                         channelName = item.getName();
                         break;
                     }

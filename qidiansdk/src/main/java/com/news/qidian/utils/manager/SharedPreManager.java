@@ -121,10 +121,10 @@ public class SharedPreManager {
 
     /**
      * 保存游客信息 json
-     * @param UserVisitorEntity
+     * @param userVisitorEntity
      */
     public static void saveVisitorUser(UserVisitorEntity userVisitorEntity){
-        save(CommonConstant.FILE_VISITOR_USER, CommonConstant.KEY_USER_INFO, userVisitorEntity.toJsonString());
+        save(CommonConstant.KEY_VISITOR_INFO, CommonConstant.KEY_USER_INFO, userVisitorEntity.toJsonString());
     }
     /**
      * 从 sp 中获取游客用户对象
@@ -132,7 +132,7 @@ public class SharedPreManager {
      */
     public static UserVisitorEntity getVisitorUser(Context mContext){
 //        ShareSDK.initSDK(mContext);
-        String userVisitorJson = get(CommonConstant.FILE_VISITOR_USER, CommonConstant.KEY_USER_INFO);
+        String userVisitorJson = get(CommonConstant.KEY_VISITOR_INFO, CommonConstant.KEY_USER_INFO);
         if(TextUtils.isEmpty(userVisitorJson)){
             return null;
         }
@@ -172,7 +172,9 @@ public class SharedPreManager {
 //                ShareSDK.getPlatform(mContext, user.getPlatformType()).removeAccount();
 //            }
         }
-        remove(CommonConstant.FILE_USER, CommonConstant.KEY_USER_INFO);
+        user.setUtype("2");
+        saveUser(user);
+//        remove(CommonConstant.FILE_USER, CommonConstant.KEY_USER_INFO);
     }
     /**
      * 从 sp 中获取用户对象
@@ -186,19 +188,26 @@ public class SharedPreManager {
         }
 
         User user = User.parseUser(userJson);
-        if ("meizu".equals(user.getPlatformType())){
-            if (System.currentTimeMillis() - user.getExpiresTime() > 0){
-                remove(CommonConstant.FILE_USER, CommonConstant.KEY_USER_INFO);
-                return null;
-            }else {
-                return user;
-            }
-        }
-//        if(ShareSDK.getPlatform(mContext,user.getPlatformType()).isValid()){
-//            return user;
-//        }else{
-//            remove(CommonConstant.FILE_USER, CommonConstant.KEY_USER_INFO);
+//        if ("meizu".equals(user.getPlatformType())){
+//            if (System.currentTimeMillis() - user.getExpiresTime() > 0){
+//                remove(CommonConstant.FILE_USER, CommonConstant.KEY_USER_INFO);
+//                return null;
+//            }else {
+//                return user;
+//            }
 //        }
+        if (user != null){
+            return user;
+//            if (user.isVisitor()){
+//                return user;
+//            }else {
+//                if (ShareSDK.getPlatform(mContext,user.getPlatformType()).isValid()){
+//                    return user;
+//                }else {
+//                    remove(CommonConstant.FILE_USER, CommonConstant.KEY_USER_INFO);
+//                }
+//            }
+        }
         return null;
     }
     public static void save(String spName, String key, long value){
@@ -263,26 +272,43 @@ public class SharedPreManager {
     public static int upLoadLogSave(String mUserId, String key, String locationJsonString, UploadLogDataEntity uploadLogDataEntity) {
 
         String mReadData = upLoadLogGet(key);
-        Gson gson = new Gson();
-        UploadLogEntity uploadLogEntity = new UploadLogEntity();
-        if (mReadData != null && mReadData.length() != 0) {
-            uploadLogEntity = gson.fromJson(mReadData, UploadLogEntity.class);
-
+        if(mReadData.indexOf("city")!= -1){
+            remove(CommonConstant.UPLOAD_LOG, key);
         }
-        LocationEntity locationEntity = gson.fromJson(locationJsonString, LocationEntity.class);
-
-        uploadLogEntity.getData().add(uploadLogDataEntity);
-
-        uploadLogEntity.setUid(mUserId);
-        uploadLogEntity.setCou(locationEntity.getCountry());
-        uploadLogEntity.setPro(locationEntity.getProvince());
-        uploadLogEntity.setCity(locationEntity.getCity());
-        uploadLogEntity.setDis(locationEntity.getDistrict());
-        uploadLogEntity.setClas(CommonConstant.UPLOAD_LOG_DETAIL.equals(key) ? 0 : 1);
+        Gson gson = new Gson();
+        JSONArray array = null;
+         ArrayList<UploadLogDataEntity> data = new ArrayList<UploadLogDataEntity>();
+        try {
+            array = new JSONArray(mReadData);
+            for (int i = 0; i < array.length(); i++) {
+                String str1 = array.getString(i);
+                UploadLogDataEntity bean = gson.fromJson(str1, UploadLogDataEntity.class);
+                data.add(bean);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        data.add(uploadLogDataEntity);
 
         upLoadLogDelter(key);
-        save(CommonConstant.UPLOAD_LOG, key, gson.toJson(uploadLogEntity));
-        return uploadLogEntity.getData().size();
+        save(CommonConstant.UPLOAD_LOG, key, gson.toJson(data));
+        return data.size();
+
+
+
+//        UploadLogEntity uploadLogEntity = new UploadLogEntity();
+//        if (mReadData != null && mReadData.length() != 0) {
+//            uploadLogEntity = gson.fromJson(mReadData, UploadLogEntity.class);
+//
+//        }
+//        uploadLogEntity.getData().add(uploadLogDataEntity);
+//
+//        uploadLogEntity.setUid(mUserId);
+//        uploadLogEntity.setClas(CommonConstant.UPLOAD_LOG_DETAIL.equals(key) ? 0 : 1);
+//
+//        upLoadLogDelter(key);
+//        save(CommonConstant.UPLOAD_LOG, key, gson.toJson(uploadLogEntity));
+//        return uploadLogEntity.getData().size();
     }
     public static int upLoadLogSaveList(String mUserId, String key, List<UploadLogDataEntity> list) {
 
@@ -338,9 +364,10 @@ public class SharedPreManager {
             return false;
         }
         Logger.d("bbb", "newsID==" + newsID);
+        Logger.e("aaa","收藏的数据======"+list.toString());
         for(int i = 0; i < list.size(); i++){
-            Logger.d("bbb", "list.get(i).getUrl()======="+i+"============" + list.get(i).getUrl());
-            if(list.get(i).getUrl().equals(newsID)){
+//            Logger.d("bbb", "list.get(i).getUrl()======="+i+"============" + list.get(i).getNid());
+            if(newsID.equals(list.get(i).getNid()+"")){
                 return true;
             }
         }
@@ -369,7 +396,7 @@ public class SharedPreManager {
             e.printStackTrace();
         }
         for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getUrl().equals(newsID)){
+            if (newsID.equals(list.get(i).getNid() + "")) {
                 list.remove(i);
                 Gson gson = new Gson();
                 String str = gson.toJson(list);
@@ -392,7 +419,7 @@ public class SharedPreManager {
 //        String str = gson.toJson(list);
 //        save(CommonConstant.MY_FAVORITE, CommonConstant.MY_FAVORITE, str);
         for(NewsFeed bean : deleteList){
-            myFavoritRemoveItem(bean.getUrl());
+            myFavoritRemoveItem(bean.getNid()+"");
         }
         try {
             list = myFavoriteGetList();
@@ -435,5 +462,8 @@ public class SharedPreManager {
         remove(CommonConstant.SEARCH_HISTORY, CommonConstant.SEARCH_HISTORY);
     }
 
-
+//    public static BDLocation getLocation(){
+//        String locationStr = SharedPreManager.get(CommonConstant.FILE_USER_LOCATION, CommonConstant.KEY_USER_LOCATION);
+//        return GsonUtil.deSerializedByClass(locationStr,BDLocation.class);
+//    }
 }

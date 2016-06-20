@@ -41,7 +41,7 @@ public class NewsDetailFgtAdapter extends CommonAdapter<RelatedItemEntity>{
 //            holder.getView(R.id.attentionlayout).setLayoutParams(layoutParams);
             return;
         }
-        Calendar calendar = DateUtil.strToCalendarLong(relatedItemEntity.getUpdateTime());
+        Calendar calendar = DateUtil.strToCalendarLong(relatedItemEntity.getPtime());
 
         int thisYear = calendar.get(Calendar.YEAR);//获取年份
         int month=calendar.get(Calendar.MONTH)+1;//获取月份
@@ -55,7 +55,7 @@ public class NewsDetailFgtAdapter extends CommonAdapter<RelatedItemEntity>{
             holder.getView(R.id.rounded_imageView2).setVisibility(View.GONE);
             holder.getView(R.id.attention_line2).setVisibility(View.GONE);
             holder.setTextViewExtendText(R.id.attention_Year, thisYear + "");
-            holder.setTextViewTextBackgroundResource(R.id.attention_MonthandDay, R.drawable.time_haveyear_bg);
+//            holder.setTextViewTextBackgroundResource(R.id.attention_MonthandDay, R.drawable.time_haveyear_bg);
         }else {
             holder.getView(R.id.attention_onceHave).setVisibility(View.GONE);
             boolean yearFrist = relatedItemEntity.getYearFrist();
@@ -66,16 +66,22 @@ public class NewsDetailFgtAdapter extends CommonAdapter<RelatedItemEntity>{
                 holder.getView(R.id.attention_line2).setVisibility(View.VISIBLE);
                 holder.setTextViewExtendText(R.id.attention_Year, thisYear + "");
 
-                holder.setTextViewTextBackgroundResource(R.id.attention_MonthandDay, R.drawable.time_haveyear_bg);
+//                holder.setTextViewTextBackgroundResource(R.id.attention_MonthandDay, R.drawable.time_haveyear_bg);
             } else {
                 holder.getView(R.id.attention_line1).setVisibility(View.VISIBLE);
                 holder.getView(R.id.attention_Year).setVisibility(View.GONE);
                 holder.getView(R.id.rounded_imageView2).setVisibility(View.GONE);
                 holder.getView(R.id.attention_line2).setVisibility(View.GONE);
 
-                holder.setTextViewTextBackgroundResource(R.id.attention_MonthandDay, R.drawable.time_nohaveyear_bg);
+//                holder.setTextViewTextBackgroundResource(R.id.attention_MonthandDay, R.drawable.time_nohaveyear_bg);
 
             }
+        }
+        String form = relatedItemEntity.getFrom();
+        if (form.indexOf("百度") != -1||form.indexOf("谷歌") != -1||form.toLowerCase().indexOf("google") != -1||form.toLowerCase().indexOf("baidu") != -1) {
+            holder.setTextViewTextBackgroundResource(R.id.attention_MonthandDay, R.drawable.time_haveyear_bg);
+        }else{
+            holder.setTextViewTextBackgroundResource(R.id.attention_MonthandDay, R.drawable.time_nohaveyear_bg);
         }
         holder.setTextViewText(R.id.attention_MonthandDay,
                 (month<10?"0":"")+month+"/"+(day<10?"0":"")+day);
@@ -84,7 +90,7 @@ public class NewsDetailFgtAdapter extends CommonAdapter<RelatedItemEntity>{
         holder.setTextViewExtendTextandTextSice(R.id.attention_Title,relatedItemEntity.getTitle());
 
 
-        holder.setTextViewExtendText(R.id.attention_Source,relatedItemEntity.getSourceSite());
+        holder.setTextViewExtendText(R.id.attention_Source,relatedItemEntity.getPname());
         String imageUrl = relatedItemEntity.getImgUrl();
         if(imageUrl != null&&imageUrl.length()!= 0){
             holder.getView(R.id.attention_haveImageShow).setVisibility(View.VISIBLE);

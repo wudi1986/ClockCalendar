@@ -27,16 +27,22 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.news.qidian.R;
 import com.news.qidian.adapter.NewsFeedAdapter;
+import com.news.qidian.application.QiDianApplication;
 import com.news.qidian.common.BaseActivity;
+import com.news.qidian.common.CommonConstant;
 import com.news.qidian.common.HttpConstant;
 import com.news.qidian.database.NewsDetailCommentDao;
+import com.news.qidian.entity.LocationEntity;
 import com.news.qidian.entity.NewsDetail;
 import com.news.qidian.entity.NewsFeed;
+import com.news.qidian.entity.UploadLogDataEntity;
 import com.news.qidian.entity.User;
 import com.news.qidian.net.volley.NewsDetailRequest;
+import com.news.qidian.net.volley.UpLoadLogRequest;
 import com.news.qidian.pages.NewsDetailFgt.ShowCareforLayout;
 import com.news.qidian.utils.DeviceInfoUtil;
 import com.news.qidian.utils.Logger;
@@ -48,6 +54,8 @@ import com.news.qidian.widget.NewsDetailHeaderView2;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -263,38 +271,50 @@ public class NewsDetailAty2 extends BaseActivity implements View.OnClickListener
      */
     private void upLoadLog() {
 //
-//        if (mNewsFeed == null) {
-//            return;
-//        }
-//        UploadLogDataEntity uploadLogDataEntity = new UploadLogDataEntity();
-//        uploadLogDataEntity.setNid(mNewsFeed.getUrl());
-//        uploadLogDataEntity.setCid(mNewsFeed.getChannelId());
-//        uploadLogDataEntity.setTid(mNewsFeed.getImgStyle());
-//        uploadLogDataEntity.setStime(lastTime / 1000 + "");
-//        String locationJsonString = SharedPreManager.get(CommonConstant.FILE_USER_LOCATION, CommonConstant.KEY_USER_LOCATION);
-//        int saveNum = SharedPreManager.upLoadLogSave(mUserId, CommonConstant.UPLOAD_LOG_DETAIL, locationJsonString, uploadLogDataEntity);
-//        Logger.e("ccc", "详情页的数据====" + SharedPreManager.upLoadLogGet(CommonConstant.UPLOAD_LOG_DETAIL));
-//        if (saveNum >= 30) {
-//            Gson gson = new Gson();
-//            LocationEntity locationEntity = gson.fromJson(locationJsonString, LocationEntity.class);
-//            RequestQueue requestQueue = Volley.newRequestQueue(this);
-//            String url = "http://bdp.deeporiginalx.com/rep?uid=" + mUserId + "&cou=" + locationEntity.getCountry() +
-//                    "&pro=" + locationEntity.getProvince() + "&city=" + locationEntity.getCity() + "&dis=" + locationEntity.getDistrict() +
-//                    "&clas=0" + "&data=" + TextUtil.getBase64(SharedPreManager.upLoadLogGet(CommonConstant.UPLOAD_LOG_DETAIL));
-//            Logger.d("aaa", "url===" + url);
-//
-//            UpLoadLogRequest<String> request = new UpLoadLogRequest<String>(Request.Method.GET, String.class, url, new Response.Listener<String>() {
-//                @Override
-//                public void onResponse(String response) {
-//                    SharedPreManager.upLoadLogDelter(CommonConstant.UPLOAD_LOG_DETAIL);
-//                }
-//            }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                }
-//            });
-//            requestQueue.add(request);
-//        }
+        if (mNewsFeed == null&&mUserId != null &&mUserId.length() != 0) {
+            return;
+        }
+        UploadLogDataEntity uploadLogDataEntity = new UploadLogDataEntity();
+        uploadLogDataEntity.setN(mNewsFeed.getNid()+"");
+        uploadLogDataEntity.setC(mNewsFeed.getChannel()+"");
+        uploadLogDataEntity.setT("0");
+        uploadLogDataEntity.setS(lastTime / 1000 + "");
+        uploadLogDataEntity.setF("0");
+        String locationJsonString = SharedPreManager.get(CommonConstant.FILE_USER_LOCATION, CommonConstant.KEY_USER_LOCATION);
+        int saveNum = SharedPreManager.upLoadLogSave(mUserId, CommonConstant.UPLOAD_LOG_DETAIL, locationJsonString, uploadLogDataEntity);
+        Logger.e("ccc", "详情页的数据====" + SharedPreManager.upLoadLogGet(CommonConstant.UPLOAD_LOG_DETAIL));
+        if (saveNum >= 30) {
+            Gson gson = new Gson();
+            LocationEntity locationEntity = gson.fromJson(locationJsonString, LocationEntity.class);
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String userid = null, p= null, t= null, i= null;
+            try {
+                userid = URLEncoder.encode(mUserId+"", "utf-8");
+                p = URLEncoder.encode(locationEntity.getProvince()+"", "utf-8");
+                t = URLEncoder.encode(locationEntity.getCity(), "utf-8");
+                i = URLEncoder.encode(locationEntity.getDistrict(), "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+
+
+            String url = HttpConstant.URL_UPLOAD_LOG+"u=" + userid + "&p=" + p +
+                    "&t=" + t + "&i=" +i + "&d=" + TextUtil.getBase64(SharedPreManager.upLoadLogGet(CommonConstant.UPLOAD_LOG_DETAIL));
+            Logger.d("aaa", "url===" + url);
+
+            UpLoadLogRequest<String> request = new UpLoadLogRequest<String>(Request.Method.GET, String.class, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    SharedPreManager.upLoadLogDelter(CommonConstant.UPLOAD_LOG_DETAIL);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+            requestQueue.add(request);
+        }
     }
 
     FragmentStatePagerAdapter pagerAdapter;
@@ -367,13 +387,13 @@ public class NewsDetailAty2 extends BaseActivity implements View.OnClickListener
         bgLayout.setVisibility(View.VISIBLE);
         mNewsFeed = (NewsFeed) getIntent().getSerializableExtra(NewsFeedFgt.KEY_NEWS_FEED);
         if (mNewsFeed != null) {
-            mUrl = mNewsFeed.getUrl();
+            mUrl = mNewsFeed.getNid()+"";
         } else {
             mUrl = getIntent().getStringExtra(NewsFeedFgt.KEY_NEWS_ID);
         }
         User user = SharedPreManager.getUser(NewsDetailAty2.this);
         if (user != null) {
-            mUserId = user.getUserId();
+            mUserId = user.getMuid()+"";
             mPlatformType = user.getPlatformType();
         }
         uuid = DeviceInfoUtil.getUUID();
@@ -385,10 +405,10 @@ public class NewsDetailAty2 extends BaseActivity implements View.OnClickListener
             mDetailFavorite.setImageResource(R.drawable.btn_detail_favorite_normal);
         }
 
-        Logger.e("jigang", "detail url=" + HttpConstant.URL_FETCH_CONTENT + "url=" + TextUtil.getBase64(mUrl));
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        Logger.e("jigang", "detail url=" + HttpConstant.URL_FETCH_CONTENT + "nid=" + mUrl);
+        RequestQueue requestQueue = QiDianApplication.getInstance().getRequestQueue();
         NewsDetailRequest<NewsDetail> feedRequest = new NewsDetailRequest<NewsDetail>(Request.Method.GET, new TypeToken<NewsDetail>() {
-        }.getType(), HttpConstant.URL_FETCH_CONTENT + "url=" + TextUtil.getBase64(mUrl), new Response.Listener<NewsDetail>() {
+        }.getType(), HttpConstant.URL_FETCH_CONTENT + "nid=" + mUrl, new Response.Listener<NewsDetail>() {
 
             @Override
             public void onResponse(NewsDetail result) {
@@ -401,9 +421,9 @@ public class NewsDetailAty2 extends BaseActivity implements View.OnClickListener
                     mNewsFeed = convert2NewsFeed(result);
                     displayDetailAndComment(result);
                     mDetailHeaderView.updateView(result);
-                    if (result.getCommentSize() != 0) {
+                    if (result.getComment() != 0) {
                         mDetailCommentNum.setVisibility(View.VISIBLE);
-                        mDetailCommentNum.setText(result.getCommentSize() + "");
+                        mDetailCommentNum.setText(result.getComment() + "");
                         mDetailCommentPic.setImageResource(TextUtil.isEmptyString(mDetailCommentNum.getText().toString()) ? R.drawable.btn_detail_no_comment : R.drawable.btn_detail_comment);
                     }
                 } else {
@@ -458,12 +478,13 @@ public class NewsDetailAty2 extends BaseActivity implements View.OnClickListener
         mNewsFeed.setDocid(result.getDocid());
         mNewsFeed.setUrl(result.getUrl());
         mNewsFeed.setTitle(result.getTitle());
-        mNewsFeed.setPubName(result.getPubName());
-        mNewsFeed.setPubTime(result.getPubTime());
-        mNewsFeed.setCommentsCount(result.getCommentSize() + "");
-        mNewsFeed.setChannelId(result.getChannelId() + "");
-        mNewsFeed.setImgStyle(result.getImgNum() + "");
+        mNewsFeed.setPname(result.getPname());
+        mNewsFeed.setPtime(result.getPtime());
+        mNewsFeed.setComment(result.getComment());
+        mNewsFeed.setChannel(result.getChannel());
+        mNewsFeed.setStyle(result.getImgNum());
         mNewsFeed.setImageUrl(mImageUrl);
+        mNewsFeed.setNid(result.getNid());
 
         return mNewsFeed;
     }
@@ -490,7 +511,7 @@ public class NewsDetailAty2 extends BaseActivity implements View.OnClickListener
     public void finish() {
         if (mNewsFeed != null) {
             Intent intent = new Intent();
-            intent.putExtra(NewsFeedAdapter.KEY_NEWS_ID, mNewsFeed.getUrl());
+            intent.putExtra(NewsFeedAdapter.KEY_NEWS_ID, mNewsFeed.getNid());
             setResult(NewsFeedAdapter.REQUEST_CODE, intent);
         }
         super.finish();

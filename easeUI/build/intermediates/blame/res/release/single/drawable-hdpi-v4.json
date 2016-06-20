@@ -24,12 +24,12 @@
         "source": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/src/main/res/drawable-hdpi/ee_8.png"
     },
     {
-        "merged": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/build/intermediates/res/merged/release/drawable-hdpi-v4/ee_28.png",
-        "source": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/src/main/res/drawable-hdpi/ee_28.png"
-    },
-    {
         "merged": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/build/intermediates/res/merged/release/drawable-hdpi-v4/ease_default_image.png",
         "source": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/src/main/res/drawable-hdpi/ease_default_image.png"
+    },
+    {
+        "merged": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/build/intermediates/res/merged/release/drawable-hdpi-v4/ee_28.png",
+        "source": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/src/main/res/drawable-hdpi/ee_28.png"
     },
     {
         "merged": "/Users/wudi/AndroidStudioProjects/ClockCalendar/easeUI/build/intermediates/res/merged/release/drawable-hdpi-v4/ease_record_animate_08.png",

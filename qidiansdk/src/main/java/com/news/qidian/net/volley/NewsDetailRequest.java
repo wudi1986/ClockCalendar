@@ -16,7 +16,8 @@ import java.util.Map;
  * Created by fengjigang on 16/2/26.
  */
 public class NewsDetailRequest<T> extends GsonRequest<T> {
-    private HashMap mParams;
+    private HashMap mParams, mHeader;
+
 
     public NewsDetailRequest(int method, Class clazz, String url, Response.Listener successListener, Response.ErrorListener listener) {
         super(method, clazz, url, successListener, listener);
@@ -25,18 +26,17 @@ public class NewsDetailRequest<T> extends GsonRequest<T> {
     public NewsDetailRequest(int method, Type reflectType, String url, Response.Listener successListener, Response.ErrorListener listener) {
         super(method, reflectType, url, successListener, listener);
     }
-    public void setRequestParams(HashMap params){
-        this.mParams = params;
-    }
     @Override
-    protected String checkJsonData(String data, NetworkResponse response) {
+    protected String checkJsonData(String data,NetworkResponse response) {
         try {
             JSONObject jsonObject = new JSONObject(data);
             String code = jsonObject.optString("code", "");
-            String message = jsonObject.optString("message", "");
-            Logger.e("jigang","code = "+code + ",message=" + message);
-            if ("0".equals(code) && "success".equals(message)){
-                return jsonObject.optString("data","");
+//            String message = jsonObject.optString("message", "");
+            Logger.e("jigang","code = "+code );
+            if ("2000".equals(code) ) {
+                return jsonObject.optString("data", "");
+            }else if("2002".equals(code)){
+                return "2002";
             }else {
                 return "";
             }
@@ -45,8 +45,20 @@ public class NewsDetailRequest<T> extends GsonRequest<T> {
         }
         return "";
     }
+//    @Override
+//    public Map<String, String> getHeaders() throws AuthFailureError {
+//        return mHeader;
+//    }
+//    public void setRequestHeader(HashMap header) {
+//        this.mHeader = header;
+//    }
+
+
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
         return mParams;
+    }
+    public void setRequestParams(HashMap params) {
+        this.mParams = params;
     }
 }

@@ -1,5 +1,6 @@
 package com.news.qidian.entity;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -10,9 +11,10 @@ import java.io.Serializable;
  * 新闻评论
  */
 @DatabaseTable(tableName = "tb_news_detail_comment_item")
-public class NewsDetailComment implements Serializable {
+public class NewsDetailComment implements Serializable{
 
     /**
+     *old
      * docid : /group/6267906567157874945/
      * comment_id : 6222592828
      * id : 4666198
@@ -21,13 +23,27 @@ public class NewsDetailComment implements Serializable {
      * content : 凭啥老百姓吃草根？他天天大鱼大肉！这种人不用再为他卖命，真的不值。
      * create_time : 2016-03-31 12:39:00
      * nickname : 你猜23803670
+     *
+     * new
+     * "id": 2,
+     "content": "66666",
+     "commend": 10, **
+     "ctime": "2016-05-24 19:22:11",
+     "uid": 4,
+     "uname": "zhange",
+     "docid": "http://toutiao.com/group/2223/comments/111",
+     "upflag": 1 - 用户是否为该条评论点赞过，0、1 对应 未点、已点
+     *
      */
 
-    private String profile;
 
-    private String nickname;
+    /**  在创建评论时：如果你当前用户有头像，就提供该值，没有则不提供
+     评论列表响应时：如果创建该评论时提供了头像就会有该值，否则没有 */
+    private String avatar;
 
-    private String uuid;
+    private String uname;
+
+    private String uid;
     public NewsDetailComment(){}
     @DatabaseField(columnName="docid")
     private String docid;
@@ -35,18 +51,29 @@ public class NewsDetailComment implements Serializable {
     private String comment_id;
     @DatabaseField(id = true)
     private String id;
-    @DatabaseField(columnName="love")
-    private int love;
+    /**  点赞数 */
+    @DatabaseField(columnName="commend")
+    private int commend;
     @DatabaseField(columnName="content")
     private String content;
-    @DatabaseField(columnName="create_time")
-    private String create_time;
+    @DatabaseField(columnName="ctime")
+    private String ctime;
     @DatabaseField(columnName="isPraise")
     private boolean isPraise;
     @DatabaseField(columnName = "original")
     private String original;
 
     private User user;
+    /** 用户是否为该条评论点赞过，0、1 对应 未点、已点 */
+    private int upflag;
+
+    public int getUpflag() {
+        return upflag;
+    }
+
+    public void setUpflag(int upflag) {
+        this.upflag = upflag;
+    }
 
     public String getOriginal() {
         return original;
@@ -72,43 +99,47 @@ public class NewsDetailComment implements Serializable {
         this.newsFeed = newsFeed;
     }
 
-    @DatabaseField(canBeNull = true, foreign = true, columnName = "url", foreignAutoRefresh = true)
+    @DatabaseField(dataType = DataType.SERIALIZABLE)
     private NewsFeed newsFeed;
 
-    public NewsDetailComment(String comment_id, String content, String create_time, String docid, String id, int love, String nickname, String profile, String uuid) {
+    public NewsDetailComment(String comment_id, String content, String ctime, String docid, String id, int commend, String uname, String avatar, String uid) {
         this.comment_id = comment_id;
         this.content = content;
-        this.create_time = create_time;
+        this.ctime = ctime;
         this.docid = docid;
         this.id = id;
-        this.love = love;
-        this.nickname = nickname;
-        this.profile = profile;
-        this.uuid = uuid;
+        this.commend = commend;
+        this.uname = uname;
+        this.avatar = avatar;
+        this.uid = uid;
     }
 
     @Override
     public String toString() {
         return "NewsDetailComment{" +
-                "docid='" + docid + '\'' +
+                "avatar='" + avatar + '\'' +
+                ", uname='" + uname + '\'' +
+                ", uid='" + uid + '\'' +
+                ", docid='" + docid + '\'' +
                 ", comment_id='" + comment_id + '\'' +
                 ", id='" + id + '\'' +
-                ", profile='" + profile + '\'' +
-                ", love=" + love +
+                ", commend=" + commend +
                 ", content='" + content + '\'' +
-                ", create_time='" + create_time + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", ctime='" + ctime + '\'' +
                 ", isPraise=" + isPraise +
-                ", uuid='" + uuid + '\'' +
+                ", original='" + original + '\'' +
+                ", user=" + user +
+                ", upflag=" + upflag +
+                ", newsFeed=" + newsFeed +
                 '}';
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public boolean isPraise() {
@@ -142,20 +173,20 @@ public class NewsDetailComment implements Serializable {
         this.id = id;
     }
 
-    public String getProfile() {
-        return profile;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public int getLove() {
-        return love;
+    public int getCommend() {
+        return commend;
     }
 
-    public void setLove(int love) {
-        this.love = love;
+    public void setCommend(int commend) {
+        this.commend = commend;
     }
 
     public String getContent() {
@@ -166,19 +197,19 @@ public class NewsDetailComment implements Serializable {
         this.content = content;
     }
 
-    public String getCreate_time() {
-        return create_time;
+    public String getCtime() {
+        return ctime;
     }
 
-    public void setCreate_time(String create_time) {
-        this.create_time = create_time;
+    public void setCtime(String ctime) {
+        this.ctime = ctime;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getUname() {
+        return uname;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUname(String uname) {
+        this.uname = uname;
     }
 }
